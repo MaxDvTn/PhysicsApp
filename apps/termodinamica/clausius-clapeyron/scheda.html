@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Cg fill=%22%231d3d8f%22%3E%3Ccircle cx=%225%22 cy=%2226%22 r=%223%22/%3E%3Ccircle cx=%2212%22 cy=%2212%22 r=%223%22/%3E%3Ccircle cx=%2220%22 cy=%228%22 r=%223%22/%3E%3Ccircle cx=%2228%22 cy=%2216%22 r=%223%22/%3E%3C/g%3E%3C/svg%3E">
 <title>Esploratore Clausius-Clapeyron · App di fisica</title>
-<meta name="description" content="Perché in montagna l&#x27;acqua bolle a meno di 100 °C e perché un clima più caldo porta piogge più intense: due cursori, la quota e il riscaldamento.">
+<meta name="description" content="Perché in rifugio l&#x27;acqua bolle sotto i 100 °C e da dove viene il «7 % per grado» del vapore in un clima più caldo: i modelli confrontati con i dati veri.">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../../../sito/stile.css">
 <script>
@@ -29,22 +29,22 @@ r.dataset.tema=s==='scuro'?'chiaro':'scuro';try{localStorage.setItem('tema',r.da
   <main class="foglio scheda">
     <p><a href="../../../index.html#termodinamica">Torna a tutte le app</a></p>
     <h1>Esploratore Clausius-Clapeyron</h1>
-    <p class="lead">Perché in montagna l&#x27;acqua bolle a meno di 100 °C e perché un clima più caldo porta piogge più intense: due cursori, la quota e il riscaldamento.</p>
+    <p class="lead">Perché in rifugio l&#x27;acqua bolle sotto i 100 °C e da dove viene il «7 % per grado» del vapore in un clima più caldo: i modelli confrontati con i dati veri.</p>
     <div class="azioni"><a class="bottone pieno" href="index.html">Apri l'app</a><a class="bottone" href="https://github.com/MaxDvTn/PhysicsApp/tree/main/apps/termodinamica/clausius-clapeyron">Codice su GitHub</a><span class="copiato" id="copiato" role="status"></span></div>
     <div class="testo"><h1>Esploratore Clausius-Clapeyron</h1>
 <p>Una simulazione in due parti che accompagna la lezione «L'equazione della montagna e del clima» (dicembre 2025). Nella prima si sale di quota e si vede scendere la temperatura di ebollizione dell'acqua; nella seconda si riscalda l'atmosfera e si vede crescere il vapore che può contenere.</p>
 <h2>Come si usa</h2>
 <ol>
-<li><strong>L'ebollizione in quota.</strong> Muovi il cursore dell'altitudine da 0 a 9000 m: l'app calcola la pressione con l'atmosfera standard e la temperatura di ebollizione con l'equazione di Clausius-Clapeyron. Chiedi prima una previsione: a che temperatura bolle l'acqua in un rifugio a 2500 m? E sul Monte Bianco?</li>
-<li><strong>La regola del 7 %.</strong> Muovi il cursore del riscaldamento: la nuvola cresce di circa il 7 % per ogni grado in più. Da qui si discute perché un clima più caldo porta precipitazioni più intense.</li>
+<li><strong>L'acqua bolle prima in quota.</strong> Muovi il cursore della quota (da 0 a 8849 m) o usa i pulsanti Trento, Rifugio a 2500 m, Marmolada, Monte Bianco ed Everest. L'app calcola la pressione con l'atmosfera standard e la temperatura di ebollizione con l'equazione di Clausius-Clapeyron, e segna il punto sul grafico. Chiedi prima una previsione: a che temperatura bolle l'acqua in un rifugio? (A 2500 m circa 91,5 °C; sul Monte Bianco circa 83,6 °C.)</li>
+<li><strong>Più caldo, più vapore.</strong> Scegli la temperatura di partenza e il riscaldamento. Il grafico confronta la pressione di vapore saturo vera (formula di Buck) con due modelli: Clausius-Clapeyron con il calore latente costante e con il calore latente che cambia con la temperatura. Sotto ci sono gli aumenti percentuali.</li>
+<li>Apri «Da dove viene il "7 % per grado"»: con L costante viene circa il 6 % a 15 °C; tenendo conto che a bassa temperatura L è più grande si ottiene il 7,5 % vicino a 0 °C e il 6–6,6 % tra 15 e 25 °C, come i dati veri.</li>
 </ol>
-<p>Si apre nel browser, anche senza rete.</p>
+<p>Funziona nel browser, anche sul telefono e senza rete (a parte il carattere).</p>
 <h2>Da sapere</h2>
 <ul>
-<li>Sul Monte Bianco il modello dà circa 83 °C.</li>
-<li>La prima parte fa il conto vero. La seconda <strong>non</strong> calcola il 7 %: lo usa come dato. Con il calore latente costante (40,7 kJ/mol, il valore a 100 °C) la pendenza a 15 °C viene circa il 6 % per grado. Il 7 % esce solo se si tiene conto che a bassa temperatura il calore latente è più grande: è un buon spunto per discutere l'ipotesi «L costante».</li>
+<li>È la simulazione del dicembre 2025, rivista il 24/11/2026: prima il 7 % era usato come dato (1,07 elevato al riscaldamento), ora si calcola dall'equazione; i decimali sono con la virgola; «capacità di vapore» è diventato «pressione di vapore saturo».</li>
+<li>Il modello con L costante sbaglia anche il valore: a 15 °C dà 2,1 kPa contro 1,7 kPa veri. È un buon esempio di ipotesi da discutere.</li>
 <li>Meglio evitare l'idea dell'«aria come una spugna»: la pressione di vapore saturo dipende solo dalla temperatura e ci sarebbe anche senza aria.</li>
-<li>Nell'app i decimali sono scritti con il punto.</li>
 </ul></div>
     <div class="testo" id="materiali"></div>
     <footer>Liceo «L. da Vinci» di Trento, prof. Massimo Bosetti.</footer>

@@ -1,403 +1,183 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Esploratore Clausius-Clapeyron</title>
-    <style>
-        :root {
-            --primary: #3498db;
-            --secondary: #e67e22;
-            --dark: #2c3e50;
-            --light: #ecf0f1;
-            --glass: rgba(255, 255, 255, 0.8);
-            --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-            background: linear-gradient(135deg, #a8c0ff 0%, #3f2b96 100%);
-            min-height: 100vh;
-            color: var(--dark);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .container {
-            width: 90%;
-            max-width: 1000px;
-            background: var(--glass);
-            backdrop-filter: blur(8px);
-            border-radius: 20px;
-            box-shadow: var(--shadow);
-            padding: 30px;
-            margin: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
-        }
-
-        header {
-            text-align: center;
-            border-bottom: 2px solid rgba(0,0,0,0.1);
-            padding-bottom: 20px;
-        }
-
-        h1 { margin: 0; color: var(--dark); font-size: 2.5rem; }
-        p.subtitle { margin: 10px 0 0; color: var(--secondary); font-weight: bold; }
-
-        .modules {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-        }
-
-        @media (max-width: 768px) {
-            .modules { grid-template-columns: 1fr; }
-        }
-
-        .card {
-            background: rgba(255, 255, 255, 0.5);
-            border-radius: 15px;
-            padding: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.6);
-            transition: transform 0.3s ease;
-        }
-
-        .card:hover { transform: translateY(-5px); }
-
-        h2 { color: var(--primary); display: flex; align-items: center; gap: 10px; margin-top: 0; }
-        
-        .control-group {
-            margin: 20px 0;
-        }
-
-        label { display: block; font-weight: bold; margin-bottom: 10px; }
-        
-        input[type=range] {
-            width: 100%;
-            height: 10px;
-            border-radius: 5px;
-            background: #d3d3d3;
-            outline: none;
-            opacity: 0.7;
-            transition: .2s;
-            -webkit-appearance: none;
-        }
-
-        input[type=range]:hover { opacity: 1; }
-
-        input[type=range]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: var(--primary);
-            cursor: pointer;
-        }
-
-        .output-display {
-            background: var(--dark);
-            color: #fff;
-            padding: 15px;
-            border-radius: 10px;
-            font-family: monospace;
-            font-size: 1.1rem;
-            text-align: center;
-            margin-top: 20px;
-        }
-
-        .value-highlight { color: var(--secondary); font-weight: bold; }
-
-        /* Module 1 Visuals */
-        .mountain-scene {
-            height: 150px;
-            background: linear-gradient(to bottom, #87CEEB 0%, #ffffff 100%);
-            border-radius: 10px;
-            position: relative;
-            overflow: hidden;
-            margin-top: 20px;
-        }
-        
-        .mountain {
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 0; 
-            height: 0; 
-            border-left: 100px solid transparent;
-            border-right: 100px solid transparent;
-            border-bottom: 140px solid #7f8c8d;
-        }
-
-        .mountain::after {
-            content: '';
-            position: absolute;
-            top: 20px;
-            left: -30px;
-            width: 0;
-            height: 0;
-            border-left: 30px solid transparent;
-            border-right: 30px solid transparent;
-            border-bottom: 40px solid white; /* Snow cap */
-        }
-
-        .climber {
-            position: absolute;
-            bottom: 10px;
-            left: 55%; /* Start slightly offset */
-            font-size: 24px;
-            transition: bottom 0.3s ease, left 0.3s ease;
-        }
-
-        .pot {
-            position: absolute;
-            right: 20px;
-            bottom: 10px;
-            font-size: 30px;
-        }
-
-        .bubble {
-            position: absolute;
-            background: rgba(255, 255, 255, 0.7);
-            border-radius: 50%;
-            bottom: 100%;
-            animation: rise 2s infinite ease-in;
-        }
-
-        @keyframes rise {
-            0% { transform: translateY(0) scale(1); opacity: 0; }
-            50% { opacity: 1; }
-            100% { transform: translateY(-50px) scale(1.5); opacity: 0; }
-        }
-
-        /* Module 2 Visuals */
-        .cloud-scene {
-            height: 150px;
-            background: #dff9fb;
-            border-radius: 10px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-            margin-top: 20px;
-        }
-
-        .cloud {
-            width: 80px;
-            height: 50px;
-            background: #fff;
-            border-radius: 50px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            position: relative;
-            transition: transform 0.3s ease, filter 0.3s ease, background 0.3s ease;
-        }
-
-        .cloud::before, .cloud::after {
-            content: '';
-            position: absolute;
-            background: inherit;
-            border-radius: 50%;
-        }
-        
-        .cloud::before { width: 40px; height: 40px; top: -20px; left: 10px; }
-        .cloud::after { width: 30px; height: 30px; top: -15px; right: 10px; }
-
-        .rain {
-            position: absolute;
-            top: 60px;
-            width: 100%;
-            height: 80px;
-            display: flex;
-            justify-content: center;
-            gap: 5px;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        .drop {
-            width: 2px;
-            height: 10px;
-            background: #3498db;
-            animation: rain 0.5s infinite linear;
-        }
-
-        @keyframes rain {
-            from { transform: translateY(0); }
-            to { transform: translateY(50px); }
-        }
-
-    </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dalla montagna al clima: l'equazione di Clausius-Clapeyron</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* Versione rivista (24/11/2026) della simulazione del dicembre 2025:
+   il 7 % ora si calcola, decimali con la virgola, «pressione di vapore saturo» al posto di «capacità». */
+:root{color-scheme:light dark;
+  --carta:light-dark(#fbfcfb,#1b2824);--quadretto:light-dark(#e1e8ec,#26362f);
+  --inchiostro:light-dark(#1d3d8f,#9cc0ff);--grafite:light-dark(#23262b,#e6eae2);
+  --matita:light-dark(#5a6370,#a9b4ad);--rosso:light-dark(#c62f3a,#f08a92);
+  --verde:light-dark(#2d7a4b,#7fd3a0);--bordo:light-dark(#c9d2d8,#3a4a43);--pannello:light-dark(#ffffff,#22302b)}
+*{box-sizing:border-box}
+body{margin:0;color:var(--grafite);background:var(--carta);font:17px/1.5 "Atkinson Hyperlegible",system-ui,sans-serif;
+  background-image:linear-gradient(var(--quadretto) 1px,transparent 1px),linear-gradient(90deg,var(--quadretto) 1px,transparent 1px);background-size:20px 20px}
+main{max-width:1180px;margin:0 auto;padding:28px 20px 40px}
+h1{font-size:clamp(30px,4.4vw,48px);line-height:1.05;margin:0 0 8px}
+.sotto{color:var(--matita);margin:0 0 24px;max-width:46rem}
+.moduli{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,500px),1fr));gap:24px}
+section{background:var(--pannello);border:1px solid var(--bordo);border-radius:6px;padding:20px 22px}
+h2{font-size:24px;margin:0 0 4px}
+.domanda{margin:0 0 14px;color:var(--matita)}
+label{display:block;font-weight:700;margin:12px 0 4px}
+input[type=range]{width:100%;accent-color:var(--inchiostro);height:28px}
+.luoghi{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 10px}
+.luoghi button{font:inherit;font-size:14px;min-height:34px;padding:0 10px;border:1px solid var(--bordo);border-radius:17px;background:var(--carta);color:var(--grafite);cursor:pointer}
+.luoghi button:hover{border-color:var(--inchiostro)}
+button:focus-visible,input:focus-visible{outline:3px solid var(--inchiostro);outline-offset:2px}
+canvas{display:block;width:100%;height:260px;margin:8px 0}
+.numeri{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:6px}
+.num{border-left:4px solid var(--inchiostro);padding:4px 10px}
+.num b{display:block;font-size:26px;font-variant-numeric:tabular-nums}
+.num span{color:var(--matita);font-size:14px}
+.num.vero{border-color:var(--verde)}.num.cost{border-color:var(--rosso)}
+.nota{font-size:14px;color:var(--matita);margin:12px 0 0}
+details{margin-top:12px}summary{cursor:pointer;font-weight:700;min-height:32px}
+.legenda{display:flex;flex-wrap:wrap;gap:14px;font-size:14px;color:var(--matita)}
+.legenda i{display:inline-block;width:18px;height:3px;vertical-align:middle;margin-right:5px}
+</style>
 </head>
 <body>
+<main>
+  <h1>Dalla montagna al clima</h1>
+  <p class="sotto">Una sola equazione, quella di Clausius-Clapeyron, spiega perché in rifugio la pasta cuoce più lentamente e perché un'atmosfera più calda dà piogge più intense.</p>
 
-<div class="container">
-    <header>
-        <h1>Dalla Montagna al Clima 🏔️🌡️</h1>
-        <p class="subtitle">Esplora l'Equazione di Clausius-Clapeyron</p>
-    </header>
+  <div class="moduli">
+    <section aria-labelledby="t1">
+      <h2 id="t1">1. L'acqua bolle prima in quota</h2>
+      <p class="domanda">A che temperatura bolle l'acqua in un rifugio? E sul Monte Bianco?</p>
+      <label for="quota">Quota: <span id="quotaVal">0</span> m</label>
+      <input id="quota" type="range" min="0" max="8849" step="1" value="0">
+      <div class="luoghi" id="luoghi"></div>
+      <canvas id="g1" role="img" aria-label="Temperatura di ebollizione dell'acqua in funzione della quota"></canvas>
+      <div class="numeri">
+        <div class="num"><b id="pVal">1,000 atm</b><span>pressione dell'aria (atmosfera standard)</span></div>
+        <div class="num"><b id="tVal">100,0 °C</b><span>temperatura di ebollizione</span></div>
+      </div>
+      <details>
+        <summary>Il conto</summary>
+        <p>L'acqua bolle quando la sua pressione di vapore saturo è uguale alla pressione dell'aria. Con l'equazione di Clausius-Clapeyron integrata, partendo da 100 °C a 1 atm:</p>
+        <p>1/T = 1/T₀ − (R/L)·ln(p/p₀), con T₀ = 373,15 K, L = 40,7 kJ/mol, R = 8,314 J/(mol·K).</p>
+        <p>La pressione alla quota h viene dalla formula dell'atmosfera standard: p = p₀·(1 − 2,26·10⁻⁵·h)^5,26, con h in metri.</p>
+      </details>
+    </section>
 
-    <div class="modules">
-        <!-- Module 1: The Mountain -->
-        <div class="card">
-            <h2>1. L'Ebollizione in Quota</h2>
-            <p>Come cambia la temperatura di ebollizione dell'acqua salendo di quota?</p>
-            
-            <div class="control-group">
-                <label for="altitude">Altitudine: <span id="alt-val" class="value-highlight">0</span> m</label>
-                <input type="range" id="altitude" min="0" max="9000" value="0" step="50">
-                
-                <div class="mountain-scene">
-                    <div class="mountain"></div>
-                    <div class="climber" id="climber">⛺</div>
-                </div>
-            </div>
-
-            <div class="output-display">
-                Pressione: <span id="pressure-val" class="value-highlight">1.00</span> atm<br>
-                T. Ebollizione: <span id="boil-val" class="value-highlight">100.0</span> °C
-            </div>
-            <p class="small" style="font-size: 0.8rem; margin-top: 10px; color: #666;">
-                *Calcolato usando l'atmosfera standard e l'equazione di Clausius-Clapeyron.
-            </p>
-        </div>
-
-        <!-- Module 2: The Climate -->
-        <div class="card">
-            <h2>2. La Regola del 7%</h2>
-            <p>Quanto vapore acqueo in più può contenere l'atmosfera se si riscalda?</p>
-            
-            <div class="control-group">
-                <label for="temp-rise">Riscaldamento Globale: +<span id="temp-val" class="value-highlight">0.0</span> °C</label>
-                <input type="range" id="temp-rise" min="0" max="6" value="0" step="0.1">
-                
-                <div class="cloud-scene">
-                    <div class="cloud" id="cloud"></div>
-                    <div class="rain" id="rain"></div>
-                </div>
-            </div>
-
-            <div class="output-display">
-                Capacità Vapore: +<span id="capacity-val" class="value-highlight">0</span> %<br>
-                <span id="impact-text" style="font-size: 0.9rem; color: #e74c3c;">Stabile</span>
-            </div>
-            <p class="small" style="font-size: 0.8rem; margin-top: 10px; color: #666;">
-                *La capacità cresce esponenzialmente (~7% per ogni °C).
-            </p>
-        </div>
-    </div>
-</div>
-
+    <section aria-labelledby="t2">
+      <h2 id="t2">2. Più caldo, più vapore</h2>
+      <p class="domanda">Se l'aria si scalda di un grado, di quanto cresce la pressione di vapore saturo, cioè il vapore che può esserci prima che condensi?</p>
+      <label for="temp">Temperatura di partenza: <span id="tempVal">15</span> °C</label>
+      <input id="temp" type="range" min="-10" max="35" step="1" value="15">
+      <label for="dt">Riscaldamento: +<span id="dtVal">1,0</span> °C</label>
+      <input id="dt" type="range" min="0.5" max="5" step="0.5" value="1">
+      <canvas id="g2" role="img" aria-label="Pressione di vapore saturo in funzione della temperatura: dati veri e due modelli"></canvas>
+      <div class="legenda">
+        <span><i style="background:var(--verde)"></i>dati veri (formula di Buck)</span>
+        <span><i style="background:var(--inchiostro)"></i>Clausius-Clapeyron con L che cambia con t (quasi sovrapposta ai dati veri)</span>
+        <span><i style="background:var(--rosso)"></i>Clausius-Clapeyron con L = 40,7 kJ/mol costante</span>
+      </div>
+      <div class="numeri">
+        <div class="num vero"><b id="aVero">+6,6 %</b><span>aumento, dati veri</span></div>
+        <div class="num"><b id="aVar">+6,4 %</b><span>aumento, L che cambia con t</span></div>
+        <div class="num cost"><b id="aCost">+5,9 %</b><span>aumento, L costante</span></div>
+      </div>
+      <p class="nota" id="commento"></p>
+      <details>
+        <summary>Da dove viene il «7 % per grado»</summary>
+        <p>Dall'equazione di Clausius-Clapeyron, d(ln p)/dT = L/(R T²): l'aumento relativo per grado è L/(R T²). Con L = 40,7 kJ/mol, che è il valore a 100 °C, a 15 °C viene circa il 6 %. Ma a bassa temperatura il calore latente è più grande (circa 45 kJ/mol a 0 °C), e tenendo conto di come cambia si ottiene circa il 7,5 % per grado vicino a 0 °C e il 6–6,6 % tra 15 e 25 °C, come dicono i dati veri. Il «7 %» è quindi un valore arrotondato, giusto alle temperature più basse.</p>
+        <p>Il modello con L costante sbaglia anche il valore della pressione: a 15 °C dà circa 2,1 kPa contro 1,7 kPa veri. È un buon esempio di ipotesi da controllare.</p>
+        <p>Attenzione al linguaggio: si dice spesso «l'aria può contenere più vapore», come se fosse una spugna. In realtà la pressione di vapore saturo dipende solo dalla temperatura e ci sarebbe anche senza aria.</p>
+      </details>
+    </section>
+  </div>
+  <p class="nota">Liceo «L. da Vinci» di Trento, prof. Massimo Bosetti. Simulazione del dicembre 2025, rivista nel novembre 2026.</p>
+</main>
 <script>
-    // --- Module 1 Logic ---
-    const altSlider = document.getElementById('altitude');
-    const altVal = document.getElementById('alt-val');
-    const pressureVal = document.getElementById('pressure-val');
-    const boilVal = document.getElementById('boil-val');
-    const climber = document.getElementById('climber');
+{
+const R=8.314, L0=40700, T0=373.15;
+const $=id=>document.getElementById(id);
+// i colori usano light-dark(): per il canvas si leggono già risolti da un elemento di prova
+const sonda=document.createElement('span');sonda.hidden=true;document.body.appendChild(sonda);
+const css=k=>{sonda.style.color=`var(${k})`;return getComputedStyle(sonda).color||'#888'};
+const fmt=(x,d=1)=>x.toFixed(d).replace('.',',');
+const fmtInt=n=>Math.round(n).toLocaleString('it-IT');
 
-    // Constants
-    const P0 = 1.0; // atm
-    const T0 = 373.15; // K (100 C)
-    const L = 40700; // J/mol (Latent heat)
-    const R = 8.314; // J/mol*K
+// --- 1. Ebollizione in quota ---
+const pQuota=h=>Math.pow(1-2.25577e-5*h,5.25588);           // atm
+const tEbol=p=>1/(1/T0-(R/L0)*Math.log(p))-273.15;            // °C
+const LUOGHI=[['Trento',194],['Rifugio a 2500 m',2500],['Marmolada',3343],['Monte Bianco',4806],['Everest',8849]];
+$('luoghi').innerHTML=LUOGHI.map(([n,h])=>`<button type="button" data-h="${h}">${n}</button>`).join('');
+$('luoghi').addEventListener('click',e=>{const b=e.target.closest('button');if(b){$('quota').value=b.dataset.h;agg1()}});
 
-    function updateMountain() {
-        const h = parseInt(altSlider.value);
-        altVal.textContent = h;
+function prepara(cv){
+  const r=cv.getBoundingClientRect(),dpr=devicePixelRatio||1;
+  cv.width=r.width*dpr;cv.height=r.height*dpr;
+  const c=cv.getContext('2d');c.setTransform(dpr,0,0,dpr,0,0);
+  return [c,r.width,r.height];
+}
+function assi(c,W,H,m,xr,yr,xt,yt,xs,ys,xl,yl){
+  const X=x=>m.l+(x-xr[0])/(xr[1]-xr[0])*(W-m.l-m.r), Y=y=>H-m.b-(y-yr[0])/(yr[1]-yr[0])*(H-m.t-m.b);
+  c.strokeStyle=css('--bordo');c.fillStyle=css('--matita');c.lineWidth=1;c.font='13px "Atkinson Hyperlegible",sans-serif';
+  c.textAlign='center';c.textBaseline='top';
+  for(let x=xr[0];x<=xr[1]+1e-9;x+=xs){c.beginPath();c.moveTo(X(x),Y(yr[0]));c.lineTo(X(x),Y(yr[1]));c.stroke();c.fillText(xt(x),X(x),H-m.b+5)}
+  c.textAlign='right';c.textBaseline='middle';
+  for(let y=yr[0];y<=yr[1]+1e-9;y+=ys){c.beginPath();c.moveTo(X(xr[0]),Y(y));c.lineTo(X(xr[1]),Y(y));c.stroke();c.fillText(yt(y),m.l-6,Y(y))}
+  c.textAlign='center';c.fillText(xl,(m.l+W-m.r)/2,H-14);
+  c.save();c.translate(10,(m.t+H-m.b)/2);c.rotate(-Math.PI/2);c.fillText(yl,0,0);c.restore();
+  return [X,Y];
+}
+function agg1(){
+  const h=+$('quota').value,p=pQuota(h),t=tEbol(p);
+  $('quotaVal').textContent=fmtInt(h);$('pVal').textContent=fmt(p,3)+' atm';$('tVal').textContent=fmt(t)+' °C';
+  const [c,W,H]=prepara($('g1'));c.clearRect(0,0,W,H);
+  const m={l:70,r:22,t:10,b:46};
+  const [X,Y]=assi(c,W,H,m,[0,9000],[65,100],x=>fmtInt(x),y=>y+' °C',1500,5,'quota (m)','temperatura di ebollizione');
+  c.strokeStyle=css('--inchiostro');c.lineWidth=2.5;c.beginPath();
+  for(let q=0;q<=9000;q+=50){const y=tEbol(pQuota(q));q?c.lineTo(X(q),Y(y)):c.moveTo(X(q),Y(y))}c.stroke();
+  c.fillStyle=css('--rosso');c.beginPath();c.arc(X(h),Y(t),6,0,7);c.fill();
+}
 
-        // 1. Calculate Pressure (Standard Atmosphere Approximation)
-        // P = P0 * (1 - 2.25577e-5 * h)^5.25588
-        const P_atm = P0 * Math.pow((1 - 2.25577e-5 * h), 5.25588);
-        pressureVal.textContent = P_atm.toFixed(2);
+// --- 2. Pressione di vapore saturo ---
+const buck=t=>0.61121*Math.exp((18.678-t/234.5)*(t/(257.14+t)));     // kPa, dati veri
+const eCost=t=>101.325*Math.exp(-(L0/R)*(1/(t+273.15)-1/T0));         // kPa, L costante
+const Lt=t=>(2501-2.37*t)*18.015;                                     // J/mol, L che cambia con t
+// e(t) con L(t): si integra d(ln p)/dT = L/(R T²) da 100 °C in giù, con passi di 0,01 K; si salva un valore ogni 0,1 °C
+const TAB=[];                                                         // TAB[i] = e(-20 + 0,1 i) in kPa
+{let lnp=Math.log(101.325),T=T0;const n=12000,dT=0.01,val=[];val[n]=101.325;
+ for(let k=n-1;k>=0;k--){const Tm=T-dT/2;lnp-=Lt(Tm-273.15)/(R*Tm*Tm)*dT;T-=dT;val[k]=Math.exp(lnp)}
+ for(let i=0;i<=1200;i++)TAB[i]=val[i*10]}
+const eVar=t=>{const x=(t+20)*10,i=Math.min(1199,Math.max(0,Math.floor(x))),f=x-i;return TAB[i]+(TAB[i+1]-TAB[i])*f};
 
-        // 2. Calculate Boiling Temp (Inverse Clausius-Clapeyron)
-        // 1/T = 1/T0 - (R/L)*ln(P/P0)
-        // T = 1 / ( 1/T0 - (R/L)*ln(P/P0) )
-        const oneOverT = (1/T0) - (R/L) * Math.log(P_atm/P0);
-        const T_boil_K = 1 / oneOverT;
-        const T_boil_C = T_boil_K - 273.15;
-        
-        boilVal.textContent = T_boil_C.toFixed(1);
-
-        // 3. Visuals
-        // Move climber along the mountain: 
-        // Bottom-Left (0m) to Top-Center (9000m)
-        // Map 0-9000 to X: 10% -> 50%, Y: 10px -> 120px
-        const percent = h / 9000;
-        const newLeft = 10 + (40 * percent); // 10% to 50%
-        const newBottom = 10 + (100 * percent); // 10px to 110px
-        
-        climber.style.left = newLeft + '%';
-        climber.style.bottom = newBottom + 'px';
-    }
-
-    altSlider.addEventListener('input', updateMountain);
-
-    // --- Module 2 Logic ---
-    const tempSlider = document.getElementById('temp-rise');
-    const tempVal = document.getElementById('temp-val');
-    const capacityVal = document.getElementById('capacity-val');
-    const impactText = document.getElementById('impact-text');
-    const cloud = document.getElementById('cloud');
-    const rain = document.getElementById('rain');
-
-    function updateClimate() {
-        const dT = parseFloat(tempSlider.value);
-        tempVal.textContent = dT.toFixed(1);
-
-        // Rule of 7%: Capacity ~ 1.07^dT
-        const factor = Math.pow(1.07, dT);
-        const increasePercent = (factor - 1) * 100;
-        
-        capacityVal.textContent = increasePercent.toFixed(1);
-
-        // Visuals
-        // Cloud grows
-        const scale = 1 + (increasePercent / 100) * 1.5; // Scale up to 2.5x roughly
-        cloud.style.transform = `scale(${scale})`;
-        
-        // Cloud gets darker (grey)
-        const darkness = 255 - (increasePercent * 3); // minimal darkness
-        cloud.style.background = `rgb(${darkness}, ${darkness}, ${darkness})`;
-        
-        // Rain appears at high dT
-        if (dT > 2) {
-            rain.style.opacity = (dT - 2) / 4; // Fade in
-            // Generate drops
-            rain.innerHTML = '';
-            const dropCount = Math.floor(dT * 3);
-            for(let i=0; i<dropCount; i++) {
-                const drop = document.createElement('div');
-                drop.className = 'drop';
-                drop.style.left = Math.random() * 100 + '%';
-                drop.style.animationDuration = (0.5 + Math.random()*0.5) + 's';
-                rain.appendChild(drop);
-            }
-        } else {
-            rain.style.opacity = 0;
-            rain.innerHTML = '';
-        }
-
-        // Text
-        if (dT < 1) { impactText.textContent = "Situazione Stabile"; impactText.style.color = "#27ae60"; }
-        else if (dT < 2) { impactText.textContent = "Aumento Precipitazioni"; impactText.style.color = "#f39c12"; }
-        else if (dT < 4) { impactText.textContent = "Rischio Eventi Estremi"; impactText.style.color = "#e67e22"; }
-        else { impactText.textContent = "CRITICO: Supercelle & Alluvioni"; impactText.style.color = "#c0392b"; }
-    }
-
-    tempSlider.addEventListener('input', updateClimate);
-
-    // Init
-    updateMountain();
-    updateClimate();
-
+function agg2(){
+  const t=+$('temp').value,d=+$('dt').value;
+  $('tempVal').textContent=t;$('dtVal').textContent=fmt(d);
+  const perc=f=>(f(t+d)/f(t)-1)*100;
+  const v=perc(buck),va=perc(eVar),co=perc(eCost);
+  $('aVero').textContent='+'+fmt(v)+' %';$('aVar').textContent='+'+fmt(va)+' %';$('aCost').textContent='+'+fmt(co)+' %';
+  const perGrado=(Math.pow(buck(t+d)/buck(t),1/d)-1)*100;
+  $('commento').textContent=`Dati veri: circa ${fmt(perGrado)} % per grado a partire da ${t} °C. A ${t} °C la pressione di vapore saturo vale ${fmt(buck(t),2)} kPa (dati veri) e ${fmt(eCost(t),2)} kPa con L costante.`;
+  const [c,W,H]=prepara($('g2'));c.clearRect(0,0,W,H);
+  const m={l:70,r:22,t:10,b:46},ymax=7;
+  const [X,Y]=assi(c,W,H,m,[-10,40],[0,ymax],x=>x+' °C',y=>y+' kPa',10,1,'temperatura','pressione di vapore saturo');
+  c.save();c.beginPath();c.rect(m.l,m.t,W-m.l-m.r,H-m.t-m.b);c.clip();
+  for(const [f,col] of [[eCost,'--rosso'],[eVar,'--inchiostro'],[buck,'--verde']]){
+    c.strokeStyle=css(col);c.lineWidth=col==='--verde'?3:2;c.beginPath();
+    for(let x=-10;x<=40;x+=0.25){const y=f(x);x>-10?c.lineTo(X(x),Y(y)):c.moveTo(X(x),Y(y))}c.stroke();
+  }
+  c.restore();
+  c.fillStyle='rgba(127,127,127,.15)';c.fillRect(X(t),m.t,X(t+d)-X(t),H-m.t-m.b);
+  for(const x of [t,t+d]){c.fillStyle=css('--verde');c.beginPath();c.arc(X(x),Y(buck(x)),5,0,7);c.fill()}
+}
+$('quota').addEventListener('input',agg1);$('temp').addEventListener('input',agg2);$('dt').addEventListener('input',agg2);
+addEventListener('resize',()=>{agg1();agg2()});
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{agg1();agg2()});
+agg1();agg2();
+}
 </script>
-
 </body>
 </html>
