@@ -11,22 +11,58 @@
   "tema": "Attrito viscoso e velocità limite",
   "anno": 3,
   "data": "2026-11-13",
+  "en": {
+    "titolo": "Small ball in glycerine (VPython)",
+    "sommario": "Step-by-step simulation of a small steel ball falling through glycerine, with v(t) and a(t) graphs and a comparison with Stokes' law.",
+    "tema": "Viscous drag and terminal velocity",
+    "argomento": [
+      "Mechanics",
+      "Dynamics"
+    ]
+  },
   "file": [
     [
       "attrito_viscoso_studenti.py",
-      "Versione da completare (studenti)"
+      "Versione da completare (studenti), in italiano",
+      "Version to complete (students), Italian",
+      "it"
     ],
     [
       "attrito_viscoso_colab.ipynb",
-      "Notebook per Google Colab"
+      "Notebook per Google Colab, in italiano",
+      "Google Colab notebook, Italian",
+      "it"
+    ],
+    [
+      "viscous_drag_students_en.py",
+      "Versione da completare (studenti), in inglese",
+      "Version to complete (students), English",
+      "en"
+    ],
+    [
+      "viscous_drag_colab_en.ipynb",
+      "Notebook per Google Colab, in inglese",
+      "Google Colab notebook, English",
+      "en"
     ]
   ],
-  "colab": "attrito_viscoso_colab.ipynb",
+  "colab": {
+    "it": "attrito_viscoso_colab.ipynb",
+    "en": "viscous_drag_colab_en.ipynb"
+  },
   "allegati": [],
   "docente": [
     [
       "docente/attrito_viscoso_completo.py",
-      "Simulazione completa"
+      "Simulazione completa, in italiano",
+      "Complete simulation, Italian",
+      "it"
+    ],
+    [
+      "docente/viscous_drag_complete_en.py",
+      "Simulazione completa, in inglese",
+      "Complete simulation, English",
+      "en"
     ]
   ],
   "collegate": [

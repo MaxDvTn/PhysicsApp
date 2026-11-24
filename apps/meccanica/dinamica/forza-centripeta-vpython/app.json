@@ -11,22 +11,58 @@
   "tema": "Forza centripeta",
   "anno": 3,
   "data": "2026-11-13",
+  "en": {
+    "titolo": "A force always perpendicular to the velocity (VPython)",
+    "sommario": "A force of constant magnitude, always perpendicular to the velocity, bends the path into a circle. With the «Cut the string» button the ball leaves along the tangent.",
+    "tema": "Centripetal force",
+    "argomento": [
+      "Mechanics",
+      "Dynamics"
+    ]
+  },
   "file": [
     [
       "forza_centripeta_studenti.py",
-      "Versione da completare (studenti)"
+      "Versione da completare (studenti), in italiano",
+      "Version to complete (students), Italian",
+      "it"
     ],
     [
       "forza_centripeta_colab.ipynb",
-      "Notebook per Google Colab"
+      "Notebook per Google Colab, in italiano",
+      "Google Colab notebook, Italian",
+      "it"
+    ],
+    [
+      "centripetal_force_students_en.py",
+      "Versione da completare (studenti), in inglese",
+      "Version to complete (students), English",
+      "en"
+    ],
+    [
+      "centripetal_force_colab_en.ipynb",
+      "Notebook per Google Colab, in inglese",
+      "Google Colab notebook, English",
+      "en"
     ]
   ],
-  "colab": "forza_centripeta_colab.ipynb",
+  "colab": {
+    "it": "forza_centripeta_colab.ipynb",
+    "en": "centripetal_force_colab_en.ipynb"
+  },
   "allegati": [],
   "docente": [
     [
       "docente/forza_centripeta_completo.py",
-      "Simulazione completa"
+      "Simulazione completa, in italiano",
+      "Complete simulation, Italian",
+      "it"
+    ],
+    [
+      "docente/centripetal_force_complete_en.py",
+      "Simulazione completa, in inglese",
+      "Complete simulation, English",
+      "en"
     ]
   ],
   "collegate": [

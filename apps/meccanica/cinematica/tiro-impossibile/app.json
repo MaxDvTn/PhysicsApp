@@ -11,29 +11,43 @@
   "tema": "Moto parabolico",
   "anno": 3,
   "data": "2026-10-09",
+  "en": {
+    "titolo": "The impossible shot",
+    "sommario": "The monkey and hunter problem: an investigation in three acts and a VPython simulation that students build in three steps.",
+    "tema": "Projectile motion",
+    "argomento": [
+      "Mechanics",
+      "Kinematics"
+    ]
+  },
   "file": [
     [
       "schede/scheda_tiro_impossibile.pdf",
-      "Scheda dell'indagine (tre atti)"
+      "Scheda dell'indagine (tre atti)",
+      "Investigation worksheet (three acts, Italian)"
     ],
     [
       "schede/passo1_dardo.pdf",
-      "Passo 1: il dardo in orizzontale"
+      "Passo 1: il dardo in orizzontale",
+      "Step 1: the dart moving horizontally (Italian)"
     ],
     [
       "schede/passo1B_scimmia.pdf",
-      "Passo 1B: la scimmia che cade"
+      "Passo 1B: la scimmia che cade",
+      "Step 1B: the falling monkey (Italian)"
     ],
     [
       "schede/passo2_dardo_e_scimmia.pdf",
-      "Passo 2: dardo e scimmia insieme"
+      "Passo 2: dardo e scimmia insieme",
+      "Step 2: dart and monkey together (Italian)"
     ]
   ],
   "allegati": [],
   "docente": [
     [
       "docente/soluzione_docente.pdf",
-      "Soluzione per il docente (tre atti e simulazione)"
+      "Soluzione per il docente (tre atti e simulazione)",
+      "Teacher's solution (three acts and simulation, Italian)"
     ]
   ],
   "collegate": []

@@ -2,6 +2,8 @@
 
 Una sferetta d'acciaio (raggio 2 mm) cade in un cilindro di glicerina. Il programma calcola il moto passo per passo con il secondo principio, disegna i grafici v(t) e a(t), misura la velocità tra due tacche e la confronta con la formula di Stokes.
 
+Gli script e il notebook ci sono in italiano e in inglese (i file che finiscono con `_en`).
+
 ## Come si usa
 
 **Nel browser, senza installare niente (consigliato).**

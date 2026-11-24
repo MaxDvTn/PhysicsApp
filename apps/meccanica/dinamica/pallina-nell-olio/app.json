@@ -11,23 +11,36 @@
   "tema": "Attrito viscoso e velocità limite",
   "anno": 3,
   "data": "2026-11-24",
+  "en": {
+    "titolo": "The golf ball in oil",
+    "sommario": "Video analysis of a ball falling through a cylinder of oil: from the observed motion to terminal velocity.",
+    "tema": "Viscous drag and terminal velocity",
+    "argomento": [
+      "Mechanics",
+      "Dynamics"
+    ]
+  },
   "file": [],
   "allegati": [
     [
       "allegati/sintesi_attrito_viscoso.pdf",
-      "Sintesi della lezione"
+      "Sintesi della lezione",
+      "Lesson summary (Italian)"
     ],
     [
       "allegati/problemi_attrito_viscoso_studenti.pdf",
-      "Problemi in classe (versione studenti)"
+      "Problemi in classe (versione studenti)",
+      "Problems for class (students' version, Italian)"
     ],
     [
       "allegati/slide_attrito_viscoso.pdf",
-      "Slide, tema chiaro"
+      "Slide, tema chiaro",
+      "Slides, light theme (Italian)"
     ],
     [
       "allegati/slide_attrito_viscoso_dark.pdf",
-      "Slide, tema scuro"
+      "Slide, tema scuro",
+      "Slides, dark theme (Italian)"
     ]
   ],
   "docente": [],

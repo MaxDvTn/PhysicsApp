@@ -11,19 +11,31 @@
   "tema": "Forza centripeta",
   "anno": 3,
   "data": "2026-11-24",
+  "en": {
+    "titolo": "From polygon to circle",
+    "sommario": "A ball travels around a regular polygon and gets a kick at every vertex: adding sides leads to the centripetal force.",
+    "tema": "Centripetal force",
+    "argomento": [
+      "Mechanics",
+      "Dynamics"
+    ]
+  },
   "file": [],
   "allegati": [
     [
       "allegati/sintesi_forza_centripeta.pdf",
-      "Sintesi della lezione"
+      "Sintesi della lezione",
+      "Lesson summary (Italian)"
     ],
     [
       "allegati/slide_forza_centripeta.pdf",
-      "Slide, tema chiaro"
+      "Slide, tema chiaro",
+      "Slides, light theme (Italian)"
     ],
     [
       "allegati/slide_forza_centripeta_dark.pdf",
-      "Slide, tema scuro"
+      "Slide, tema scuro",
+      "Slides, dark theme (Italian)"
     ]
   ],
   "docente": [],

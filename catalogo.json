@@ -11,6 +11,14 @@
     "tema": "Moti della Terra",
     "anno": 3,
     "data": "2026-09-29",
+    "en": {
+      "titolo": "Solar day and sidereal day",
+      "sommario": "Why the solar day is about 4 minutes longer than the sidereal day: a flip-through worksheet for Year 3, with links to six simulations.",
+      "tema": "Motions of the Earth",
+      "argomento": [
+        "Astronomy"
+      ]
+    },
     "file": [],
     "allegati": [],
     "docente": [],
@@ -31,6 +39,14 @@
     "tema": "Reti neurali",
     "anno": null,
     "data": "2026-09-23",
+    "en": {
+      "titolo": "Sums of sigmoids",
+      "sommario": "The universal approximation theorem, hands on: one neuron, the constructive proof step by step and a network that trains in the browser.",
+      "tema": "Neural networks",
+      "argomento": [
+        "Artificial intelligence"
+      ]
+    },
     "file": [],
     "allegati": [],
     "docente": [],
@@ -51,6 +67,14 @@
     "tema": "Teoria dei numeri",
     "anno": null,
     "data": "2026-11-21",
+    "en": {
+      "titolo": "A map of the Riemann proof",
+      "sommario": "The seven stages of the announced proof of the Riemann hypothesis, explained with high-school maths, with a «prime seismograph» computed in the browser.",
+      "tema": "Number theory",
+      "argomento": [
+        "Mathematics"
+      ]
+    },
     "file": [],
     "allegati": [],
     "docente": [],
@@ -72,29 +96,43 @@
     "tema": "Moto parabolico",
     "anno": 3,
     "data": "2026-10-09",
+    "en": {
+      "titolo": "The impossible shot",
+      "sommario": "The monkey and hunter problem: an investigation in three acts and a VPython simulation that students build in three steps.",
+      "tema": "Projectile motion",
+      "argomento": [
+        "Mechanics",
+        "Kinematics"
+      ]
+    },
     "file": [
       [
         "schede/scheda_tiro_impossibile.pdf",
-        "Scheda dell'indagine (tre atti)"
+        "Scheda dell'indagine (tre atti)",
+        "Investigation worksheet (three acts, Italian)"
       ],
       [
         "schede/passo1_dardo.pdf",
-        "Passo 1: il dardo in orizzontale"
+        "Passo 1: il dardo in orizzontale",
+        "Step 1: the dart moving horizontally (Italian)"
       ],
       [
         "schede/passo1B_scimmia.pdf",
-        "Passo 1B: la scimmia che cade"
+        "Passo 1B: la scimmia che cade",
+        "Step 1B: the falling monkey (Italian)"
       ],
       [
         "schede/passo2_dardo_e_scimmia.pdf",
-        "Passo 2: dardo e scimmia insieme"
+        "Passo 2: dardo e scimmia insieme",
+        "Step 2: dart and monkey together (Italian)"
       ]
     ],
     "allegati": [],
     "docente": [
       [
         "docente/soluzione_docente.pdf",
-        "Soluzione per il docente (tre atti e simulazione)"
+        "Soluzione per il docente (tre atti e simulazione)",
+        "Teacher's solution (three acts and simulation, Italian)"
       ]
     ],
     "collegate": [],
@@ -115,22 +153,58 @@
     "tema": "Attrito viscoso e velocità limite",
     "anno": 3,
     "data": "2026-11-13",
+    "en": {
+      "titolo": "Small ball in glycerine (VPython)",
+      "sommario": "Step-by-step simulation of a small steel ball falling through glycerine, with v(t) and a(t) graphs and a comparison with Stokes' law.",
+      "tema": "Viscous drag and terminal velocity",
+      "argomento": [
+        "Mechanics",
+        "Dynamics"
+      ]
+    },
     "file": [
       [
         "attrito_viscoso_studenti.py",
-        "Versione da completare (studenti)"
+        "Versione da completare (studenti), in italiano",
+        "Version to complete (students), Italian",
+        "it"
       ],
       [
         "attrito_viscoso_colab.ipynb",
-        "Notebook per Google Colab"
+        "Notebook per Google Colab, in italiano",
+        "Google Colab notebook, Italian",
+        "it"
+      ],
+      [
+        "viscous_drag_students_en.py",
+        "Versione da completare (studenti), in inglese",
+        "Version to complete (students), English",
+        "en"
+      ],
+      [
+        "viscous_drag_colab_en.ipynb",
+        "Notebook per Google Colab, in inglese",
+        "Google Colab notebook, English",
+        "en"
       ]
     ],
-    "colab": "attrito_viscoso_colab.ipynb",
+    "colab": {
+      "it": "attrito_viscoso_colab.ipynb",
+      "en": "viscous_drag_colab_en.ipynb"
+    },
     "allegati": [],
     "docente": [
       [
         "docente/attrito_viscoso_completo.py",
-        "Simulazione completa"
+        "Simulazione completa, in italiano",
+        "Complete simulation, Italian",
+        "it"
+      ],
+      [
+        "docente/viscous_drag_complete_en.py",
+        "Simulazione completa, in inglese",
+        "Complete simulation, English",
+        "en"
       ]
     ],
     "collegate": [
@@ -153,19 +227,31 @@
     "tema": "Forza centripeta",
     "anno": 3,
     "data": "2026-11-24",
+    "en": {
+      "titolo": "From polygon to circle",
+      "sommario": "A ball travels around a regular polygon and gets a kick at every vertex: adding sides leads to the centripetal force.",
+      "tema": "Centripetal force",
+      "argomento": [
+        "Mechanics",
+        "Dynamics"
+      ]
+    },
     "file": [],
     "allegati": [
       [
         "allegati/sintesi_forza_centripeta.pdf",
-        "Sintesi della lezione"
+        "Sintesi della lezione",
+        "Lesson summary (Italian)"
       ],
       [
         "allegati/slide_forza_centripeta.pdf",
-        "Slide, tema chiaro"
+        "Slide, tema chiaro",
+        "Slides, light theme (Italian)"
       ],
       [
         "allegati/slide_forza_centripeta_dark.pdf",
-        "Slide, tema scuro"
+        "Slide, tema scuro",
+        "Slides, dark theme (Italian)"
       ]
     ],
     "docente": [],
@@ -189,22 +275,58 @@
     "tema": "Forza centripeta",
     "anno": 3,
     "data": "2026-11-13",
+    "en": {
+      "titolo": "A force always perpendicular to the velocity (VPython)",
+      "sommario": "A force of constant magnitude, always perpendicular to the velocity, bends the path into a circle. With the «Cut the string» button the ball leaves along the tangent.",
+      "tema": "Centripetal force",
+      "argomento": [
+        "Mechanics",
+        "Dynamics"
+      ]
+    },
     "file": [
       [
         "forza_centripeta_studenti.py",
-        "Versione da completare (studenti)"
+        "Versione da completare (studenti), in italiano",
+        "Version to complete (students), Italian",
+        "it"
       ],
       [
         "forza_centripeta_colab.ipynb",
-        "Notebook per Google Colab"
+        "Notebook per Google Colab, in italiano",
+        "Google Colab notebook, Italian",
+        "it"
+      ],
+      [
+        "centripetal_force_students_en.py",
+        "Versione da completare (studenti), in inglese",
+        "Version to complete (students), English",
+        "en"
+      ],
+      [
+        "centripetal_force_colab_en.ipynb",
+        "Notebook per Google Colab, in inglese",
+        "Google Colab notebook, English",
+        "en"
       ]
     ],
-    "colab": "forza_centripeta_colab.ipynb",
+    "colab": {
+      "it": "forza_centripeta_colab.ipynb",
+      "en": "centripetal_force_colab_en.ipynb"
+    },
     "allegati": [],
     "docente": [
       [
         "docente/forza_centripeta_completo.py",
-        "Simulazione completa"
+        "Simulazione completa, in italiano",
+        "Complete simulation, Italian",
+        "it"
+      ],
+      [
+        "docente/centripetal_force_complete_en.py",
+        "Simulazione completa, in inglese",
+        "Complete simulation, English",
+        "en"
       ]
     ],
     "collegate": [
@@ -227,23 +349,36 @@
     "tema": "Attrito viscoso e velocità limite",
     "anno": 3,
     "data": "2026-11-24",
+    "en": {
+      "titolo": "The golf ball in oil",
+      "sommario": "Video analysis of a ball falling through a cylinder of oil: from the observed motion to terminal velocity.",
+      "tema": "Viscous drag and terminal velocity",
+      "argomento": [
+        "Mechanics",
+        "Dynamics"
+      ]
+    },
     "file": [],
     "allegati": [
       [
         "allegati/sintesi_attrito_viscoso.pdf",
-        "Sintesi della lezione"
+        "Sintesi della lezione",
+        "Lesson summary (Italian)"
       ],
       [
         "allegati/problemi_attrito_viscoso_studenti.pdf",
-        "Problemi in classe (versione studenti)"
+        "Problemi in classe (versione studenti)",
+        "Problems for class (students' version, Italian)"
       ],
       [
         "allegati/slide_attrito_viscoso.pdf",
-        "Slide, tema chiaro"
+        "Slide, tema chiaro",
+        "Slides, light theme (Italian)"
       ],
       [
         "allegati/slide_attrito_viscoso_dark.pdf",
-        "Slide, tema scuro"
+        "Slide, tema scuro",
+        "Slides, dark theme (Italian)"
       ]
     ],
     "docente": [],
@@ -266,6 +401,14 @@
     "tema": "Transizioni di fase",
     "anno": 4,
     "data": "2025-12-27",
+    "en": {
+      "titolo": "Clausius-Clapeyron explorer",
+      "sommario": "Why water boils below 100 °C in a mountain hut and where the «7 % per degree» of water vapour in a warmer climate comes from: models compared with real data.",
+      "tema": "Phase transitions",
+      "argomento": [
+        "Thermodynamics"
+      ]
+    },
     "file": [],
     "allegati": [],
     "docente": [],

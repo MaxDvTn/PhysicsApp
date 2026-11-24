@@ -1,6 +1,6 @@
 # Giorno solare e giorno siderale
 
-Perché il Sole torna nello stesso punto del cielo dopo 24 ore, mentre le stelle ci tornano dopo circa 23 ore e 56 minuti? La pagina contiene la scheda per la classe terza (5 pagine, con schemi) e i collegamenti a sei simulazioni esterne per vederlo in movimento.
+Perché il Sole torna nello stesso punto del cielo dopo 24 ore, mentre le stelle ci tornano dopo circa 23 ore e 56 minuti? La pagina contiene la scheda per la classe terza (5 pagine, con schemi; in inglese c'è la traduzione completa, con gli schemi ridisegnati) e i collegamenti a sei simulazioni esterne per vederlo in movimento.
 
 ## Come si usa
 

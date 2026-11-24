@@ -82,6 +82,77 @@ button.b[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--a
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 
+<!-- LINGUA:INIZIO — commutatore italiano/inglese, uguale in tutte le app (strumenti/lingua_snippet.html) -->
+<style>
+.lingua-btn{position:fixed;right:12px;bottom:12px;z-index:1000;font:600 14px/1 system-ui,sans-serif;min-height:38px;padding:0 14px;border-radius:19px;border:1px solid #8889;background:Canvas;color:CanvasText;cursor:pointer;box-shadow:0 1px 4px #0003}
+.lingua-btn:focus-visible{outline:3px solid Highlight;outline-offset:2px}
+@media print{.lingua-btn{display:none}}
+</style>
+<button class="lingua-btn" id="linguaBtn" type="button"></button>
+<script>
+/* La lingua si sceglie così: ?lang=en|it nell'indirizzo, poi la scelta salvata (chiave «lingua»,
+   la stessa del sito PhysicsApp), poi la lingua del browser. Gli elementi con data-en mostrano
+   quel testo in inglese; il loro contenuto originale è l'italiano. Le app ascoltano l'evento «lingua». */
+window.I18N=(function(){
+  function iniziale(){
+    try{var q=new URLSearchParams(location.search).get('lang');if(q==='en'||q==='it')return q;
+        var s=localStorage.getItem('lingua');if(s==='en'||s==='it')return s}catch(e){}
+    return /^it/i.test(navigator.language||'it')?'it':'en';
+  }
+  var I={lingua:iniziale(),titolo:null,
+    t:function(it,en){return I.lingua==='en'?en:it},
+    num:function(x,d){var s=Number(x).toFixed(d);return I.lingua==='en'?s:s.replace('.',',')},
+    applica:function(){
+      document.documentElement.lang=I.lingua;
+      document.querySelectorAll('[data-en]').forEach(function(el){
+        if(el.dataset.it===undefined)el.dataset.it=el.innerHTML;
+        el.innerHTML=I.lingua==='en'?el.dataset.en:el.dataset.it;
+      });
+      document.querySelectorAll('[data-en-label]').forEach(function(el){
+        if(el.dataset.itLabel===undefined)el.dataset.itLabel=el.getAttribute('aria-label')||'';
+        el.setAttribute('aria-label',I.lingua==='en'?el.dataset.enLabel:el.dataset.itLabel);
+      });
+      if(I.titolo)document.title=I.t(I.titolo[0],I.titolo[1]);
+      var b=document.getElementById('linguaBtn');
+      b.textContent=I.lingua==='en'?'Italiano':'English';
+      b.setAttribute('lang',I.lingua==='en'?'it':'en');
+      b.setAttribute('aria-label',I.lingua==='en'?'Passa all’italiano':'Switch to English');
+      window.dispatchEvent(new Event('lingua'));
+    },
+    imposta:function(l){I.lingua=l;try{localStorage.setItem('lingua',l)}catch(e){}I.applica()},
+    /* Per le app con molti testi creati dal codice: dizionario {testo italiano: testo inglese}
+       e regole [[RegExp, sostituzione]], applicati ai nodi di testo e agli attributi
+       aria-label, placeholder e title, anche a quelli aggiunti dopo. */
+    dizionario:function(mappa,regole){
+      var stato=new WeakMap(),ATTR=['aria-label','placeholder','title'];
+      function inglese(it){var t=it.trim();if(!t)return null;var en=mappa[t];
+        if(en===undefined){for(var i=0;i<(regole||[]).length;i++){if(regole[i][0].test(t)){en=t.replace(regole[i][0],regole[i][1]);break}}}
+        return en===undefined?null:it.replace(t,en)}
+      function testo(n){var s=stato.get(n),it=(s&&n.nodeValue===s.en)?s.it:n.nodeValue,en=inglese(it);
+        if(en===null){stato.delete(n);return}stato.set(n,{it:it,en:en});
+        var v=I.lingua==='en'?en:it;if(n.nodeValue!==v)n.nodeValue=v}
+      function attributi(el){ATTR.forEach(function(a){if(!el.hasAttribute(a))return;var k='i18n'+a.replace(/-/g,''),
+        it=el.dataset[k]!==undefined&&el.getAttribute(a)===el.dataset[k+'En']?el.dataset[k]:el.getAttribute(a),en=inglese(it);
+        if(en===null)return;el.dataset[k]=it;el.dataset[k+'En']=en;var v=I.lingua==='en'?en:it;if(el.getAttribute(a)!==v)el.setAttribute(a,v)})}
+      function giro(radice){if(radice.nodeType===3){testo(radice);return}if(radice.nodeType!==1)return;
+        if(/^(SCRIPT|STYLE)$/.test(radice.tagName))return;attributi(radice);
+        var w=document.createTreeWalker(radice,NodeFilter.SHOW_TEXT|NodeFilter.SHOW_ELEMENT),n;
+        while((n=w.nextNode())){if(n.nodeType===3){if(!/^(SCRIPT|STYLE)$/.test(n.parentNode.tagName))testo(n)}else attributi(n)}}
+      var tutto=function(){giro(document.body)};
+      window.addEventListener('lingua',tutto);
+      new MutationObserver(function(ms){ms.forEach(function(m){
+        if(m.type==='characterData')testo(m.target);
+        else if(m.type==='attributes')attributi(m.target);
+        else m.addedNodes.forEach(giro)})}).observe(document.body,{subtree:true,childList:true,characterData:true,attributes:true,attributeFilter:ATTR});
+      tutto();
+    }
+  };
+  document.getElementById('linguaBtn').addEventListener('click',function(){I.imposta(I.lingua==='en'?'it':'en')});
+  return I;
+})();
+</script>
+<!-- LINGUA:FINE -->
+
 <div class="wrap">
   <header>
     <div class="eyebrow">Laboratorio · Teorema di approssimazione universale</div>
@@ -249,7 +320,7 @@ const $ = id => document.getElementById(id);
 const tok = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
 const sig = t => 1 / (1 + Math.exp(-t));
 const relu = t => t > 0 ? t : 0;
-const fmt = (v, d = 3) => Number.isFinite(v) ? v.toFixed(d).replace('.', ',') : '–';
+const fmt = (v, d = 3) => Number.isFinite(v) ? I18N.num(v, d) : '–';
 
 const FUNCS = [
   x => Math.sin(2 * x) + 0.3 * x,
@@ -332,7 +403,7 @@ class Plot {
   }
 }
 function niceStep(range) { const r = range / 6, p = Math.pow(10, Math.floor(Math.log10(r))), m = r / p; return (m < 1.5 ? 1 : m < 3.5 ? 2 : m < 7.5 ? 5 : 10) * p; }
-function trimNum(v) { return (Math.round(v * 100) / 100).toString().replace('.', ','); }
+function trimNum(v) { const s = (Math.round(v * 100) / 100).toString(); return I18N.lingua === 'en' ? s : s.replace('.', ','); }
 function yRange(fn, a, b, pad = .25) {
   let lo = Infinity, hi = -Infinity;
   for (let i = 0; i <= 400; i++) { const y = fn(a + (b - a) * i / 400); if (Number.isFinite(y)) { lo = Math.min(lo, y); hi = Math.max(hi, y); } }
@@ -417,6 +488,20 @@ const EXPL = {
   4: `<p><b>Dentro la rete.</b> In viola i singoli contributi Δₖ·σ(w(x − mₖ)), cioè gli N neuroni nascosti già moltiplicati per il loro peso d'uscita.</p>
       <p>La curva verde è la loro somma più la costante f(x₀). Non c'è altro: una rete a uno strato è una somma di gradini smussati.</p>`,
 };
+const EXPL_EN = {
+  1: `<p><b>Step 1 · Grid.</b> f is uniformly continuous on [a, b]: there is a δ such that points less than δ apart have values less than ε/3 apart.</p>
+      <span class="formula">h = (b − a)/N ≤ δ,  xₖ = a + k h,  mₖ = (xₖ₋₁ + xₖ)/2</span>
+      <p>The dots are the nodes xₖ; the dashed lines are the midpoints mₖ, where we will put the steps.</p>`,
+  2: `<p><b>Step 2 · Step function.</b> We add up steps of height Δₖ = f(xₖ) − f(xₖ₋₁) at the midpoints:</p>
+      <span class="formula">S(x) = f(x₀) + Σ Δₖ · H(x − mₖ)</span>
+      <p>The sum telescopes: between mⱼ and mⱼ₊₁ it equals exactly f(xⱼ). So |f − S| &lt; ε/3.</p>`,
+  3: `<p><b>Step 3 · Network.</b> Each step becomes a steep neuron:</p>
+      <span class="formula">G(x) = f(x₀) + Σ Δₖ · σ(w (x − mₖ))</span>
+      <p>All weights equal to w, thresholds −w·mₖ, output weights Δₖ. With w ≥ 4 ln N / h we get |S − G| &lt; 2ε/3, so |f − G| &lt; ε.</p>
+      <p class="note">Try going well beyond the theorem's w: the error gets worse. The value is sufficient, not optimal.</p>`,
+  4: `<p><b>Inside the network.</b> In purple the single contributions Δₖ·σ(w(x − mₖ)), that is, the N hidden neurons already multiplied by their output weight.</p>
+      <p>The green curve is their sum plus the constant f(x₀). There is nothing else: a one-layer network is a sum of smoothed steps.</p>`,
+};
 function parseCustom(s) {
   const clean = s.replace(/\^/g, '**');
   if (/[^0-9x+\-*/().,\s a-z]/i.test(clean)) throw new Error('bad');
@@ -461,7 +546,7 @@ function draw2() {
     for (let k = 0; k < r.N; k++) { const Dk = r.D[k], mk = r.m[k]; p2.curve(x => Dk * sig(r.w * (x - mk)), tok('--c-n'), 1.2, { alpha: .65, a: -3, b: 3, n: 300 }); }
   }
   if (step2 >= 3) p2.curve(r.G, tok('--c-g'), 2.6, { a: -3, b: 3 });
-  $('explain2').innerHTML = EXPL[step2];
+  $('explain2').innerHTML = (I18N.lingua === 'en' ? EXPL_EN : EXPL)[step2];
 }
 document.querySelectorAll('[data-step]').forEach(btn => btn.addEventListener('click', () => {
   step2 = +btn.dataset.step;
@@ -548,7 +633,7 @@ function draw3() {
   let em = 0, ec = 0;
   for (let i = 0; i <= 600; i++) { const x = -3 + 6 * i / 600, fx = T3.f(x); em = Math.max(em, Math.abs(fx - model(x))); ec = Math.max(ec, Math.abs(fx - G(x))); }
   $('s3it').textContent = T3.t; $('s3max').textContent = fmt(em); $('s3cons').textContent = fmt(ec);
-  $('s3mse').textContent = T3.hist.length ? T3.hist[T3.hist.length - 1].toExponential(2).replace('.', ',') : '–';
+  $('s3mse').textContent = T3.hist.length ? I18N.t(T3.hist[T3.hist.length - 1].toExponential(2).replace('.', ','), T3.hist[T3.hist.length - 1].toExponential(2)) : '–';
   drawLoss();
 }
 function drawLoss() {
@@ -556,7 +641,7 @@ function drawLoss() {
   if (cv.width !== Math.round(W * dpr)) { cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr); }
   const c = cv.getContext('2d'); c.setTransform(dpr, 0, 0, dpr, 0, 0); c.clearRect(0, 0, W, H);
   c.font = '11px ' + tok('--f-mono'); c.fillStyle = tok('--muted'); c.textBaseline = 'top';
-  c.fillText('errore quadratico medio (scala log)', 6, 4);
+  c.fillText(I18N.t('errore quadratico medio (scala log)', 'mean squared error (log scale)'), 6, 4);
   const h = T3.hist; if (h.length < 2) return;
   const L = h.map(v => Math.log10(Math.max(v, 1e-8)));
   const lo = Math.min(...L), hi = Math.max(...L), rng_ = Math.max(hi - lo, .5);
@@ -595,6 +680,44 @@ window.addEventListener('resize', redraw);
 if (document.fonts && document.fonts.ready) document.fonts.ready.then(redraw);
 matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change', redraw);
 new MutationObserver(redraw).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+window.addEventListener('lingua', redraw);
+I18N.titolo = ['Somme di sigmoidi', 'Sums of sigmoids'];
+I18N.dizionario({
+  'Laboratorio · Teorema di approssimazione universale': 'Lab · Universal approximation theorem',
+  'Somme di sigmoidi': 'Sums of sigmoids',
+  'Un neurone con peso grande è quasi un gradino; tanti gradini disegnano qualsiasi funzione continua. Tre schede: prova un neurone, segui la dimostrazione costruttiva passo per passo, poi guarda una rete che impara da sola.': 'A neuron with a large weight is almost a step; many steps can draw any continuous function. Three tabs: try a neuron, follow the constructive proof step by step, then watch a network learn on its own.',
+  'Un neurone': 'One neuron', 'La dimostrazione': 'The proof', 'Addestramento': 'Training',
+  'singoli neuroni c·σ(w(x−m))': 'single neurons c·σ(w(x−m))', 'somma (uscita della rete)': 'sum (network output)', 'bersaglio della sfida': 'challenge target',
+  'pendenza in x = m (neurone 1)': 'slope at x = m (neuron 1)', 'errore massimo dal bersaglio': 'maximum error from the target',
+  'Sfida': 'Challenge', 'Nessun bersaglio (esplorazione libera)': 'No target (free exploration)',
+  'Una gobba alta 2 su [−1, 1]': 'A bump of height 2 on [−1, 1]', 'Una scala: 1 su [−2, 0], 2 su [0, 2]': 'A staircase: 1 on [−2, 0], 2 on [0, 2]',
+  'Un gradino in giù: 1 per x < 0, −1 per x ≥ 0': 'A step down: 1 for x < 0, −1 for x ≥ 0',
+  'Muovi i cursori finché la curva verde copre quella rossa. Sotto 0,15 di errore la sfida è vinta.': 'Move the sliders until the green curve covers the red one. With an error below 0.15 the challenge is won.',
+  'Mostra: un gradino': 'Show: a step', 'Mostra: una gobba': 'Show: a bump', 'Azzera': 'Reset',
+  'funzione a scala S': 'step function S', 'rete G': 'network G', 'contributi Δₖ·σ(w(x−mₖ))': 'contributions Δₖ·σ(w(x−mₖ))',
+  'passo h': 'step h', 'w del teorema = 4 ln N / h': "theorem's w = 4 ln N / h", 'parametri della rete': 'network parameters',
+  'Passo della dimostrazione': 'Step of the proof', 'Passo': 'Step', 'Griglia': 'Grid', 'Scala': 'Staircase', 'Rete': 'Network', 'Neuroni': 'Neurons',
+  'Funzione e rete': 'Function and network', 'sin 2x + 0,3x': 'sin 2x + 0.3x', 'Scrivi tu…': 'Write your own…',
+  'Usa x, + − * / ^, sin, cos, exp, abs, sqrt, log. Intervallo [−3, 3].': 'Use x, + − * / ^, sin, cos, exp, abs, sqrt, log. Interval [−3, 3].',
+  'Espressione in x': 'Expression in x',
+  'Espressione non valida: controlla parentesi e nomi delle funzioni.': 'Invalid expression: check the brackets and the function names.',
+  'Usa il w del teorema': "Use the theorem's w", 'campioni': 'samples', 'rete addestrata': 'trained network', 'rete costruita (stesso N)': 'constructed network (same N)',
+  'posizioni dei gradini −b/w': 'step positions −b/w', 'passi': 'steps', 'errore quadratico medio': 'mean squared error',
+  "Errore quadratico medio durante l'addestramento": 'Mean squared error during training',
+  'max |f − rete| su [−3, 3]': 'max |f − network| on [−3, 3]', 'max |f − costruita|': 'max |f − constructed|',
+  'Addestra': 'Train', 'Avvia': 'Start', 'Pausa': 'Pause', 'Nuova inizializzazione': 'New initialisation',
+  "Discesa del gradiente con Adam sull'errore quadratico medio, calcolata nel browser. Ogni “Nuova inizializzazione” parte da pesi casuali diversi.": 'Gradient descent with Adam on the mean squared error, computed in the browser. Every “New initialisation” starts from different random weights.',
+  'Rete e dati': 'Network and data', 'Attivazione': 'Activation', 'Attivazione: sigmoide': 'Activation: sigmoid', 'Attivazione: ReLU': 'Activation: ReLU',
+  'neuroni': 'neurons', 'rumore': 'noise', 'passo': 'step size', 'Mostra [−6, 6]': 'Show [−6, 6]', 'Rete costruita': 'Constructed network', 'Gradini': 'Steps',
+  'Da osservare': 'What to look for',
+  'La rete addestrata di solito batte quella costruita con lo stesso N: usa pesi diversi per ogni neurone e mette i gradini dove servono.': 'The trained network usually beats the constructed one with the same N: it uses different weights for each neuron and puts the steps where they are needed.',
+  "Con “Mostra [−6, 6]” si vede che fuori dai dati non c'è alcuna garanzia. Con pochi campioni, rumore e molti neuroni compare il sovradattamento.": 'With “Show [−6, 6]” you can see that outside the data there is no guarantee at all. With few samples, noise and many neurons, overfitting appears.',
+  'attivo': 'active', 'peso w': 'weight w', 'salto m': 'jump m', 'altezza c': 'height c',
+}, [
+  [/^Neurone (\d+)$/, 'Neuron $1'],
+  [/^(.*)✓ vinta$/, '$1✓ won'],
+]);
+I18N.applica();
 })();
 </script>
 

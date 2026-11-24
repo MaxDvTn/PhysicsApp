@@ -10,6 +10,14 @@
   "tema": "Teoria dei numeri",
   "anno": null,
   "data": "2026-11-21",
+  "en": {
+    "titolo": "A map of the Riemann proof",
+    "sommario": "The seven stages of the announced proof of the Riemann hypothesis, explained with high-school maths, with a «prime seismograph» computed in the browser.",
+    "tema": "Number theory",
+    "argomento": [
+      "Mathematics"
+    ]
+  },
   "file": [],
   "allegati": [],
   "docente": [],

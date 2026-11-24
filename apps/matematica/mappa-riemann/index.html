@@ -90,7 +90,79 @@ window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']]},svg
 <script async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script>
 </head>
 <body>
-<main>
+<!-- LINGUA:INIZIO — commutatore italiano/inglese, uguale in tutte le app (strumenti/lingua_snippet.html) -->
+<style>
+.lingua-btn{position:fixed;right:12px;bottom:12px;z-index:1000;font:600 14px/1 system-ui,sans-serif;min-height:38px;padding:0 14px;border-radius:19px;border:1px solid #8889;background:Canvas;color:CanvasText;cursor:pointer;box-shadow:0 1px 4px #0003}
+.lingua-btn:focus-visible{outline:3px solid Highlight;outline-offset:2px}
+@media print{.lingua-btn{display:none}}
+</style>
+<button class="lingua-btn" id="linguaBtn" type="button"></button>
+<script>
+/* La lingua si sceglie così: ?lang=en|it nell'indirizzo, poi la scelta salvata (chiave «lingua»,
+   la stessa del sito PhysicsApp), poi la lingua del browser. Gli elementi con data-en mostrano
+   quel testo in inglese; il loro contenuto originale è l'italiano. Le app ascoltano l'evento «lingua». */
+window.I18N=(function(){
+  function iniziale(){
+    try{var q=new URLSearchParams(location.search).get('lang');if(q==='en'||q==='it')return q;
+        var s=localStorage.getItem('lingua');if(s==='en'||s==='it')return s}catch(e){}
+    return /^it/i.test(navigator.language||'it')?'it':'en';
+  }
+  var I={lingua:iniziale(),titolo:null,
+    t:function(it,en){return I.lingua==='en'?en:it},
+    num:function(x,d){var s=Number(x).toFixed(d);return I.lingua==='en'?s:s.replace('.',',')},
+    applica:function(){
+      document.documentElement.lang=I.lingua;
+      document.querySelectorAll('[data-en]').forEach(function(el){
+        if(el.dataset.it===undefined)el.dataset.it=el.innerHTML;
+        el.innerHTML=I.lingua==='en'?el.dataset.en:el.dataset.it;
+      });
+      document.querySelectorAll('[data-en-label]').forEach(function(el){
+        if(el.dataset.itLabel===undefined)el.dataset.itLabel=el.getAttribute('aria-label')||'';
+        el.setAttribute('aria-label',I.lingua==='en'?el.dataset.enLabel:el.dataset.itLabel);
+      });
+      if(I.titolo)document.title=I.t(I.titolo[0],I.titolo[1]);
+      var b=document.getElementById('linguaBtn');
+      b.textContent=I.lingua==='en'?'Italiano':'English';
+      b.setAttribute('lang',I.lingua==='en'?'it':'en');
+      b.setAttribute('aria-label',I.lingua==='en'?'Passa all’italiano':'Switch to English');
+      window.dispatchEvent(new Event('lingua'));
+    },
+    imposta:function(l){I.lingua=l;try{localStorage.setItem('lingua',l)}catch(e){}I.applica()},
+    /* Per le app con molti testi creati dal codice: dizionario {testo italiano: testo inglese}
+       e regole [[RegExp, sostituzione]], applicati ai nodi di testo e agli attributi
+       aria-label, placeholder e title, anche a quelli aggiunti dopo. */
+    dizionario:function(mappa,regole){
+      var stato=new WeakMap(),ATTR=['aria-label','placeholder','title'];
+      function inglese(it){var t=it.trim();if(!t)return null;var en=mappa[t];
+        if(en===undefined){for(var i=0;i<(regole||[]).length;i++){if(regole[i][0].test(t)){en=t.replace(regole[i][0],regole[i][1]);break}}}
+        return en===undefined?null:it.replace(t,en)}
+      function testo(n){var s=stato.get(n),it=(s&&n.nodeValue===s.en)?s.it:n.nodeValue,en=inglese(it);
+        if(en===null){stato.delete(n);return}stato.set(n,{it:it,en:en});
+        var v=I.lingua==='en'?en:it;if(n.nodeValue!==v)n.nodeValue=v}
+      function attributi(el){ATTR.forEach(function(a){if(!el.hasAttribute(a))return;var k='i18n'+a.replace(/-/g,''),
+        it=el.dataset[k]!==undefined&&el.getAttribute(a)===el.dataset[k+'En']?el.dataset[k]:el.getAttribute(a),en=inglese(it);
+        if(en===null)return;el.dataset[k]=it;el.dataset[k+'En']=en;var v=I.lingua==='en'?en:it;if(el.getAttribute(a)!==v)el.setAttribute(a,v)})}
+      function giro(radice){if(radice.nodeType===3){testo(radice);return}if(radice.nodeType!==1)return;
+        if(/^(SCRIPT|STYLE)$/.test(radice.tagName))return;attributi(radice);
+        var w=document.createTreeWalker(radice,NodeFilter.SHOW_TEXT|NodeFilter.SHOW_ELEMENT),n;
+        while((n=w.nextNode())){if(n.nodeType===3){if(!/^(SCRIPT|STYLE)$/.test(n.parentNode.tagName))testo(n)}else attributi(n)}}
+      var tutto=function(){giro(document.body)};
+      window.addEventListener('lingua',tutto);
+      new MutationObserver(function(ms){ms.forEach(function(m){
+        if(m.type==='characterData')testo(m.target);
+        else if(m.type==='attributes')attributi(m.target);
+        else m.addedNodes.forEach(giro)})}).observe(document.body,{subtree:true,childList:true,characterData:true,attributes:true,attributeFilter:ATTR});
+      tutto();
+    }
+  };
+  document.getElementById('linguaBtn').addEventListener('click',function(){I.imposta(I.lingua==='en'?'it':'en')});
+  return I;
+})();
+</script>
+<!-- LINGUA:FINE -->
+
+<style>html[lang=en] [data-l=it]{display:none}html:not([lang=en]) [data-l=en]{display:none}</style>
+<main data-l="it">
 
 <header class="stack">
   <p class="eyebrow">Ipotesi di Riemann · annuncio del 20 novembre 2026</p>
@@ -253,6 +325,156 @@ window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']]},svg
   Fonti: README del repository <a href="https://github.com/nasqret/riemann-rev">github.com/nasqret/riemann-rev</a> e la sua <a href="https://nasqret.github.io/riemann-rev/guide/proof-guide.pdf">guida PDF di 11 pagine</a>, stato registrato il 20 novembre 2026. Le analogie sono semplificazioni didattiche e non fanno parte della dimostrazione.
 </footer>
 </main>
+<main data-l="en">
+<header class="stack">
+  <p class="eyebrow">Riemann hypothesis · announcement of 20 November 2026</p>
+  <h1>A map of the proof, stage by stage</h1>
+  <p class="lead">The mathematician Levent Alpöge has announced a proof of the Riemann hypothesis, written in a language that a computer can check line by line. Here you will find the route it follows, in seven stages, explained with high-school maths.</p>
+  <p class="note"><strong>Before we start.</strong> Two independent programs have accepted the proof, but no mathematician has yet read and approved it in full. This page follows the reading map of the repository <a href="https://github.com/nasqret/riemann-rev">nasqret/riemann-rev</a>, which is not the proof and does not certify it.</p>
+</header>
+<section class="stack">
+  <h2>What it is about</h2>
+  <p>Prime numbers (2, 3, 5, 7, 11…) look randomly scattered. Yet if you count them up to a large number, the total follows a very regular law. The question is: <b>how wrong is that law?</b></p>
+  <p>The Riemann hypothesis (1859) says that the error is as small as it can be: it grows roughly like \(\sqrt{x}\). If you count the primes up to one million, the error is of the order of a thousand, not a hundred thousand.</p>
+  <p>Riemann stated it with a function, the <b>zeta</b> function \(\zeta(s)\), and with the points where it equals zero. The hypothesis says that all the interesting zeros lie on the same vertical line, the line of numbers with real part \(\tfrac12\). Aligned zeros and regular primes are the same statement seen from two sides.</p>
+</section>
+<section class="stack">
+  <h2>The prime seismograph</h2>
+  <p>The proof does not look at the zeros directly. It uses a quantity \(G(y)\) that adds up the primes up to \(y\) with certain weights and subtracts the predicted value. It works like a seismograph: it records how far the primes stray from the law.</p>
+  <p>The graph below is computed right now, in your browser, with all the primes up to one million. The curve is \(G(y)\) divided by \(\sqrt{y}\). If the hypothesis is true, it never leaves the dashed band.</p>
+  <div class="chart-wrap">
+    <canvas id="chart_en" role="img" aria-label="Graph of G(y) divided by the square root of y, for y from 10 to one million: the curve oscillates near zero and stays inside the dashed band predicted by the Riemann hypothesis."></canvas>
+    <div class="legend">
+      <span><i class="sw"></i>deviation of the primes, divided by \(\sqrt{y}\)</span>
+      <span><i class="sw band"></i>band required by the hypothesis (±0.046)</span>
+    </div>
+  </div>
+  <p class="muted small">The repository's guide reports the same check up to ten million: the curve stays below 0.023, half the band. A graph proves nothing, though, because the hypothesis is about all numbers. It helps to see what we want to prove.</p>
+  <details>
+    <summary>The seismograph formula</summary>
+    <div class="formula">\[G(y)=\sum_{n\le y}\Lambda(n)\Bigl(\frac{y}{n}-1\Bigr)-y\ln y+(1+\gamma)\,y\]</div>
+    <p class="muted">\(\Lambda(n)\) equals \(\ln p\) if \(n\) is a power of the prime \(p\), and zero otherwise: it is how the sum “sees” only the primes. \(\gamma\approx0.577\) is Euler's constant. In the graph the constant \(\ln 2\pi\) is also subtracted.</p>
+  </details>
+</section>
+<section class="stack">
+  <h2>The seven stages</h2>
+  <p>The route is read from the top: you start from the theorem and at each stage you ask “what do I need to get this far?”. The answer is the next stage.</p>
+  <p class="ends">▲ The theorem: all the zeros lie on the line \(\tfrac12\)</p>
+  <ol class="route">
+    <li class="stop"><span class="num">1</span>
+      <div class="card">
+        <h3>The mirror</h3>
+        <p class="one">Checking half of the plane is enough.</p>
+        <p>The zeta function has a symmetry: the line \(\tfrac12\) acts as a mirror. A zero on the left would have a twin on the right. So it is enough to prove that there is none to the right of the line.</p>
+        <p class="why"><b>What is missing:</b> a way to rule out the zeros on the right. Zeros are hard to get hold of, so it is better to translate the problem.</p>
+      </div>
+    </li>
+    <li class="stop"><span class="num">2</span>
+      <div class="card">
+        <h3>From zeros to primes</h3>
+        <p class="one">Everything is translated into a calculation on prime numbers.</p>
+        <p>It is the seismograph \(G(y)\) in the graph. There is an exact equivalence: the hypothesis is true if and only if \(G(y)\) stays of size \(\sqrt{y}\). A zero out of place would make the oscillations grow faster.</p>
+        <p class="why"><b>What is missing:</b> checking \(G(y)\) for every \(y\) is too much. A cheaper criterion is needed.</p>
+      </div>
+    </li>
+    <li class="stop"><span class="num">3</span>
+      <div class="card">
+        <h3>The windows</h3>
+        <p class="one">You do not need to look everywhere: long stretches, further and further out, are enough.</p>
+        <p>The argument is by contradiction. A zero to the right of the line would produce a wave that grows without stopping and would show up in every long enough stretch. If you find windows, even very far away, where the seismograph stays calm, that zero cannot exist.</p>
+        <div class="analogy"><b>As if to say:</b> if there were a continuous earthquake getting stronger and stronger, no long recording could come out flat. A flat recording rules it out.</div>
+        <p class="why"><b>What is missing:</b> the real work, that is, proving that in those windows the sum over the primes is small. That is the job of stages 4, 5 and 6.</p>
+        <details>
+          <summary>With the formulas</summary>
+          <p class="muted">The windows have the form \([Y,\,Y^{1+\delta}]\). If there is a zero with real part greater than \(\theta\), every window far enough out contains a point where the sum exceeds \(C\,y^{\theta}\). So an estimate <i>from above</i>, on one side only, is enough. It works because the weights are all positive: the contributions add up and cannot cancel each other. It is a “local” version of a theorem by Landau.</p>
+          <p class="muted">The goal of the following stages, which the guide calls \((\star)\): there are \(Y\) as large as you like with \(G(x)\le x^{1/2+9\varepsilon}\) for every \(x\) in \([Y,\,Y^{3/2}]\).</p>
+        </details>
+      </div>
+    </li>
+    <li class="stop"><span class="num">4</span>
+      <div class="card">
+        <span class="chip">only partly checked by the reading project</span>
+        <h3>Divisible, therefore large</h3>
+        <p class="one">A non-zero integer that is divisible by many primes cannot be small.</p>
+        <p>If a number is divisible by 2, 3, 5 and 7, it is at least 210. The proof builds special numbers that are divisible by a great many primes and whose maximum size is also known. Comparing the two pieces of information, the primes involved cannot “weigh” too much: that is the estimate we were looking for.</p>
+        <div class="analogy"><b>An idea you already know:</b> a polynomial of degree \(n\) has at most \(n\) roots. If it has many, its degree must be high. In the 1960s Stepanov used this comparison for a similar problem on finite fields. Here “having many roots” becomes “being divisible by many primes” and “degree” becomes “size”.</div>
+        <div class="analogy"><b>Where the square root comes from:</b> the construction is repeated \(m\) times and has two costs, \(\dfrac{x}{m}\) and \(m\). One goes down and the other goes up. The sum is smallest when they are equal, that is for \(m=\sqrt{x}\). It is a minimum problem from Year 4, and it is why \(\sqrt{x}\) appears in the hypothesis.</div>
+        <p class="why"><b>What is missing:</b> the estimate that comes out also contains pieces that do not belong there, some with the wrong sign.</p>
+        <details>
+          <summary>With the formulas</summary>
+          <div class="formula">\[\frac1b\bigl(\mathrm{ASK}(a)-\mathrm{MAIN}(a)\bigr)\le x^{O(\varepsilon)}\Bigl(\frac{x}{m}+m+\sqrt{x}\Bigr)\]</div>
+          <p class="muted">ASK measures the divisibility gained, MAIN the expected value. The special numbers are derivatives of theta functions, linked to the fields \(\mathbb{Q}(\sqrt{-d})\): the derivative of order \(a\) is divisible by \(p^{\,a/p+a/p^2+\cdots}\) for certain primes \(p\). The construction is repeated in a chain of \(m\) “theta lifts”. The comparison between divisibility and size is made with an inequality by Bost on the “slopes” of lattices.</p>
+        </details>
+      </div>
+    </li>
+    <li class="stop"><span class="num">5</span>
+      <div class="card">
+        <h3>The filter</h3>
+        <p class="one">The piece we care about is isolated, like one note in a chord.</p>
+        <p>The estimate of stage 4 is a mixture of different contributions (mathematicians call them characters). With Fourier analysis, the same idea that splits a sound into its frequencies, only the wanted contribution is kept. The weights are chosen so that everything stays positive, as stage 3 requires.</p>
+        <p>Some unwanted contributions remain. To remove them the construction uses two auxiliary prime numbers, \(q\) and \(d\), which can be chosen. An average over all the candidates shows that for every window there is a good pair. So the construction is redone from scratch for every window.</p>
+        <p class="why"><b>What is missing:</b> the divisibility of stage 4 is not perfect. There is a loss, and it must be shown to be bearable.</p>
+      </div>
+    </li>
+    <li class="stop"><span class="num">6</span>
+      <div class="card">
+        <span class="chip">only partly checked by the reading project</span>
+        <h3>The price to pay</h3>
+        <p class="one">The loss does not have to be zero: it is enough for it to be contained in some window.</p>
+        <p>A 1979 theorem (Ferrero and Washington) makes it possible to say that the “costly” cases are at most a fixed number \(R\), however far out you look. Each one spoils only one stretch of scales. So, among many possible windows, at least one avoids them all.</p>
+        <div class="analogy"><b>Pigeonhole principle:</b> if you have more drawers than socks, at least one drawer is empty. Here the socks are the \(R\) costly cases and the drawers are the windows. That is why windows were enough at stage 3.</div>
+        <p class="why"><b>What is missing:</b> the objects that measure the loss, and the special numbers of stage 4, must exist and have the right properties.</p>
+      </div>
+    </li>
+    <li class="stop"><span class="num">7</span>
+      <div class="card">
+        <span class="chip">only read in the source, not re-checked</span>
+        <h3>The foundations</h3>
+        <p class="one">Everything rests on a deep theory linking symmetries and numbers.</p>
+        <p>These are the “Galois representations attached to automorphic forms”: a dictionary between the symmetries of equations and certain very regular functions. They belong to the same family of ideas used for Fermat's last theorem. Here high-school maths is no longer enough: it is the hardest and least verified part of the map.</p>
+        <p class="why"><b>To keep an eye on:</b> the guide lists seven ingredients (“seven inputs”) on which the final assembly depends. The authors of the guide have read them in the code, not reconstructed them by hand.</p>
+      </div>
+    </li>
+  </ol>
+  <p class="ends">▼ The axioms of mathematics</p>
+</section>
+<section class="stack">
+  <h2>What we know and what we do not</h2>
+  <div class="two">
+    <div class="card">
+      <h3>Stated in the repository</h3>
+      <ul class="plain">
+        <li>Two independent checking programs have accepted the complete proof.</li>
+        <li>It is 175,187 files long, written in Lean.</li>
+        <li>It uses only Lean's three standard axioms.</li>
+        <li>It also covers a more general version of the hypothesis.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Still open</h3>
+      <ul class="plain">
+        <li>No review by other mathematicians.</li>
+        <li>There is not yet a version written to be read by people.</li>
+        <li>A computer saying “correct” does not explain <i>why</i> it is true.</li>
+        <li>The repository's documents describe stage 4 in different ways.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+<section class="stack">
+  <h2>Words to know</h2>
+  <dl class="card">
+    <div><dt>Zero of a function</dt><dd>A value where the function equals 0, like \(x=2\) for \(x^2-4\).</dd></div>
+    <div><dt>Critical line</dt><dd>In the plane of complex numbers, the vertical line of numbers with real part \(\tfrac12\).</dd></div>
+    <div><dt>Lean</dt><dd>A language in which proofs are written. A small program, the kernel, checks every step.</dd></div>
+    <div><dt>Proof by contradiction</dt><dd>You assume the opposite of what you want and reach a contradiction.</dd></div>
+  </dl>
+</section>
+<footer>
+  Sources: README of the repository <a href="https://github.com/nasqret/riemann-rev">github.com/nasqret/riemann-rev</a> and its <a href="https://nasqret.github.io/riemann-rev/guide/proof-guide.pdf">11-page PDF guide</a>, as recorded on 20 November 2026. The analogies are teaching simplifications and are not part of the proof.
+</footer>
+</main>
+
 
 <script>
 (function(){
@@ -272,8 +494,9 @@ window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']]},svg
     }
   }
   function css(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim();}
-  function draw(){
-    var cv=document.getElementById('chart'), r=cv.getBoundingClientRect(), d=window.devicePixelRatio||1;
+  function draw(){ ['chart','chart_en'].forEach(disegna); }
+  function disegna(id){
+    var cv=document.getElementById(id), r=cv.getBoundingClientRect(), d=window.devicePixelRatio||1;
     if(!r.width) return;
     cv.width=r.width*d; cv.height=r.height*d;
     var g=cv.getContext('2d'); g.scale(d,d);
@@ -286,7 +509,7 @@ window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']]},svg
     g.textAlign='center'; g.textBaseline='top';
     for(var e=1;e<=6;e++){ g.beginPath(); g.moveTo(X(e),t); g.lineTo(X(e),H-b); g.stroke(); g.fillText('10'+(e>1?sup[e-1]:''),Math.min(X(e),W-14),H-b+7); }
     g.textAlign='right'; g.textBaseline='middle';
-    [-0.05,0,0.05].forEach(function(v){ g.beginPath(); g.moveTo(l,Y(v)); g.lineTo(W-rt,Y(v)); g.stroke(); g.fillText(v.toFixed(2).replace('.',','),l-6,Y(v)); });
+    [-0.05,0,0.05].forEach(function(v){ g.beginPath(); g.moveTo(l,Y(v)); g.lineTo(W-rt,Y(v)); g.stroke(); g.fillText(id==='chart_en'?v.toFixed(2):v.toFixed(2).replace('.',','),l-6,Y(v)); });
     g.strokeStyle=css('--warn'); g.lineWidth=1.5; g.setLineDash([6,5]);
     [BAND,-BAND].forEach(function(v){ g.beginPath(); g.moveTo(l,Y(v)); g.lineTo(W-rt,Y(v)); g.stroke(); });
     g.setLineDash([]);
@@ -296,6 +519,9 @@ window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']]},svg
     var last=pts[pts.length-1]; g.fillStyle=css('--accent'); g.beginPath(); g.arc(X(last[0]),Y(last[1]),3.5,0,7); g.fill();
   }
   try{ compute(); draw(); }catch(e){}
+  window.addEventListener('lingua',function(){draw();try{if(window.MathJax&&MathJax.startup&&MathJax.startup.document&&MathJax.startup.document.rerender)MathJax.startup.document.rerender()}catch(e){}});
+  I18N.titolo=['Mappa della dimostrazione di Riemann','A map of the Riemann proof'];
+  I18N.applica();
   window.addEventListener('resize',draw);
   if(window.matchMedia) matchMedia('(prefers-color-scheme: dark)').addEventListener('change',draw);
   new MutationObserver(draw).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});

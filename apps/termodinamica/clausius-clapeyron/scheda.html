@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="it" data-titolo-it="Esploratore Clausius-Clapeyron · App di fisica" data-titolo-en="Clausius-Clapeyron explorer · Physics apps">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -9,9 +9,15 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../../../sito/stile.css">
 <script>
-try{var t=localStorage.getItem('tema');if(t)document.documentElement.dataset.tema=t}catch(e){}
+(function(){var r=document.documentElement;
+try{var t=localStorage.getItem('tema');if(t)r.dataset.tema=t}catch(e){}
+var l=null;try{var q=new URLSearchParams(location.search).get('lang');if(q==='en'||q==='it'){l=q;localStorage.setItem('lingua',q)}else{var s=localStorage.getItem('lingua');if(s==='en'||s==='it')l=s}}catch(e){}
+if(!l)l=/^it/i.test(navigator.language||'it')?'it':'en';r.lang=l;})();
 function cambiaTema(){var r=document.documentElement,s=r.dataset.tema||(matchMedia('(prefers-color-scheme: dark)').matches?'scuro':'chiaro');
 r.dataset.tema=s==='scuro'?'chiaro':'scuro';try{localStorage.setItem('tema',r.dataset.tema)}catch(e){}}
+function cambiaLingua(){var r=document.documentElement;r.lang=r.lang==='en'?'it':'en';try{localStorage.setItem('lingua',r.lang)}catch(e){}aggiornaTitolo()}
+function aggiornaTitolo(){var r=document.documentElement,t=r.dataset['titolo'+(r.lang==='en'?'En':'It')];if(t)document.title=t}
+document.addEventListener('DOMContentLoaded',aggiornaTitolo);
 </script>
 </head>
 <body>
@@ -19,19 +25,19 @@ r.dataset.tema=s==='scuro'?'chiaro':'scuro';try{localStorage.setItem('tema',r.da
   <aside class="margine">
     <a class="marchio" href="../../../index.html">PhysicsApp</a>
     <dl class="scheda-dati">
-      <dt>Argomento</dt><dd>Termodinamica<br>Transizioni di fase</dd>
-      <dt>Anno</dt><dd><span class="classe">4º anno</span></dd>
-      <dt>Tipo</dt><dd>App nel browser</dd>
-      <dt>Data</dt><dd>27/12/2025</dd>
+      <dt><span data-l="it">Argomento</span><span data-l="en">Topic</span></dt><dd><span data-l="it">Termodinamica</span><span data-l="en">Thermodynamics</span><br><span data-l="it">Transizioni di fase</span><span data-l="en">Phase transitions</span></dd>
+      <dt><span data-l="it">Anno</span><span data-l="en">Year</span></dt><dd><span class="classe" data-l="it">4º anno</span><span class="classe" data-l="en">Year 4</span></dd>
+      <dt><span data-l="it">Tipo</span><span data-l="en">Type</span></dt><dd><span data-l="it">App nel browser</span><span data-l="en">Browser app</span></dd>
+      <dt><span data-l="it">Data</span><span data-l="en">Date</span></dt><dd>27/12/2025</dd>
     </dl>
-    <button class="tema-btn" type="button" onclick="cambiaTema()">Carta o lavagna</button>
+    <div class="comandi"><button class="tema-btn lingua-btn" type="button" onclick="cambiaLingua()"><span data-l="it" lang="en">English</span><span data-l="en" lang="it">Italiano</span></button><button class="tema-btn" type="button" onclick="cambiaTema()"><span data-l="it">Carta o lavagna</span><span data-l="en">Paper or blackboard</span></button></div>
   </aside>
   <main class="foglio scheda">
-    <p><a href="../../../index.html#termodinamica">Torna a tutte le app</a></p>
-    <h1>Esploratore Clausius-Clapeyron</h1>
-    <p class="lead">Perché in rifugio l&#x27;acqua bolle sotto i 100 °C e da dove viene il «7 % per grado» del vapore in un clima più caldo: i modelli confrontati con i dati veri.</p>
-    <div class="azioni"><a class="bottone pieno" href="index.html">Apri l'app</a><a class="bottone" href="https://github.com/MaxDvTn/PhysicsApp/tree/main/apps/termodinamica/clausius-clapeyron">Codice su GitHub</a><span class="copiato" id="copiato" role="status"></span></div>
-    <div class="testo"><h1>Esploratore Clausius-Clapeyron</h1>
+    <p><a href="../../../index.html#termodinamica"><span data-l="it">Torna a tutte le app</span><span data-l="en">Back to all the apps</span></a></p>
+    <h1 data-l="it">Esploratore Clausius-Clapeyron</h1><h1 data-l="en">Clausius-Clapeyron explorer</h1>
+    <p class="lead" data-l="it">Perché in rifugio l&#x27;acqua bolle sotto i 100 °C e da dove viene il «7 % per grado» del vapore in un clima più caldo: i modelli confrontati con i dati veri.</p><p class="lead" data-l="en">Why water boils below 100 °C in a mountain hut and where the «7 % per degree» of water vapour in a warmer climate comes from: models compared with real data.</p>
+    <div class="azioni"><a class="bottone pieno" href="index.html"><span data-l="it">Apri l’app</span><span data-l="en">Open the app</span></a><a class="bottone" href="https://github.com/MaxDvTn/PhysicsApp/tree/main/apps/termodinamica/clausius-clapeyron"><span data-l="it">Codice su GitHub</span><span data-l="en">Code on GitHub</span></a><span class="copiato" id="copiato" role="status"></span></div>
+    <div class="testo"><div data-l="it"><h1>Esploratore Clausius-Clapeyron</h1>
 <p>Una simulazione in due parti che accompagna la lezione «L'equazione della montagna e del clima» (dicembre 2025). Nella prima si sale di quota e si vede scendere la temperatura di ebollizione dell'acqua; nella seconda si riscalda l'atmosfera e si vede crescere il vapore che può contenere.</p>
 <h2>Come si usa</h2>
 <ol>
@@ -45,9 +51,23 @@ r.dataset.tema=s==='scuro'?'chiaro':'scuro';try{localStorage.setItem('tema',r.da
 <li>È la simulazione del dicembre 2025, rivista il 24/11/2026: prima il 7 % era usato come dato (1,07 elevato al riscaldamento), ora si calcola dall'equazione; i decimali sono con la virgola; «capacità di vapore» è diventato «pressione di vapore saturo».</li>
 <li>Il modello con L costante sbaglia anche il valore: a 15 °C dà 2,1 kPa contro 1,7 kPa veri. È un buon esempio di ipotesi da discutere.</li>
 <li>Meglio evitare l'idea dell'«aria come una spugna»: la pressione di vapore saturo dipende solo dalla temperatura e ci sarebbe anche senza aria.</li>
-</ul></div>
+</ul></div><div data-l="en"><h1>Clausius-Clapeyron explorer</h1>
+<p>A two-part simulation that goes with the lesson “The equation of the mountains and of the climate” (December 2025). In the first part you climb and watch the boiling point of water drop; in the second you warm the atmosphere and watch the vapour it can hold grow.</p>
+<h2>How to use it</h2>
+<ol>
+<li><strong>Water boils sooner at altitude.</strong> Move the altitude slider (from 0 to 8849 m) or use the Trento, Hut at 2500 m, Marmolada, Mont Blanc and Everest buttons. The app computes the pressure with the standard atmosphere and the boiling point with the Clausius-Clapeyron equation, and marks the point on the graph. Ask for a prediction first: at what temperature does water boil in a mountain hut? (At 2500 m about 91.5 °C; on Mont Blanc about 83.6 °C.)</li>
+<li><strong>Warmer means more vapour.</strong> Choose the starting temperature and the warming. The graph compares the real saturation vapour pressure (Buck formula) with two models: Clausius-Clapeyron with a constant latent heat and with a latent heat that changes with temperature. The percentage increases are shown below.</li>
+<li>Open “Where the ‘7 % per degree’ comes from”: with constant L you get about 6 % at 15 °C; taking into account that L is larger at low temperature gives 7.5 % near 0 °C and 6–6.6 % between 15 and 25 °C, as the real data show.</li>
+</ol>
+<p>It works in the browser, on phones too, and without a connection (except for the typeface).</p>
+<h2>Good to know</h2>
+<ul>
+<li>This is the December 2025 simulation, revised on 24 November 2026: before, the 7 % was used as a given (1.07 to the power of the warming); now it is computed from the equation, and “vapour capacity” has become “saturation vapour pressure”.</li>
+<li>The constant-L model also gets the value wrong: at 15 °C it gives 2.1 kPa against a real 1.7 kPa. It is a good example of an assumption to discuss.</li>
+<li>Better to avoid the idea of “the air as a sponge”: the saturation vapour pressure depends only on temperature and would be there even without air.</li>
+</ul></div></div>
     <div class="testo" id="materiali"></div>
-    <footer>Liceo «L. da Vinci» di Trento, prof. Massimo Bosetti.</footer>
+    <footer><span data-l="it">Liceo «L. da Vinci» di Trento, prof. Massimo Bosetti.</span><span data-l="en">Liceo «L. da Vinci», Trento, Prof. Massimo Bosetti.</span></footer>
   </main>
 </div>
 <script>
@@ -57,9 +77,9 @@ document.querySelectorAll('[data-copia]').forEach(b=>{
   const f=b.dataset.copia;
   if(!(f in codici)) codici[f]=fetch(f).then(r=>r.ok?r.text():null).catch(()=>null).then(t=>codici[f]=t);
   b.addEventListener('click',()=>{
-    const msg=document.getElementById('copiato'), t=codici[f];
-    const fatto=()=>msg.textContent='Codice copiato: su GlowScript scegli «Create New Program» e incollalo con Cmd+V o Ctrl+V.';
-    const errore=()=>msg.textContent='Non sono riuscito a copiare: scarica il file qui sotto e incollalo a mano.';
+    const msg=document.getElementById('copiato'), t=codici[f], en=document.documentElement.lang==='en';
+    const fatto=()=>msg.textContent=en?'Code copied: on GlowScript choose “Create New Program” and paste it with Cmd+V or Ctrl+V.':'Codice copiato: su GlowScript scegli «Create New Program» e incollalo con Cmd+V o Ctrl+V.';
+    const errore=()=>msg.textContent=en?'Could not copy: download the file below and paste it by hand.':'Non sono riuscito a copiare: scarica il file qui sotto e incollalo a mano.';
     if(typeof t==='string'&&navigator.clipboard) navigator.clipboard.writeText(t).then(fatto,errore); else errore();
     window.open('https://glowscript.org/','_blank','noopener');
   });

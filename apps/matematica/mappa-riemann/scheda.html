@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="it" data-titolo-it="La mappa della dimostrazione di Riemann · App di fisica" data-titolo-en="A map of the Riemann proof · Physics apps">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -9,9 +9,15 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../../../sito/stile.css">
 <script>
-try{var t=localStorage.getItem('tema');if(t)document.documentElement.dataset.tema=t}catch(e){}
+(function(){var r=document.documentElement;
+try{var t=localStorage.getItem('tema');if(t)r.dataset.tema=t}catch(e){}
+var l=null;try{var q=new URLSearchParams(location.search).get('lang');if(q==='en'||q==='it'){l=q;localStorage.setItem('lingua',q)}else{var s=localStorage.getItem('lingua');if(s==='en'||s==='it')l=s}}catch(e){}
+if(!l)l=/^it/i.test(navigator.language||'it')?'it':'en';r.lang=l;})();
 function cambiaTema(){var r=document.documentElement,s=r.dataset.tema||(matchMedia('(prefers-color-scheme: dark)').matches?'scuro':'chiaro');
 r.dataset.tema=s==='scuro'?'chiaro':'scuro';try{localStorage.setItem('tema',r.dataset.tema)}catch(e){}}
+function cambiaLingua(){var r=document.documentElement;r.lang=r.lang==='en'?'it':'en';try{localStorage.setItem('lingua',r.lang)}catch(e){}aggiornaTitolo()}
+function aggiornaTitolo(){var r=document.documentElement,t=r.dataset['titolo'+(r.lang==='en'?'En':'It')];if(t)document.title=t}
+document.addEventListener('DOMContentLoaded',aggiornaTitolo);
 </script>
 </head>
 <body>
@@ -19,19 +25,19 @@ r.dataset.tema=s==='scuro'?'chiaro':'scuro';try{localStorage.setItem('tema',r.da
   <aside class="margine">
     <a class="marchio" href="../../../index.html">PhysicsApp</a>
     <dl class="scheda-dati">
-      <dt>Argomento</dt><dd>Matematica<br>Teoria dei numeri</dd>
-      <dt>Anno</dt><dd>tutti</dd>
-      <dt>Tipo</dt><dd>App nel browser</dd>
-      <dt>Data</dt><dd>21/11/2026</dd>
+      <dt><span data-l="it">Argomento</span><span data-l="en">Topic</span></dt><dd><span data-l="it">Matematica</span><span data-l="en">Mathematics</span><br><span data-l="it">Teoria dei numeri</span><span data-l="en">Number theory</span></dd>
+      <dt><span data-l="it">Anno</span><span data-l="en">Year</span></dt><dd><span data-l="it">tutti</span><span data-l="en">all</span></dd>
+      <dt><span data-l="it">Tipo</span><span data-l="en">Type</span></dt><dd><span data-l="it">App nel browser</span><span data-l="en">Browser app</span></dd>
+      <dt><span data-l="it">Data</span><span data-l="en">Date</span></dt><dd>21/11/2026</dd>
     </dl>
-    <button class="tema-btn" type="button" onclick="cambiaTema()">Carta o lavagna</button>
+    <div class="comandi"><button class="tema-btn lingua-btn" type="button" onclick="cambiaLingua()"><span data-l="it" lang="en">English</span><span data-l="en" lang="it">Italiano</span></button><button class="tema-btn" type="button" onclick="cambiaTema()"><span data-l="it">Carta o lavagna</span><span data-l="en">Paper or blackboard</span></button></div>
   </aside>
   <main class="foglio scheda">
-    <p><a href="../../../index.html#matematica">Torna a tutte le app</a></p>
-    <h1>La mappa della dimostrazione di Riemann</h1>
-    <p class="lead">Le sette tappe della dimostrazione annunciata dell&#x27;ipotesi di Riemann, spiegate con la matematica del liceo, con il «sismografo dei primi» calcolato nel browser.</p>
-    <div class="azioni"><a class="bottone pieno" href="index.html">Apri l'app</a><a class="bottone" href="https://github.com/MaxDvTn/PhysicsApp/tree/main/apps/matematica/mappa-riemann">Codice su GitHub</a><span class="copiato" id="copiato" role="status"></span></div>
-    <div class="testo"><h1>La mappa della dimostrazione di Riemann</h1>
+    <p><a href="../../../index.html#matematica"><span data-l="it">Torna a tutte le app</span><span data-l="en">Back to all the apps</span></a></p>
+    <h1 data-l="it">La mappa della dimostrazione di Riemann</h1><h1 data-l="en">A map of the Riemann proof</h1>
+    <p class="lead" data-l="it">Le sette tappe della dimostrazione annunciata dell&#x27;ipotesi di Riemann, spiegate con la matematica del liceo, con il «sismografo dei primi» calcolato nel browser.</p><p class="lead" data-l="en">The seven stages of the announced proof of the Riemann hypothesis, explained with high-school maths, with a «prime seismograph» computed in the browser.</p>
+    <div class="azioni"><a class="bottone pieno" href="index.html"><span data-l="it">Apri l’app</span><span data-l="en">Open the app</span></a><a class="bottone" href="https://github.com/MaxDvTn/PhysicsApp/tree/main/apps/matematica/mappa-riemann"><span data-l="it">Codice su GitHub</span><span data-l="en">Code on GitHub</span></a><span class="copiato" id="copiato" role="status"></span></div>
+    <div class="testo"><div data-l="it"><h1>La mappa della dimostrazione di Riemann</h1>
 <p>Il 20 novembre 2026 Levent Alpöge ha annunciato una dimostrazione dell'ipotesi di Riemann scritta in un linguaggio che un computer può controllare riga per riga. Questa pagina segue la strada della dimostrazione in sette tappe, spiegate con la matematica del liceo.</p>
 <h2>Come si usa</h2>
 <ol>
@@ -40,9 +46,18 @@ r.dataset.tema=s==='scuro'?'chiaro':'scuro';try{localStorage.setItem('tema',r.da
 <li>Percorri le sette tappe. Le parti con le formule sono nei riquadri da aprire, per chi vuole andare più a fondo.</li>
 </ol>
 <h2>Attenzione</h2>
-<p>Due programmi indipendenti hanno accettato la dimostrazione, ma al momento della pubblicazione nessun matematico l'aveva ancora letta e approvata per intero. La pagina segue la mappa di lettura del repository <a target="_blank" rel="noopener" href="https://github.com/nasqret/riemann-rev">nasqret/riemann-rev</a>, che non è la dimostrazione e non la certifica.</p></div>
+<p>Due programmi indipendenti hanno accettato la dimostrazione, ma al momento della pubblicazione nessun matematico l'aveva ancora letta e approvata per intero. La pagina segue la mappa di lettura del repository <a target="_blank" rel="noopener" href="https://github.com/nasqret/riemann-rev">nasqret/riemann-rev</a>, che non è la dimostrazione e non la certifica.</p></div><div data-l="en"><h1>A map of the Riemann proof</h1>
+<p>On 20 November 2026 Levent Alpöge announced a proof of the Riemann hypothesis written in a language that a computer can check line by line. This page follows the route of the proof in seven stages, explained with high-school maths.</p>
+<h2>How to use it</h2>
+<ol>
+<li>Read “What it is about”: prime numbers, the law that counts them and how wrong it can be.</li>
+<li>Look at the <strong>prime seismograph</strong>: the graph is computed in your browser with all the primes up to one million. If the hypothesis is true, the curve never leaves the dashed band.</li>
+<li>Go through the seven stages. The parts with formulas are in boxes you can open, for those who want to go deeper.</li>
+</ol>
+<h2>Warning</h2>
+<p>Two independent programs have accepted the proof, but at the time of publication no mathematician had yet read and approved it in full. The page follows the reading map of the repository <a target="_blank" rel="noopener" href="https://github.com/nasqret/riemann-rev">nasqret/riemann-rev</a>, which is not the proof and does not certify it.</p></div></div>
     <div class="testo" id="materiali"></div>
-    <footer>Liceo «L. da Vinci» di Trento, prof. Massimo Bosetti.</footer>
+    <footer><span data-l="it">Liceo «L. da Vinci» di Trento, prof. Massimo Bosetti.</span><span data-l="en">Liceo «L. da Vinci», Trento, Prof. Massimo Bosetti.</span></footer>
   </main>
 </div>
 <script>
@@ -52,9 +67,9 @@ document.querySelectorAll('[data-copia]').forEach(b=>{
   const f=b.dataset.copia;
   if(!(f in codici)) codici[f]=fetch(f).then(r=>r.ok?r.text():null).catch(()=>null).then(t=>codici[f]=t);
   b.addEventListener('click',()=>{
-    const msg=document.getElementById('copiato'), t=codici[f];
-    const fatto=()=>msg.textContent='Codice copiato: su GlowScript scegli «Create New Program» e incollalo con Cmd+V o Ctrl+V.';
-    const errore=()=>msg.textContent='Non sono riuscito a copiare: scarica il file qui sotto e incollalo a mano.';
+    const msg=document.getElementById('copiato'), t=codici[f], en=document.documentElement.lang==='en';
+    const fatto=()=>msg.textContent=en?'Code copied: on GlowScript choose “Create New Program” and paste it with Cmd+V or Ctrl+V.':'Codice copiato: su GlowScript scegli «Create New Program» e incollalo con Cmd+V o Ctrl+V.';
+    const errore=()=>msg.textContent=en?'Could not copy: download the file below and paste it by hand.':'Non sono riuscito a copiare: scarica il file qui sotto e incollalo a mano.';
     if(typeof t==='string'&&navigator.clipboard) navigator.clipboard.writeText(t).then(fatto,errore); else errore();
     window.open('https://glowscript.org/','_blank','noopener');
   });

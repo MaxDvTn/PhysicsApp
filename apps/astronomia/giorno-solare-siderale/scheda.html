@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="it" data-titolo-it="Giorno solare e giorno siderale · App di fisica" data-titolo-en="Solar day and sidereal day · Physics apps">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -9,9 +9,15 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../../../sito/stile.css">
 <script>
-try{var t=localStorage.getItem('tema');if(t)document.documentElement.dataset.tema=t}catch(e){}
+(function(){var r=document.documentElement;
+try{var t=localStorage.getItem('tema');if(t)r.dataset.tema=t}catch(e){}
+var l=null;try{var q=new URLSearchParams(location.search).get('lang');if(q==='en'||q==='it'){l=q;localStorage.setItem('lingua',q)}else{var s=localStorage.getItem('lingua');if(s==='en'||s==='it')l=s}}catch(e){}
+if(!l)l=/^it/i.test(navigator.language||'it')?'it':'en';r.lang=l;})();
 function cambiaTema(){var r=document.documentElement,s=r.dataset.tema||(matchMedia('(prefers-color-scheme: dark)').matches?'scuro':'chiaro');
 r.dataset.tema=s==='scuro'?'chiaro':'scuro';try{localStorage.setItem('tema',r.dataset.tema)}catch(e){}}
+function cambiaLingua(){var r=document.documentElement;r.lang=r.lang==='en'?'it':'en';try{localStorage.setItem('lingua',r.lang)}catch(e){}aggiornaTitolo()}
+function aggiornaTitolo(){var r=document.documentElement,t=r.dataset['titolo'+(r.lang==='en'?'En':'It')];if(t)document.title=t}
+document.addEventListener('DOMContentLoaded',aggiornaTitolo);
 </script>
 </head>
 <body>
@@ -19,20 +25,20 @@ r.dataset.tema=s==='scuro'?'chiaro':'scuro';try{localStorage.setItem('tema',r.da
   <aside class="margine">
     <a class="marchio" href="../../../index.html">PhysicsApp</a>
     <dl class="scheda-dati">
-      <dt>Argomento</dt><dd>Astronomia<br>Moti della Terra</dd>
-      <dt>Anno</dt><dd><span class="classe">3º anno</span></dd>
-      <dt>Tipo</dt><dd>App nel browser</dd>
-      <dt>Data</dt><dd>29/09/2026</dd>
+      <dt><span data-l="it">Argomento</span><span data-l="en">Topic</span></dt><dd><span data-l="it">Astronomia</span><span data-l="en">Astronomy</span><br><span data-l="it">Moti della Terra</span><span data-l="en">Motions of the Earth</span></dd>
+      <dt><span data-l="it">Anno</span><span data-l="en">Year</span></dt><dd><span class="classe" data-l="it">3º anno</span><span class="classe" data-l="en">Year 3</span></dd>
+      <dt><span data-l="it">Tipo</span><span data-l="en">Type</span></dt><dd><span data-l="it">App nel browser</span><span data-l="en">Browser app</span></dd>
+      <dt><span data-l="it">Data</span><span data-l="en">Date</span></dt><dd>29/09/2026</dd>
     </dl>
-    <button class="tema-btn" type="button" onclick="cambiaTema()">Carta o lavagna</button>
+    <div class="comandi"><button class="tema-btn lingua-btn" type="button" onclick="cambiaLingua()"><span data-l="it" lang="en">English</span><span data-l="en" lang="it">Italiano</span></button><button class="tema-btn" type="button" onclick="cambiaTema()"><span data-l="it">Carta o lavagna</span><span data-l="en">Paper or blackboard</span></button></div>
   </aside>
   <main class="foglio scheda">
-    <p><a href="../../../index.html#astronomia">Torna a tutte le app</a></p>
-    <h1>Giorno solare e giorno siderale</h1>
-    <p class="lead">Perché il giorno solare dura circa 4 minuti più di quello siderale: la scheda per la classe terza sfogliabile, con i collegamenti a sei simulazioni.</p>
-    <div class="azioni"><a class="bottone pieno" href="index.html">Apri l'app</a><a class="bottone" href="https://github.com/MaxDvTn/PhysicsApp/tree/main/apps/astronomia/giorno-solare-siderale">Codice su GitHub</a><span class="copiato" id="copiato" role="status"></span></div>
-    <div class="testo"><h1>Giorno solare e giorno siderale</h1>
-<p>Perché il Sole torna nello stesso punto del cielo dopo 24 ore, mentre le stelle ci tornano dopo circa 23 ore e 56 minuti? La pagina contiene la scheda per la classe terza (5 pagine, con schemi) e i collegamenti a sei simulazioni esterne per vederlo in movimento.</p>
+    <p><a href="../../../index.html#astronomia"><span data-l="it">Torna a tutte le app</span><span data-l="en">Back to all the apps</span></a></p>
+    <h1 data-l="it">Giorno solare e giorno siderale</h1><h1 data-l="en">Solar day and sidereal day</h1>
+    <p class="lead" data-l="it">Perché il giorno solare dura circa 4 minuti più di quello siderale: la scheda per la classe terza sfogliabile, con i collegamenti a sei simulazioni.</p><p class="lead" data-l="en">Why the solar day is about 4 minutes longer than the sidereal day: a flip-through worksheet for Year 3, with links to six simulations.</p>
+    <div class="azioni"><a class="bottone pieno" href="index.html"><span data-l="it">Apri l’app</span><span data-l="en">Open the app</span></a><a class="bottone" href="https://github.com/MaxDvTn/PhysicsApp/tree/main/apps/astronomia/giorno-solare-siderale"><span data-l="it">Codice su GitHub</span><span data-l="en">Code on GitHub</span></a><span class="copiato" id="copiato" role="status"></span></div>
+    <div class="testo"><div data-l="it"><h1>Giorno solare e giorno siderale</h1>
+<p>Perché il Sole torna nello stesso punto del cielo dopo 24 ore, mentre le stelle ci tornano dopo circa 23 ore e 56 minuti? La pagina contiene la scheda per la classe terza (5 pagine, con schemi; in inglese c'è la traduzione completa, con gli schemi ridisegnati) e i collegamenti a sei simulazioni esterne per vederlo in movimento.</p>
 <h2>Come si usa</h2>
 <ol>
 <li>Sfoglia le cinque pagine della scheda: si possono proiettare una alla volta.</li>
@@ -48,9 +54,26 @@ r.dataset.tema=s==='scuro'?'chiaro':'scuro';try{localStorage.setItem('tema',r.da
 <li>University of Nebraska, Sidereal and Solar Time</li>
 <li>Stellarium Web</li>
 </ul>
-<p>Le simulazioni sono di altri autori e si aprono sui loro siti.</p></div>
+<p>Le simulazioni sono di altri autori e si aprono sui loro siti.</p></div><div data-l="en"><h1>Solar day and sidereal day</h1>
+<p>Why does the Sun come back to the same point in the sky after 24 hours, while the stars come back after about 23 hours and 56 minutes? The page contains the Year 3 worksheet, in Italian (5 pages, with diagrams) and translated into English, and links to six external simulations to see it in motion.</p>
+<h2>How to use it</h2>
+<ol>
+<li>Go through the worksheet: in Italian the five pages can be projected one at a time; in English the text and the diagrams are on one page.</li>
+<li>Open the simulations at the bottom of the page. The EduMedia one (solar day) is good to start with; to compare the two days use Science Sims or PhysSandbox.</li>
+<li>With <strong>Stellarium Web</strong> you can look at the sky over Trento 24 hours apart and 23 hours and 56 minutes apart: in the second case the stars are back in the same position.</li>
+</ol>
+<h2>Linked simulations</h2>
+<ul>
+<li>EduMedia, Solar day</li>
+<li>Science Sims (CCNY), Solar vs Sidereal Day</li>
+<li>PhysSandbox, Sidereal vs Solar Day</li>
+<li>ComPADRE, Sidereal/Solar Day, Naked Eye</li>
+<li>University of Nebraska, Sidereal and Solar Time</li>
+<li>Stellarium Web</li>
+</ul>
+<p>The simulations are by other authors and open on their own sites.</p></div></div>
     <div class="testo" id="materiali"></div>
-    <footer>Liceo «L. da Vinci» di Trento, prof. Massimo Bosetti.</footer>
+    <footer><span data-l="it">Liceo «L. da Vinci» di Trento, prof. Massimo Bosetti.</span><span data-l="en">Liceo «L. da Vinci», Trento, Prof. Massimo Bosetti.</span></footer>
   </main>
 </div>
 <script>
@@ -60,9 +83,9 @@ document.querySelectorAll('[data-copia]').forEach(b=>{
   const f=b.dataset.copia;
   if(!(f in codici)) codici[f]=fetch(f).then(r=>r.ok?r.text():null).catch(()=>null).then(t=>codici[f]=t);
   b.addEventListener('click',()=>{
-    const msg=document.getElementById('copiato'), t=codici[f];
-    const fatto=()=>msg.textContent='Codice copiato: su GlowScript scegli «Create New Program» e incollalo con Cmd+V o Ctrl+V.';
-    const errore=()=>msg.textContent='Non sono riuscito a copiare: scarica il file qui sotto e incollalo a mano.';
+    const msg=document.getElementById('copiato'), t=codici[f], en=document.documentElement.lang==='en';
+    const fatto=()=>msg.textContent=en?'Code copied: on GlowScript choose “Create New Program” and paste it with Cmd+V or Ctrl+V.':'Codice copiato: su GlowScript scegli «Create New Program» e incollalo con Cmd+V o Ctrl+V.';
+    const errore=()=>msg.textContent=en?'Could not copy: download the file below and paste it by hand.':'Non sono riuscito a copiare: scarica il file qui sotto e incollalo a mano.';
     if(typeof t==='string'&&navigator.clipboard) navigator.clipboard.writeText(t).then(fatto,errore); else errore();
     window.open('https://glowscript.org/','_blank','noopener');
   });

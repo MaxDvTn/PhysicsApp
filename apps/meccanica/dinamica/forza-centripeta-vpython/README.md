@@ -2,6 +2,8 @@
 
 Una pallina di massa m parte con velocità v₀. Su di lei agisce una forza di modulo costante, ricalcolata a ogni passo perpendicolare alla velocità. Il risultato è una traiettoria circolare con |v| costante, raggio r = m v₀²/F e periodo T = 2πr/v₀. Il pulsante **Taglia il filo** toglie la forza e la pallina parte lungo la tangente.
 
+Gli script e il notebook ci sono in italiano e in inglese (i file che finiscono con `_en`).
+
 ## Come si usa
 
 **Nel browser, senza installare niente (consigliato).**

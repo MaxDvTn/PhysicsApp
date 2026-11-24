@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="it" data-titolo-it="Il tiro impossibile · App di fisica" data-titolo-en="The impossible shot · Physics apps">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -9,9 +9,15 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../../../../sito/stile.css">
 <script>
-try{var t=localStorage.getItem('tema');if(t)document.documentElement.dataset.tema=t}catch(e){}
+(function(){var r=document.documentElement;
+try{var t=localStorage.getItem('tema');if(t)r.dataset.tema=t}catch(e){}
+var l=null;try{var q=new URLSearchParams(location.search).get('lang');if(q==='en'||q==='it'){l=q;localStorage.setItem('lingua',q)}else{var s=localStorage.getItem('lingua');if(s==='en'||s==='it')l=s}}catch(e){}
+if(!l)l=/^it/i.test(navigator.language||'it')?'it':'en';r.lang=l;})();
 function cambiaTema(){var r=document.documentElement,s=r.dataset.tema||(matchMedia('(prefers-color-scheme: dark)').matches?'scuro':'chiaro');
 r.dataset.tema=s==='scuro'?'chiaro':'scuro';try{localStorage.setItem('tema',r.dataset.tema)}catch(e){}}
+function cambiaLingua(){var r=document.documentElement;r.lang=r.lang==='en'?'it':'en';try{localStorage.setItem('lingua',r.lang)}catch(e){}aggiornaTitolo()}
+function aggiornaTitolo(){var r=document.documentElement,t=r.dataset['titolo'+(r.lang==='en'?'En':'It')];if(t)document.title=t}
+document.addEventListener('DOMContentLoaded',aggiornaTitolo);
 </script>
 </head>
 <body>
@@ -19,19 +25,19 @@ r.dataset.tema=s==='scuro'?'chiaro':'scuro';try{localStorage.setItem('tema',r.da
   <aside class="margine">
     <a class="marchio" href="../../../../index.html">PhysicsApp</a>
     <dl class="scheda-dati">
-      <dt>Argomento</dt><dd>Meccanica › Cinematica<br>Moto parabolico</dd>
-      <dt>Anno</dt><dd><span class="classe">3º anno</span></dd>
-      <dt>Tipo</dt><dd>Schede di laboratorio</dd>
-      <dt>Data</dt><dd>09/10/2026</dd>
+      <dt><span data-l="it">Argomento</span><span data-l="en">Topic</span></dt><dd><span data-l="it">Meccanica › Cinematica</span><span data-l="en">Mechanics › Kinematics</span><br><span data-l="it">Moto parabolico</span><span data-l="en">Projectile motion</span></dd>
+      <dt><span data-l="it">Anno</span><span data-l="en">Year</span></dt><dd><span class="classe" data-l="it">3º anno</span><span class="classe" data-l="en">Year 3</span></dd>
+      <dt><span data-l="it">Tipo</span><span data-l="en">Type</span></dt><dd><span data-l="it">Schede di laboratorio</span><span data-l="en">Lab worksheets</span></dd>
+      <dt><span data-l="it">Data</span><span data-l="en">Date</span></dt><dd>09/10/2026</dd>
     </dl>
-    <button class="tema-btn" type="button" onclick="cambiaTema()">Carta o lavagna</button>
+    <div class="comandi"><button class="tema-btn lingua-btn" type="button" onclick="cambiaLingua()"><span data-l="it" lang="en">English</span><span data-l="en" lang="it">Italiano</span></button><button class="tema-btn" type="button" onclick="cambiaTema()"><span data-l="it">Carta o lavagna</span><span data-l="en">Paper or blackboard</span></button></div>
   </aside>
   <main class="foglio scheda">
-    <p><a href="../../../../index.html#meccanica">Torna a tutte le app</a></p>
-    <h1>Il tiro impossibile</h1>
-    <p class="lead">Il problema del cacciatore e della scimmia: un&#x27;indagine in tre atti e una simulazione VPython costruita dagli studenti in tre passi.</p>
-    <div class="azioni"><a class="bottone" href="https://github.com/MaxDvTn/PhysicsApp/tree/main/apps/meccanica/cinematica/tiro-impossibile">Codice su GitHub</a><span class="copiato" id="copiato" role="status"></span></div>
-    <div class="testo"><h1>Il tiro impossibile</h1>
+    <p><a href="../../../../index.html#meccanica"><span data-l="it">Torna a tutte le app</span><span data-l="en">Back to all the apps</span></a></p>
+    <h1 data-l="it">Il tiro impossibile</h1><h1 data-l="en">The impossible shot</h1>
+    <p class="lead" data-l="it">Il problema del cacciatore e della scimmia: un&#x27;indagine in tre atti e una simulazione VPython costruita dagli studenti in tre passi.</p><p class="lead" data-l="en">The monkey and hunter problem: an investigation in three acts and a VPython simulation that students build in three steps.</p>
+    <div class="azioni"><a class="bottone" href="https://github.com/MaxDvTn/PhysicsApp/tree/main/apps/meccanica/cinematica/tiro-impossibile"><span data-l="it">Codice su GitHub</span><span data-l="en">Code on GitHub</span></a><span class="copiato" id="copiato" role="status"></span></div>
+    <div class="testo"><div data-l="it"><h1>Il tiro impossibile</h1>
 <p>Un fotografo-veterinario mira con un fucile a dardi dritto a una scimmia appesa a un ramo. La scimmia si lascia cadere nell'istante dello sparo. La colpisce lo stesso? È il classico problema del cacciatore e della scimmia, trasformato in un'indagine in tre atti e in una simulazione VPython che gli studenti costruiscono da soli.</p>
 <h2>Come si usa</h2>
 <ol>
@@ -44,9 +50,23 @@ r.dataset.tema=s==='scuro'?'chiaro':'scuro';try{localStorage.setItem('tema',r.da
 <h2>Risultato atteso</h2>
 <p>Con i dati di esempio (h = 8 m, d = 30 m, v₀ = 60 m/s) la simulazione finisce a t ≈ 0,52 s con il verdetto <strong>COLPITA</strong>: dardo e scimmia cadono della stessa quantità rispetto a dove sarebbero senza gravità.</p>
 <h2>Note</h2>
-<p>Le schede usano g = 9,81 m/s². La soluzione per il docente (dimostrazione, dati di esempio e simulazione completa) è nella parte «Per il docente».</p></div>
-    <div class="testo" id="materiali"><h2>File dell'app</h2><ul class="materiali"><li><span><a href="schede/scheda_tiro_impossibile.pdf" download>Scheda dell&#x27;indagine (tre atti)</a> <small>PDF, 104 kB</small></span></li><li><span><a href="schede/passo1_dardo.pdf" download>Passo 1: il dardo in orizzontale</a> <small>PDF, 124 kB</small></span></li><li><span><a href="schede/passo1B_scimmia.pdf" download>Passo 1B: la scimmia che cade</a> <small>PDF, 110 kB</small></span></li><li><span><a href="schede/passo2_dardo_e_scimmia.pdf" download>Passo 2: dardo e scimmia insieme</a> <small>PDF, 149 kB</small></span></li></ul><h2 id="docente">Per il docente</h2><p>Versioni complete e soluzioni: utili per preparare la lezione o per proiettarle. Agli studenti conviene dare prima le versioni da completare.</p><ul class="materiali docente"><li><span><a href="docente/soluzione_docente.pdf" download>Soluzione per il docente (tre atti e simulazione)</a> <small>PDF, 84 kB</small></span></li></ul></div>
-    <footer>Liceo «L. da Vinci» di Trento, prof. Massimo Bosetti.</footer>
+<p>Le schede usano g = 9,81 m/s². La soluzione per il docente (dimostrazione, dati di esempio e simulazione completa) è nella parte «Per il docente».</p></div><div data-l="en"><h1>The impossible shot</h1>
+<p>A wildlife photographer-vet aims a dart gun straight at a monkey hanging from a branch. The monkey lets go at the instant of the shot. Does the dart still hit it? It is the classic monkey and hunter problem, turned into an investigation in three acts and a VPython simulation that students build themselves.</p>
+<p>The worksheets are in Italian.</p>
+<h2>How to use it</h2>
+<ol>
+<li><strong>Investigation worksheet</strong> (90 minutes, alone or in pairs). In Act 1 each student chooses and justifies their own data: height of the monkey h, distance d, speed of the dart v₀. In Act 2 they make a prediction and justify it with the equations of motion.</li>
+<li><strong>Step 1: the dart moving horizontally</strong> (45 minutes). Only the horizontal motion of the dart is simulated, uniform with vₓ = v₀ cos θ, and the simulated time is compared with d/vₓ.</li>
+<li><strong>Step 1B: the falling monkey</strong>. The free fall of the monkey is simulated.</li>
+<li><strong>Step 2: dart and monkey together</strong> (60 minutes). The two programs are joined: the simulation decides on its own whether the dart hits or misses. The “ghost dart”, which moves without gravity along the line of sight, shows why it works.</li>
+</ol>
+<p>The code is written on <a target="_blank" rel="noopener" href="https://glowscript.org">glowscript.org</a> (first line <code>Web VPython 3.2</code>) or in Python with <code>from vpython import *</code>. Each worksheet has blanks to fill in (<code>___</code>), questions to answer in the comments and some challenges: a dart that is too slow, gravity on the Moon and on Jupiter, a large time step, a monkey that jumps downwards.</p>
+<h2>Expected result</h2>
+<p>With the example data (h = 8 m, d = 30 m, v₀ = 60 m/s) the simulation ends at t ≈ 0.52 s with the verdict <strong>HIT</strong>: dart and monkey fall by the same amount compared with where they would be without gravity.</p>
+<h2>Notes</h2>
+<p>The worksheets use g = 9.81 m/s². The teacher's solution (proof, example data and complete simulation) is in the “For the teacher” section.</p></div></div>
+    <div class="testo" id="materiali"><h2 data-l="it">File dell&#x27;app</h2><h2 data-l="en">App files</h2><ul class="materiali"><li><span><a href="schede/scheda_tiro_impossibile.pdf" download><span data-l="it">Scheda dell&#x27;indagine (tre atti)</span><span data-l="en">Investigation worksheet (three acts, Italian)</span></a> <small data-l="it">PDF, 104 kB</small><small data-l="en">PDF, 104 kB</small></span></li><li><span><a href="schede/passo1_dardo.pdf" download><span data-l="it">Passo 1: il dardo in orizzontale</span><span data-l="en">Step 1: the dart moving horizontally (Italian)</span></a> <small data-l="it">PDF, 124 kB</small><small data-l="en">PDF, 124 kB</small></span></li><li><span><a href="schede/passo1B_scimmia.pdf" download><span data-l="it">Passo 1B: la scimmia che cade</span><span data-l="en">Step 1B: the falling monkey (Italian)</span></a> <small data-l="it">PDF, 110 kB</small><small data-l="en">PDF, 110 kB</small></span></li><li><span><a href="schede/passo2_dardo_e_scimmia.pdf" download><span data-l="it">Passo 2: dardo e scimmia insieme</span><span data-l="en">Step 2: dart and monkey together (Italian)</span></a> <small data-l="it">PDF, 149 kB</small><small data-l="en">PDF, 149 kB</small></span></li></ul><h2 id="docente" data-l="it">Per il docente</h2><h2 id="docente" data-l="en">For the teacher</h2><p data-l="it">Versioni complete e soluzioni: utili per preparare la lezione o per proiettarle. Agli studenti conviene dare prima le versioni da completare.</p><p data-l="en">Complete versions and solutions: useful for preparing the lesson or for projecting. It is better to give students the versions to complete first.</p><ul class="materiali docente"><li><span><a href="docente/soluzione_docente.pdf" download><span data-l="it">Soluzione per il docente (tre atti e simulazione)</span><span data-l="en">Teacher&#x27;s solution (three acts and simulation, Italian)</span></a> <small data-l="it">PDF, 84 kB</small><small data-l="en">PDF, 84 kB</small></span></li></ul></div>
+    <footer><span data-l="it">Liceo «L. da Vinci» di Trento, prof. Massimo Bosetti.</span><span data-l="en">Liceo «L. da Vinci», Trento, Prof. Massimo Bosetti.</span></footer>
   </main>
 </div>
 <script>
@@ -56,9 +76,9 @@ document.querySelectorAll('[data-copia]').forEach(b=>{
   const f=b.dataset.copia;
   if(!(f in codici)) codici[f]=fetch(f).then(r=>r.ok?r.text():null).catch(()=>null).then(t=>codici[f]=t);
   b.addEventListener('click',()=>{
-    const msg=document.getElementById('copiato'), t=codici[f];
-    const fatto=()=>msg.textContent='Codice copiato: su GlowScript scegli «Create New Program» e incollalo con Cmd+V o Ctrl+V.';
-    const errore=()=>msg.textContent='Non sono riuscito a copiare: scarica il file qui sotto e incollalo a mano.';
+    const msg=document.getElementById('copiato'), t=codici[f], en=document.documentElement.lang==='en';
+    const fatto=()=>msg.textContent=en?'Code copied: on GlowScript choose “Create New Program” and paste it with Cmd+V or Ctrl+V.':'Codice copiato: su GlowScript scegli «Create New Program» e incollalo con Cmd+V o Ctrl+V.';
+    const errore=()=>msg.textContent=en?'Could not copy: download the file below and paste it by hand.':'Non sono riuscito a copiare: scarica il file qui sotto e incollalo a mano.';
     if(typeof t==='string'&&navigator.clipboard) navigator.clipboard.writeText(t).then(fatto,errore); else errore();
     window.open('https://glowscript.org/','_blank','noopener');
   });

@@ -19,22 +19,40 @@
      "file": [],
      "allegati": [["allegati/sintesi_piano_inclinato.pdf", "Sintesi della lezione"]],
      "docente": [],
+     "en": {
+       "titolo": "The inclined plane",
+       "sommario": "One sentence saying what the app does.",
+       "tema": "Forces on an inclined plane",
+       "argomento": ["Mechanics", "Dynamics"]
+     },
      "collegate": []
    }
    ```
 
    - `tipo`: `web`, `vpython` o `schede`.
    - `avvio`: il file da aprire (solo per `web`), altrimenti `null`.
-   - `file`: coppie `[percorso, descrizione]` dei file da scaricare (script, notebook, schede).
-   - `colab` (facoltativo): il notebook da aprire con il pulsante «Apri in Colab».
+   - `file`, `allegati`, `docente`: voci `[percorso, descrizione in italiano, descrizione in inglese]`; per un file scritto in una sola lingua si aggiunge `"it"` o `"en"` come quarto elemento (il pulsante «Copia e apri GlowScript» sceglie lo script della lingua del sito).
+   - `en`: titolo, sommario, tema e argomento in inglese.
+   - `colab` (facoltativo): il notebook da aprire con il pulsante «Apri in Colab», per lingua: `{"it": "...ipynb", "en": "..._en.ipynb"}`.
    - `argomento`: categoria e sottocategoria, con i nomi da mostrare nel sito.
    - `anno`: l'anno di corso (1–5) per cui è pensata, oppure `null` se va bene per tutti.
    - `docente`: coppie `[percorso, descrizione]` dei materiali per il docente (versioni complete, soluzioni), messi nella sottocartella `docente/`. Nel sito stanno in una parte separata.
    - `collegate`: gli `id` delle app della stessa lezione.
 
-5. **Scrivi `README.md`** con un titolo, due righe su che cos'è, la sezione `## Come si usa` (passi numerati, pensati per la classe) e, se serve, `## Da sapere` o `## Note`.
+5. **Scrivi `README.md` e `README.en.md`** con un titolo, due righe su che cos'è, la sezione `## Come si usa` (passi numerati, pensati per la classe) e, se serve, `## Da sapere` o `## Note`. `README.en.md` è la stessa cosa in inglese (`## How to use it`, `## Good to know`, `## Notes`).
 6. **Rigenera il sito**: `python3 strumenti/genera_sito.py` (serve `pip install markdown`, oppure `uv run --with markdown python strumenti/genera_sito.py`). Il comando controlla anche che tutti i file citati esistano.
 7. **Prima del commit**: `python3 strumenti/genera_sito.py --controlla` deve dire «OK». Poi commit e push: il sito si aggiorna da solo in un paio di minuti.
+
+## Le app in due lingue
+
+Ogni app web ha il commutatore italiano/inglese di `strumenti/lingua_snippet.html`: si incolla subito dopo `<body>` (tra i commenti `LINGUA:INIZIO` e `LINGUA:FINE`). Poi:
+
+- ai testi fissi si aggiunge `data-en="testo inglese"` (il contenuto dell'elemento resta l'italiano); alle etichette per i lettori di schermo `data-en-label`;
+- nel codice si usano `I18N.t('italiano', 'english')` per i testi e `I18N.num(x, cifre)` per i numeri (virgola in italiano, punto in inglese);
+- l'app ridisegna quando arriva l'evento `lingua` (`window.addEventListener('lingua', ridisegna)`);
+- alla fine si chiama `I18N.applica()`.
+
+Per un'app con molti testi creati dal codice si può usare `I18N.dizionario({italiano: inglese}, [[RegExp, sostituzione]])`, che traduce anche i testi aggiunti dopo. La lingua è la stessa del sito (chiave `lingua` nel browser) e si può forzare con `?lang=en` o `?lang=it`.
 
 ## Regole per i materiali
 

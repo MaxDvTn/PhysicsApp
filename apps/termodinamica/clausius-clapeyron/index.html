@@ -44,24 +44,97 @@ details{margin-top:12px}summary{cursor:pointer;font-weight:700;min-height:32px}
 </style>
 </head>
 <body>
+<!-- LINGUA:INIZIO — commutatore italiano/inglese, uguale in tutte le app (strumenti/lingua_snippet.html) -->
+<style>
+.lingua-btn{position:fixed;right:12px;bottom:12px;z-index:1000;font:600 14px/1 system-ui,sans-serif;min-height:38px;padding:0 14px;border-radius:19px;border:1px solid #8889;background:Canvas;color:CanvasText;cursor:pointer;box-shadow:0 1px 4px #0003}
+.lingua-btn:focus-visible{outline:3px solid Highlight;outline-offset:2px}
+@media print{.lingua-btn{display:none}}
+</style>
+<button class="lingua-btn" id="linguaBtn" type="button"></button>
+<script>
+/* La lingua si sceglie così: ?lang=en|it nell'indirizzo, poi la scelta salvata (chiave «lingua»,
+   la stessa del sito PhysicsApp), poi la lingua del browser. Gli elementi con data-en mostrano
+   quel testo in inglese; il loro contenuto originale è l'italiano. Le app ascoltano l'evento «lingua». */
+window.I18N=(function(){
+  function iniziale(){
+    try{var q=new URLSearchParams(location.search).get('lang');if(q==='en'||q==='it')return q;
+        var s=localStorage.getItem('lingua');if(s==='en'||s==='it')return s}catch(e){}
+    return /^it/i.test(navigator.language||'it')?'it':'en';
+  }
+  var I={lingua:iniziale(),titolo:null,
+    t:function(it,en){return I.lingua==='en'?en:it},
+    num:function(x,d){var s=Number(x).toFixed(d);return I.lingua==='en'?s:s.replace('.',',')},
+    applica:function(){
+      document.documentElement.lang=I.lingua;
+      document.querySelectorAll('[data-en]').forEach(function(el){
+        if(el.dataset.it===undefined)el.dataset.it=el.innerHTML;
+        el.innerHTML=I.lingua==='en'?el.dataset.en:el.dataset.it;
+      });
+      document.querySelectorAll('[data-en-label]').forEach(function(el){
+        if(el.dataset.itLabel===undefined)el.dataset.itLabel=el.getAttribute('aria-label')||'';
+        el.setAttribute('aria-label',I.lingua==='en'?el.dataset.enLabel:el.dataset.itLabel);
+      });
+      if(I.titolo)document.title=I.t(I.titolo[0],I.titolo[1]);
+      var b=document.getElementById('linguaBtn');
+      b.textContent=I.lingua==='en'?'Italiano':'English';
+      b.setAttribute('lang',I.lingua==='en'?'it':'en');
+      b.setAttribute('aria-label',I.lingua==='en'?'Passa all’italiano':'Switch to English');
+      window.dispatchEvent(new Event('lingua'));
+    },
+    imposta:function(l){I.lingua=l;try{localStorage.setItem('lingua',l)}catch(e){}I.applica()},
+    /* Per le app con molti testi creati dal codice: dizionario {testo italiano: testo inglese}
+       e regole [[RegExp, sostituzione]], applicati ai nodi di testo e agli attributi
+       aria-label, placeholder e title, anche a quelli aggiunti dopo. */
+    dizionario:function(mappa,regole){
+      var stato=new WeakMap(),ATTR=['aria-label','placeholder','title'];
+      function inglese(it){var t=it.trim();if(!t)return null;var en=mappa[t];
+        if(en===undefined){for(var i=0;i<(regole||[]).length;i++){if(regole[i][0].test(t)){en=t.replace(regole[i][0],regole[i][1]);break}}}
+        return en===undefined?null:it.replace(t,en)}
+      function testo(n){var s=stato.get(n),it=(s&&n.nodeValue===s.en)?s.it:n.nodeValue,en=inglese(it);
+        if(en===null){stato.delete(n);return}stato.set(n,{it:it,en:en});
+        var v=I.lingua==='en'?en:it;if(n.nodeValue!==v)n.nodeValue=v}
+      function attributi(el){ATTR.forEach(function(a){if(!el.hasAttribute(a))return;var k='i18n'+a.replace(/-/g,''),
+        it=el.dataset[k]!==undefined&&el.getAttribute(a)===el.dataset[k+'En']?el.dataset[k]:el.getAttribute(a),en=inglese(it);
+        if(en===null)return;el.dataset[k]=it;el.dataset[k+'En']=en;var v=I.lingua==='en'?en:it;if(el.getAttribute(a)!==v)el.setAttribute(a,v)})}
+      function giro(radice){if(radice.nodeType===3){testo(radice);return}if(radice.nodeType!==1)return;
+        if(/^(SCRIPT|STYLE)$/.test(radice.tagName))return;attributi(radice);
+        var w=document.createTreeWalker(radice,NodeFilter.SHOW_TEXT|NodeFilter.SHOW_ELEMENT),n;
+        while((n=w.nextNode())){if(n.nodeType===3){if(!/^(SCRIPT|STYLE)$/.test(n.parentNode.tagName))testo(n)}else attributi(n)}}
+      var tutto=function(){giro(document.body)};
+      window.addEventListener('lingua',tutto);
+      new MutationObserver(function(ms){ms.forEach(function(m){
+        if(m.type==='characterData')testo(m.target);
+        else if(m.type==='attributes')attributi(m.target);
+        else m.addedNodes.forEach(giro)})}).observe(document.body,{subtree:true,childList:true,characterData:true,attributes:true,attributeFilter:ATTR});
+      tutto();
+    }
+  };
+  document.getElementById('linguaBtn').addEventListener('click',function(){I.imposta(I.lingua==='en'?'it':'en')});
+  return I;
+})();
+</script>
+<!-- LINGUA:FINE -->
 <main>
-  <h1>Dalla montagna al clima</h1>
-  <p class="sotto">Una sola equazione, quella di Clausius-Clapeyron, spiega perché in rifugio la pasta cuoce più lentamente e perché un'atmosfera più calda dà piogge più intense.</p>
+  <h1 data-en="From the mountains to the climate">Dalla montagna al clima</h1>
+  <p class="sotto" data-en="A single equation, the Clausius-Clapeyron equation, explains why pasta cooks more slowly in a mountain hut and why a warmer atmosphere brings heavier rain.">Una sola equazione, quella di Clausius-Clapeyron, spiega perché in rifugio la pasta cuoce più lentamente e perché un'atmosfera più calda dà piogge più intense.</p>
 
   <div class="moduli">
     <section aria-labelledby="t1">
-      <h2 id="t1">1. L'acqua bolle prima in quota</h2>
-      <p class="domanda">A che temperatura bolle l'acqua in un rifugio? E sul Monte Bianco?</p>
-      <label for="quota">Quota: <span id="quotaVal">0</span> m</label>
+      <h2 id="t1" data-en="1. Water boils sooner at altitude">1. L'acqua bolle prima in quota</h2>
+      <p class="domanda" data-en="At what temperature does water boil in a mountain hut? And on Mont Blanc?">A che temperatura bolle l'acqua in un rifugio? E sul Monte Bianco?</p>
+      <label for="quota"><span data-en="Altitude">Quota</span>: <span id="quotaVal">0</span> m</label>
       <input id="quota" type="range" min="0" max="8849" step="1" value="0">
       <div class="luoghi" id="luoghi"></div>
-      <canvas id="g1" role="img" aria-label="Temperatura di ebollizione dell'acqua in funzione della quota"></canvas>
+      <canvas id="g1" role="img" aria-label="Temperatura di ebollizione dell'acqua in funzione della quota" data-en-label="Boiling point of water as a function of altitude"></canvas>
       <div class="numeri">
-        <div class="num"><b id="pVal">1,000 atm</b><span>pressione dell'aria (atmosfera standard)</span></div>
-        <div class="num"><b id="tVal">100,0 °C</b><span>temperatura di ebollizione</span></div>
+        <div class="num"><b id="pVal">1,000 atm</b><span data-en="air pressure (standard atmosphere)">pressione dell'aria (atmosfera standard)</span></div>
+        <div class="num"><b id="tVal">100,0 °C</b><span data-en="boiling point">temperatura di ebollizione</span></div>
       </div>
-      <details>
-        <summary>Il conto</summary>
+      <details data-en="<summary>The calculation</summary>
+        <p>Water boils when its saturation vapour pressure equals the air pressure. With the integrated Clausius-Clapeyron equation, starting from 100 °C at 1 atm:</p>
+        <p>1/T = 1/T₀ − (R/L)·ln(p/p₀), with T₀ = 373.15 K, L = 40.7 kJ/mol, R = 8.314 J/(mol·K).</p>
+        <p>The pressure at altitude h comes from the standard-atmosphere formula: p = p₀·(1 − 2.26·10⁻⁵·h)^5.26, with h in metres.</p>
+      "><summary>Il conto</summary>
         <p>L'acqua bolle quando la sua pressione di vapore saturo è uguale alla pressione dell'aria. Con l'equazione di Clausius-Clapeyron integrata, partendo da 100 °C a 1 atm:</p>
         <p>1/T = 1/T₀ − (R/L)·ln(p/p₀), con T₀ = 373,15 K, L = 40,7 kJ/mol, R = 8,314 J/(mol·K).</p>
         <p>La pressione alla quota h viene dalla formula dell'atmosfera standard: p = p₀·(1 − 2,26·10⁻⁵·h)^5,26, con h in metri.</p>
@@ -69,33 +142,36 @@ details{margin-top:12px}summary{cursor:pointer;font-weight:700;min-height:32px}
     </section>
 
     <section aria-labelledby="t2">
-      <h2 id="t2">2. Più caldo, più vapore</h2>
-      <p class="domanda">Se l'aria si scalda di un grado, di quanto cresce la pressione di vapore saturo, cioè il vapore che può esserci prima che condensi?</p>
-      <label for="temp">Temperatura di partenza: <span id="tempVal">15</span> °C</label>
+      <h2 id="t2" data-en="2. Warmer means more vapour">2. Più caldo, più vapore</h2>
+      <p class="domanda" data-en="If the air warms up by one degree, by how much does the saturation vapour pressure grow, that is, the vapour there can be before it condenses?">Se l'aria si scalda di un grado, di quanto cresce la pressione di vapore saturo, cioè il vapore che può esserci prima che condensi?</p>
+      <label for="temp"><span data-en="Starting temperature">Temperatura di partenza</span>: <span id="tempVal">15</span> °C</label>
       <input id="temp" type="range" min="-10" max="35" step="1" value="15">
-      <label for="dt">Riscaldamento: +<span id="dtVal">1,0</span> °C</label>
+      <label for="dt"><span data-en="Warming">Riscaldamento</span>: +<span id="dtVal">1,0</span> °C</label>
       <input id="dt" type="range" min="0.5" max="5" step="0.5" value="1">
-      <canvas id="g2" role="img" aria-label="Pressione di vapore saturo in funzione della temperatura: dati veri e due modelli"></canvas>
+      <canvas id="g2" role="img" aria-label="Pressione di vapore saturo in funzione della temperatura: dati veri e due modelli" data-en-label="Saturation vapour pressure as a function of temperature: real data and two models"></canvas>
       <div class="legenda">
-        <span><i style="background:var(--verde)"></i>dati veri (formula di Buck)</span>
-        <span><i style="background:var(--inchiostro)"></i>Clausius-Clapeyron con L che cambia con t (quasi sovrapposta ai dati veri)</span>
-        <span><i style="background:var(--rosso)"></i>Clausius-Clapeyron con L = 40,7 kJ/mol costante</span>
+        <span><i style="background:var(--verde)"></i><span data-en="real data (Buck formula)">dati veri (formula di Buck)</span></span>
+        <span><i style="background:var(--inchiostro)"></i><span data-en="Clausius-Clapeyron with L changing with t (almost on top of the real data)">Clausius-Clapeyron con L che cambia con t (quasi sovrapposta ai dati veri)</span></span>
+        <span><i style="background:var(--rosso)"></i><span data-en="Clausius-Clapeyron with constant L = 40.7 kJ/mol">Clausius-Clapeyron con L = 40,7 kJ/mol costante</span></span>
       </div>
       <div class="numeri">
-        <div class="num vero"><b id="aVero">+6,6 %</b><span>aumento, dati veri</span></div>
-        <div class="num"><b id="aVar">+6,4 %</b><span>aumento, L che cambia con t</span></div>
-        <div class="num cost"><b id="aCost">+5,9 %</b><span>aumento, L costante</span></div>
+        <div class="num vero"><b id="aVero">+6,6 %</b><span data-en="increase, real data">aumento, dati veri</span></div>
+        <div class="num"><b id="aVar">+6,4 %</b><span data-en="increase, L changing with t">aumento, L che cambia con t</span></div>
+        <div class="num cost"><b id="aCost">+5,9 %</b><span data-en="increase, constant L">aumento, L costante</span></div>
       </div>
       <p class="nota" id="commento"></p>
-      <details>
-        <summary>Da dove viene il «7 % per grado»</summary>
+      <details data-en="<summary>Where the “7 % per degree” comes from</summary>
+        <p>From the Clausius-Clapeyron equation, d(ln p)/dT = L/(R T²): the relative increase per degree is L/(R T²). With L = 40.7 kJ/mol, which is the value at 100 °C, at 15 °C you get about 6 %. But at low temperature the latent heat is larger (about 45 kJ/mol at 0 °C), and taking its change into account gives about 7.5 % per degree near 0 °C and 6–6.6 % between 15 and 25 °C, as the real data say. The “7 %” is therefore a rounded value, right at the lower temperatures.</p>
+        <p>The constant-L model also gets the value of the pressure wrong: at 15 °C it gives about 2.1 kPa against a real 1.7 kPa. It is a good example of an assumption to check.</p>
+        <p>Watch the language: people often say “the air can hold more vapour”, as if it were a sponge. In fact the saturation vapour pressure depends only on temperature and would be there even without air.</p>
+      "><summary>Da dove viene il «7 % per grado»</summary>
         <p>Dall'equazione di Clausius-Clapeyron, d(ln p)/dT = L/(R T²): l'aumento relativo per grado è L/(R T²). Con L = 40,7 kJ/mol, che è il valore a 100 °C, a 15 °C viene circa il 6 %. Ma a bassa temperatura il calore latente è più grande (circa 45 kJ/mol a 0 °C), e tenendo conto di come cambia si ottiene circa il 7,5 % per grado vicino a 0 °C e il 6–6,6 % tra 15 e 25 °C, come dicono i dati veri. Il «7 %» è quindi un valore arrotondato, giusto alle temperature più basse.</p>
         <p>Il modello con L costante sbaglia anche il valore della pressione: a 15 °C dà circa 2,1 kPa contro 1,7 kPa veri. È un buon esempio di ipotesi da controllare.</p>
         <p>Attenzione al linguaggio: si dice spesso «l'aria può contenere più vapore», come se fosse una spugna. In realtà la pressione di vapore saturo dipende solo dalla temperatura e ci sarebbe anche senza aria.</p>
       </details>
     </section>
   </div>
-  <p class="nota">Liceo «L. da Vinci» di Trento, prof. Massimo Bosetti. Simulazione del dicembre 2025, rivista nel novembre 2026.</p>
+  <p class="nota" data-en="Liceo “L. da Vinci”, Trento, Prof. Massimo Bosetti. Simulation from December 2025, revised in November 2026.">Liceo «L. da Vinci» di Trento, prof. Massimo Bosetti. Simulazione del dicembre 2025, rivista nel novembre 2026.</p>
 </main>
 <script>
 {
@@ -104,14 +180,14 @@ const $=id=>document.getElementById(id);
 // i colori usano light-dark(): per il canvas si leggono già risolti da un elemento di prova
 const sonda=document.createElement('span');sonda.hidden=true;document.body.appendChild(sonda);
 const css=k=>{sonda.style.color=`var(${k})`;return getComputedStyle(sonda).color||'#888'};
-const fmt=(x,d=1)=>x.toFixed(d).replace('.',',');
-const fmtInt=n=>Math.round(n).toLocaleString('it-IT');
+const fmt=(x,d=1)=>I18N.num(x,d);
+const fmtInt=n=>Math.round(n).toLocaleString(I18N.t('it-IT','en-GB'));
 
 // --- 1. Ebollizione in quota ---
 const pQuota=h=>Math.pow(1-2.25577e-5*h,5.25588);           // atm
 const tEbol=p=>1/(1/T0-(R/L0)*Math.log(p))-273.15;            // °C
-const LUOGHI=[['Trento',194],['Rifugio a 2500 m',2500],['Marmolada',3343],['Monte Bianco',4806],['Everest',8849]];
-$('luoghi').innerHTML=LUOGHI.map(([n,h])=>`<button type="button" data-h="${h}">${n}</button>`).join('');
+const LUOGHI=[['Trento','Trento',194],['Rifugio a 2500 m','Hut at 2500 m',2500],['Marmolada','Marmolada',3343],['Monte Bianco','Mont Blanc',4806],['Everest','Everest',8849]];
+const luoghi=()=>{$('luoghi').innerHTML=LUOGHI.map(([n,e,h])=>`<button type="button" data-h="${h}">${I18N.t(n,e)}</button>`).join('')};
 $('luoghi').addEventListener('click',e=>{const b=e.target.closest('button');if(b){$('quota').value=b.dataset.h;agg1()}});
 
 function prepara(cv){
@@ -136,7 +212,7 @@ function agg1(){
   $('quotaVal').textContent=fmtInt(h);$('pVal').textContent=fmt(p,3)+' atm';$('tVal').textContent=fmt(t)+' °C';
   const [c,W,H]=prepara($('g1'));c.clearRect(0,0,W,H);
   const m={l:70,r:22,t:10,b:46};
-  const [X,Y]=assi(c,W,H,m,[0,9000],[65,100],x=>fmtInt(x),y=>y+' °C',1500,5,'quota (m)','temperatura di ebollizione');
+  const [X,Y]=assi(c,W,H,m,[0,9000],[65,100],x=>fmtInt(x),y=>y+' °C',1500,5,I18N.t('quota (m)','altitude (m)'),I18N.t('temperatura di ebollizione','boiling point'));
   c.strokeStyle=css('--inchiostro');c.lineWidth=2.5;c.beginPath();
   for(let q=0;q<=9000;q+=50){const y=tEbol(pQuota(q));q?c.lineTo(X(q),Y(y)):c.moveTo(X(q),Y(y))}c.stroke();
   c.fillStyle=css('--rosso');c.beginPath();c.arc(X(h),Y(t),6,0,7);c.fill();
@@ -160,10 +236,10 @@ function agg2(){
   const v=perc(buck),va=perc(eVar),co=perc(eCost);
   $('aVero').textContent='+'+fmt(v)+' %';$('aVar').textContent='+'+fmt(va)+' %';$('aCost').textContent='+'+fmt(co)+' %';
   const perGrado=(Math.pow(buck(t+d)/buck(t),1/d)-1)*100;
-  $('commento').textContent=`Dati veri: circa ${fmt(perGrado)} % per grado a partire da ${t} °C. A ${t} °C la pressione di vapore saturo vale ${fmt(buck(t),2)} kPa (dati veri) e ${fmt(eCost(t),2)} kPa con L costante.`;
+  $('commento').textContent=I18N.t(`Dati veri: circa ${fmt(perGrado)} % per grado a partire da ${t} °C. A ${t} °C la pressione di vapore saturo vale ${fmt(buck(t),2)} kPa (dati veri) e ${fmt(eCost(t),2)} kPa con L costante.`,`Real data: about ${fmt(perGrado)} % per degree starting from ${t} °C. At ${t} °C the saturation vapour pressure is ${fmt(buck(t),2)} kPa (real data) and ${fmt(eCost(t),2)} kPa with constant L.`);
   const [c,W,H]=prepara($('g2'));c.clearRect(0,0,W,H);
   const m={l:70,r:22,t:10,b:46},ymax=7;
-  const [X,Y]=assi(c,W,H,m,[-10,40],[0,ymax],x=>x+' °C',y=>y+' kPa',10,1,'temperatura','pressione di vapore saturo');
+  const [X,Y]=assi(c,W,H,m,[-10,40],[0,ymax],x=>x+' °C',y=>y+' kPa',10,1,I18N.t('temperatura','temperature'),I18N.t('pressione di vapore saturo','saturation vapour pressure'));
   c.save();c.beginPath();c.rect(m.l,m.t,W-m.l-m.r,H-m.t-m.b);c.clip();
   for(const [f,col] of [[eCost,'--rosso'],[eVar,'--inchiostro'],[buck,'--verde']]){
     c.strokeStyle=css(col);c.lineWidth=col==='--verde'?3:2;c.beginPath();
@@ -176,7 +252,9 @@ function agg2(){
 $('quota').addEventListener('input',agg1);$('temp').addEventListener('input',agg2);$('dt').addEventListener('input',agg2);
 addEventListener('resize',()=>{agg1();agg2()});
 matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{agg1();agg2()});
-agg1();agg2();
+window.addEventListener('lingua',()=>{luoghi();agg1();agg2()});
+I18N.titolo=["Dalla montagna al clima: l'equazione di Clausius-Clapeyron",'From the mountains to the climate: the Clausius-Clapeyron equation'];
+I18N.applica();
 }
 </script>
 </body>

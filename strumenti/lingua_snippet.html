@@ -1,0 +1,70 @@
+<!-- LINGUA:INIZIO — commutatore italiano/inglese, uguale in tutte le app (strumenti/lingua_snippet.html) -->
+<style>
+.lingua-btn{position:fixed;right:12px;bottom:12px;z-index:1000;font:600 14px/1 system-ui,sans-serif;min-height:38px;padding:0 14px;border-radius:19px;border:1px solid #8889;background:Canvas;color:CanvasText;cursor:pointer;box-shadow:0 1px 4px #0003}
+.lingua-btn:focus-visible{outline:3px solid Highlight;outline-offset:2px}
+@media print{.lingua-btn{display:none}}
+</style>
+<button class="lingua-btn" id="linguaBtn" type="button"></button>
+<script>
+/* La lingua si sceglie così: ?lang=en|it nell'indirizzo, poi la scelta salvata (chiave «lingua»,
+   la stessa del sito PhysicsApp), poi la lingua del browser. Gli elementi con data-en mostrano
+   quel testo in inglese; il loro contenuto originale è l'italiano. Le app ascoltano l'evento «lingua». */
+window.I18N=(function(){
+  function iniziale(){
+    try{var q=new URLSearchParams(location.search).get('lang');if(q==='en'||q==='it')return q;
+        var s=localStorage.getItem('lingua');if(s==='en'||s==='it')return s}catch(e){}
+    return /^it/i.test(navigator.language||'it')?'it':'en';
+  }
+  var I={lingua:iniziale(),titolo:null,
+    t:function(it,en){return I.lingua==='en'?en:it},
+    num:function(x,d){var s=Number(x).toFixed(d);return I.lingua==='en'?s:s.replace('.',',')},
+    applica:function(){
+      document.documentElement.lang=I.lingua;
+      document.querySelectorAll('[data-en]').forEach(function(el){
+        if(el.dataset.it===undefined)el.dataset.it=el.innerHTML;
+        el.innerHTML=I.lingua==='en'?el.dataset.en:el.dataset.it;
+      });
+      document.querySelectorAll('[data-en-label]').forEach(function(el){
+        if(el.dataset.itLabel===undefined)el.dataset.itLabel=el.getAttribute('aria-label')||'';
+        el.setAttribute('aria-label',I.lingua==='en'?el.dataset.enLabel:el.dataset.itLabel);
+      });
+      if(I.titolo)document.title=I.t(I.titolo[0],I.titolo[1]);
+      var b=document.getElementById('linguaBtn');
+      b.textContent=I.lingua==='en'?'Italiano':'English';
+      b.setAttribute('lang',I.lingua==='en'?'it':'en');
+      b.setAttribute('aria-label',I.lingua==='en'?'Passa all’italiano':'Switch to English');
+      window.dispatchEvent(new Event('lingua'));
+    },
+    imposta:function(l){I.lingua=l;try{localStorage.setItem('lingua',l)}catch(e){}I.applica()},
+    /* Per le app con molti testi creati dal codice: dizionario {testo italiano: testo inglese}
+       e regole [[RegExp, sostituzione]], applicati ai nodi di testo e agli attributi
+       aria-label, placeholder e title, anche a quelli aggiunti dopo. */
+    dizionario:function(mappa,regole){
+      var stato=new WeakMap(),ATTR=['aria-label','placeholder','title'];
+      function inglese(it){var t=it.trim();if(!t)return null;var en=mappa[t];
+        if(en===undefined){for(var i=0;i<(regole||[]).length;i++){if(regole[i][0].test(t)){en=t.replace(regole[i][0],regole[i][1]);break}}}
+        return en===undefined?null:it.replace(t,en)}
+      function testo(n){var s=stato.get(n),it=(s&&n.nodeValue===s.en)?s.it:n.nodeValue,en=inglese(it);
+        if(en===null){stato.delete(n);return}stato.set(n,{it:it,en:en});
+        var v=I.lingua==='en'?en:it;if(n.nodeValue!==v)n.nodeValue=v}
+      function attributi(el){ATTR.forEach(function(a){if(!el.hasAttribute(a))return;var k='i18n'+a.replace(/-/g,''),
+        it=el.dataset[k]!==undefined&&el.getAttribute(a)===el.dataset[k+'En']?el.dataset[k]:el.getAttribute(a),en=inglese(it);
+        if(en===null)return;el.dataset[k]=it;el.dataset[k+'En']=en;var v=I.lingua==='en'?en:it;if(el.getAttribute(a)!==v)el.setAttribute(a,v)})}
+      function giro(radice){if(radice.nodeType===3){testo(radice);return}if(radice.nodeType!==1)return;
+        if(/^(SCRIPT|STYLE)$/.test(radice.tagName))return;attributi(radice);
+        var w=document.createTreeWalker(radice,NodeFilter.SHOW_TEXT|NodeFilter.SHOW_ELEMENT),n;
+        while((n=w.nextNode())){if(n.nodeType===3){if(!/^(SCRIPT|STYLE)$/.test(n.parentNode.tagName))testo(n)}else attributi(n)}}
+      var tutto=function(){giro(document.body)};
+      window.addEventListener('lingua',tutto);
+      new MutationObserver(function(ms){ms.forEach(function(m){
+        if(m.type==='characterData')testo(m.target);
+        else if(m.type==='attributes')attributi(m.target);
+        else m.addedNodes.forEach(giro)})}).observe(document.body,{subtree:true,childList:true,characterData:true,attributes:true,attributeFilter:ATTR});
+      tutto();
+    }
+  };
+  document.getElementById('linguaBtn').addEventListener('click',function(){I.imposta(I.lingua==='en'?'it':'en')});
+  return I;
+})();
+</script>
+<!-- LINGUA:FINE -->

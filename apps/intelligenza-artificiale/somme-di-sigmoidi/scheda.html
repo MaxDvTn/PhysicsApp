@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="it" data-titolo-it="Somme di sigmoidi · App di fisica" data-titolo-en="Sums of sigmoids · Physics apps">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -9,9 +9,15 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../../../sito/stile.css">
 <script>
-try{var t=localStorage.getItem('tema');if(t)document.documentElement.dataset.tema=t}catch(e){}
+(function(){var r=document.documentElement;
+try{var t=localStorage.getItem('tema');if(t)r.dataset.tema=t}catch(e){}
+var l=null;try{var q=new URLSearchParams(location.search).get('lang');if(q==='en'||q==='it'){l=q;localStorage.setItem('lingua',q)}else{var s=localStorage.getItem('lingua');if(s==='en'||s==='it')l=s}}catch(e){}
+if(!l)l=/^it/i.test(navigator.language||'it')?'it':'en';r.lang=l;})();
 function cambiaTema(){var r=document.documentElement,s=r.dataset.tema||(matchMedia('(prefers-color-scheme: dark)').matches?'scuro':'chiaro');
 r.dataset.tema=s==='scuro'?'chiaro':'scuro';try{localStorage.setItem('tema',r.dataset.tema)}catch(e){}}
+function cambiaLingua(){var r=document.documentElement;r.lang=r.lang==='en'?'it':'en';try{localStorage.setItem('lingua',r.lang)}catch(e){}aggiornaTitolo()}
+function aggiornaTitolo(){var r=document.documentElement,t=r.dataset['titolo'+(r.lang==='en'?'En':'It')];if(t)document.title=t}
+document.addEventListener('DOMContentLoaded',aggiornaTitolo);
 </script>
 </head>
 <body>
@@ -19,19 +25,19 @@ r.dataset.tema=s==='scuro'?'chiaro':'scuro';try{localStorage.setItem('tema',r.da
   <aside class="margine">
     <a class="marchio" href="../../../index.html">PhysicsApp</a>
     <dl class="scheda-dati">
-      <dt>Argomento</dt><dd>Intelligenza artificiale<br>Reti neurali</dd>
-      <dt>Anno</dt><dd>tutti</dd>
-      <dt>Tipo</dt><dd>App nel browser</dd>
-      <dt>Data</dt><dd>23/09/2026</dd>
+      <dt><span data-l="it">Argomento</span><span data-l="en">Topic</span></dt><dd><span data-l="it">Intelligenza artificiale</span><span data-l="en">Artificial intelligence</span><br><span data-l="it">Reti neurali</span><span data-l="en">Neural networks</span></dd>
+      <dt><span data-l="it">Anno</span><span data-l="en">Year</span></dt><dd><span data-l="it">tutti</span><span data-l="en">all</span></dd>
+      <dt><span data-l="it">Tipo</span><span data-l="en">Type</span></dt><dd><span data-l="it">App nel browser</span><span data-l="en">Browser app</span></dd>
+      <dt><span data-l="it">Data</span><span data-l="en">Date</span></dt><dd>23/09/2026</dd>
     </dl>
-    <button class="tema-btn" type="button" onclick="cambiaTema()">Carta o lavagna</button>
+    <div class="comandi"><button class="tema-btn lingua-btn" type="button" onclick="cambiaLingua()"><span data-l="it" lang="en">English</span><span data-l="en" lang="it">Italiano</span></button><button class="tema-btn" type="button" onclick="cambiaTema()"><span data-l="it">Carta o lavagna</span><span data-l="en">Paper or blackboard</span></button></div>
   </aside>
   <main class="foglio scheda">
-    <p><a href="../../../index.html#intelligenza-artificiale">Torna a tutte le app</a></p>
-    <h1>Somme di sigmoidi</h1>
-    <p class="lead">Il teorema di approssimazione universale da toccare con mano: un neurone, la dimostrazione costruttiva passo per passo e una rete che si addestra nel browser.</p>
-    <div class="azioni"><a class="bottone pieno" href="index.html">Apri l'app</a><a class="bottone" href="https://github.com/MaxDvTn/PhysicsApp/tree/main/apps/intelligenza-artificiale/somme-di-sigmoidi">Codice su GitHub</a><span class="copiato" id="copiato" role="status"></span></div>
-    <div class="testo"><h1>Somme di sigmoidi</h1>
+    <p><a href="../../../index.html#intelligenza-artificiale"><span data-l="it">Torna a tutte le app</span><span data-l="en">Back to all the apps</span></a></p>
+    <h1 data-l="it">Somme di sigmoidi</h1><h1 data-l="en">Sums of sigmoids</h1>
+    <p class="lead" data-l="it">Il teorema di approssimazione universale da toccare con mano: un neurone, la dimostrazione costruttiva passo per passo e una rete che si addestra nel browser.</p><p class="lead" data-l="en">The universal approximation theorem, hands on: one neuron, the constructive proof step by step and a network that trains in the browser.</p>
+    <div class="azioni"><a class="bottone pieno" href="index.html"><span data-l="it">Apri l’app</span><span data-l="en">Open the app</span></a><a class="bottone" href="https://github.com/MaxDvTn/PhysicsApp/tree/main/apps/intelligenza-artificiale/somme-di-sigmoidi"><span data-l="it">Codice su GitHub</span><span data-l="en">Code on GitHub</span></a><span class="copiato" id="copiato" role="status"></span></div>
+    <div class="testo"><div data-l="it"><h1>Somme di sigmoidi</h1>
 <p>Un neurone con un peso grande è quasi un gradino; tanti gradini disegnano qualsiasi funzione continua. È l'idea del teorema di approssimazione universale, qui in tre schede da esplorare.</p>
 <h2>Come si usa</h2>
 <ol>
@@ -45,9 +51,23 @@ r.dataset.tema=s==='scuro'?'chiaro':'scuro';try{localStorage.setItem('tema',r.da
 <li>Con «Mostra [−6, 6]» si vede che fuori dall'intervallo dei dati non c'è alcuna garanzia.</li>
 <li>Con pochi campioni, rumore e molti neuroni compare il sovradattamento: la rete segue anche gli errori dei dati.</li>
 </ul>
-<p>Tutto il calcolo avviene nel browser: non serve connessione oltre al caricamento della pagina.</p></div>
+<p>Tutto il calcolo avviene nel browser: non serve connessione oltre al caricamento della pagina.</p></div><div data-l="en"><h1>Sums of sigmoids</h1>
+<p>A neuron with a large weight is almost a step; many steps can draw any continuous function. That is the idea behind the universal approximation theorem, here in three tabs to explore.</p>
+<h2>How to use it</h2>
+<ol>
+<li><strong>One neuron.</strong> Move the weight, position and height sliders of each neuron c·σ(w(x − m)) and watch how the sum changes. Pick a challenge (a bump, a staircase, a step down) and move the sliders until the green curve covers the red one: with an error below 0.15 the challenge is won.</li>
+<li><strong>The proof.</strong> Follow the construction step by step with the Grid, Staircase, Network and Neurons buttons. Choose the function (or write your own, with x, sin, cos, exp, abs, sqrt, log) and the number N of neurons; “Use the theorem's w” sets the weight that the proof guarantees.</li>
+<li><strong>Training.</strong> Press <strong>Start</strong>: a network trains in the browser with gradient descent (Adam). Compare the trained network with the one built by hand with the same number of neurons, change the activation (sigmoid or ReLU), the number of samples and the noise.</li>
+</ol>
+<h2>What to look for</h2>
+<ul>
+<li>The trained network usually beats the constructed one with the same N, because it uses different weights for each neuron and puts the steps where they are needed.</li>
+<li>With “Show [−6, 6]” you can see that outside the range of the data there is no guarantee at all.</li>
+<li>With few samples, noise and many neurons, overfitting appears: the network also follows the errors in the data.</li>
+</ul>
+<p>All the computation happens in the browser: no connection is needed after the page has loaded.</p></div></div>
     <div class="testo" id="materiali"></div>
-    <footer>Liceo «L. da Vinci» di Trento, prof. Massimo Bosetti.</footer>
+    <footer><span data-l="it">Liceo «L. da Vinci» di Trento, prof. Massimo Bosetti.</span><span data-l="en">Liceo «L. da Vinci», Trento, Prof. Massimo Bosetti.</span></footer>
   </main>
 </div>
 <script>
@@ -57,9 +77,9 @@ document.querySelectorAll('[data-copia]').forEach(b=>{
   const f=b.dataset.copia;
   if(!(f in codici)) codici[f]=fetch(f).then(r=>r.ok?r.text():null).catch(()=>null).then(t=>codici[f]=t);
   b.addEventListener('click',()=>{
-    const msg=document.getElementById('copiato'), t=codici[f];
-    const fatto=()=>msg.textContent='Codice copiato: su GlowScript scegli «Create New Program» e incollalo con Cmd+V o Ctrl+V.';
-    const errore=()=>msg.textContent='Non sono riuscito a copiare: scarica il file qui sotto e incollalo a mano.';
+    const msg=document.getElementById('copiato'), t=codici[f], en=document.documentElement.lang==='en';
+    const fatto=()=>msg.textContent=en?'Code copied: on GlowScript choose “Create New Program” and paste it with Cmd+V or Ctrl+V.':'Codice copiato: su GlowScript scegli «Create New Program» e incollalo con Cmd+V o Ctrl+V.';
+    const errore=()=>msg.textContent=en?'Could not copy: download the file below and paste it by hand.':'Non sono riuscito a copiare: scarica il file qui sotto e incollalo a mano.';
     if(typeof t==='string'&&navigator.clipboard) navigator.clipboard.writeText(t).then(fatto,errore); else errore();
     window.open('https://glowscript.org/','_blank','noopener');
   });

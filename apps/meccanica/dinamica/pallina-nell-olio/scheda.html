@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="it" data-titolo-it="La pallina da golf nell&#x27;olio · App di fisica" data-titolo-en="The golf ball in oil · Physics apps">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -9,9 +9,15 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../../../../sito/stile.css">
 <script>
-try{var t=localStorage.getItem('tema');if(t)document.documentElement.dataset.tema=t}catch(e){}
+(function(){var r=document.documentElement;
+try{var t=localStorage.getItem('tema');if(t)r.dataset.tema=t}catch(e){}
+var l=null;try{var q=new URLSearchParams(location.search).get('lang');if(q==='en'||q==='it'){l=q;localStorage.setItem('lingua',q)}else{var s=localStorage.getItem('lingua');if(s==='en'||s==='it')l=s}}catch(e){}
+if(!l)l=/^it/i.test(navigator.language||'it')?'it':'en';r.lang=l;})();
 function cambiaTema(){var r=document.documentElement,s=r.dataset.tema||(matchMedia('(prefers-color-scheme: dark)').matches?'scuro':'chiaro');
 r.dataset.tema=s==='scuro'?'chiaro':'scuro';try{localStorage.setItem('tema',r.dataset.tema)}catch(e){}}
+function cambiaLingua(){var r=document.documentElement;r.lang=r.lang==='en'?'it':'en';try{localStorage.setItem('lingua',r.lang)}catch(e){}aggiornaTitolo()}
+function aggiornaTitolo(){var r=document.documentElement,t=r.dataset['titolo'+(r.lang==='en'?'En':'It')];if(t)document.title=t}
+document.addEventListener('DOMContentLoaded',aggiornaTitolo);
 </script>
 </head>
 <body>
@@ -19,19 +25,19 @@ r.dataset.tema=s==='scuro'?'chiaro':'scuro';try{localStorage.setItem('tema',r.da
   <aside class="margine">
     <a class="marchio" href="../../../../index.html">PhysicsApp</a>
     <dl class="scheda-dati">
-      <dt>Argomento</dt><dd>Meccanica › Dinamica<br>Attrito viscoso e velocità limite</dd>
-      <dt>Anno</dt><dd><span class="classe">3º anno</span></dd>
-      <dt>Tipo</dt><dd>App nel browser</dd>
-      <dt>Data</dt><dd>24/11/2026</dd>
+      <dt><span data-l="it">Argomento</span><span data-l="en">Topic</span></dt><dd><span data-l="it">Meccanica › Dinamica</span><span data-l="en">Mechanics › Dynamics</span><br><span data-l="it">Attrito viscoso e velocità limite</span><span data-l="en">Viscous drag and terminal velocity</span></dd>
+      <dt><span data-l="it">Anno</span><span data-l="en">Year</span></dt><dd><span class="classe" data-l="it">3º anno</span><span class="classe" data-l="en">Year 3</span></dd>
+      <dt><span data-l="it">Tipo</span><span data-l="en">Type</span></dt><dd><span data-l="it">App nel browser</span><span data-l="en">Browser app</span></dd>
+      <dt><span data-l="it">Data</span><span data-l="en">Date</span></dt><dd>24/11/2026</dd>
     </dl>
-    <button class="tema-btn" type="button" onclick="cambiaTema()">Carta o lavagna</button>
+    <div class="comandi"><button class="tema-btn lingua-btn" type="button" onclick="cambiaLingua()"><span data-l="it" lang="en">English</span><span data-l="en" lang="it">Italiano</span></button><button class="tema-btn" type="button" onclick="cambiaTema()"><span data-l="it">Carta o lavagna</span><span data-l="en">Paper or blackboard</span></button></div>
   </aside>
   <main class="foglio scheda">
-    <p><a href="../../../../index.html#meccanica">Torna a tutte le app</a></p>
-    <h1>La pallina da golf nell&#x27;olio</h1>
-    <p class="lead">Videoanalisi di una pallina che cade in un cilindro d&#x27;olio: dal moto osservato alla velocità limite.</p>
-    <div class="azioni"><a class="bottone pieno" href="index.html">Apri l'app</a><a class="bottone" href="https://github.com/MaxDvTn/PhysicsApp/tree/main/apps/meccanica/dinamica/pallina-nell-olio">Codice su GitHub</a><span class="copiato" id="copiato" role="status"></span></div>
-    <div class="testo"><h1>La pallina da golf nell'olio</h1>
+    <p><a href="../../../../index.html#meccanica"><span data-l="it">Torna a tutte le app</span><span data-l="en">Back to all the apps</span></a></p>
+    <h1 data-l="it">La pallina da golf nell&#x27;olio</h1><h1 data-l="en">The golf ball in oil</h1>
+    <p class="lead" data-l="it">Videoanalisi di una pallina che cade in un cilindro d&#x27;olio: dal moto osservato alla velocità limite.</p><p class="lead" data-l="en">Video analysis of a ball falling through a cylinder of oil: from the observed motion to terminal velocity.</p>
+    <div class="azioni"><a class="bottone pieno" href="index.html"><span data-l="it">Apri l’app</span><span data-l="en">Open the app</span></a><a class="bottone" href="https://github.com/MaxDvTn/PhysicsApp/tree/main/apps/meccanica/dinamica/pallina-nell-olio"><span data-l="it">Codice su GitHub</span><span data-l="en">Code on GitHub</span></a><span class="copiato" id="copiato" role="status"></span></div>
+    <div class="testo"><div data-l="it"><h1>La pallina da golf nell'olio</h1>
 <p>Una pallina da golf viene lasciata cadere in un cilindro graduato pieno d'olio di semi. Il video (4/10/2013, 30 fotogrammi al secondo) è stato analizzato con Tracker: l'app lo mostra in tre momenti, dalla domanda iniziale ai grafici di posizione, velocità e accelerazione.</p>
 <h2>Come si usa</h2>
 <ol>
@@ -50,9 +56,28 @@ r.dataset.tema=s==='scuro'?'chiaro':'scuro';try{localStorage.setItem('tema',r.da
 <h2>Materiali collegati</h2>
 <p>La sintesi, i problemi in classe e le slide della lezione sull'attrito viscoso sono tra gli allegati. La simulazione VPython della sferetta nella glicerina è l'esercizio di programmazione della stessa lezione.</p>
 <h2>Note</h2>
-<p>Densità e viscosità dell'olio sono valori tipici, non misurati. Funziona su computer, tablet e telefono; i tre video (circa 3 MB) stanno nella stessa cartella dell'app.</p></div>
-    <div class="testo" id="materiali"><h2>Lezione collegata</h2><ul class="materiali"><li><span><a href="allegati/sintesi_attrito_viscoso.pdf">Sintesi della lezione</a> <small>PDF, 347 kB</small></span></li><li><span><a href="allegati/problemi_attrito_viscoso_studenti.pdf">Problemi in classe (versione studenti)</a> <small>PDF, 232 kB</small></span></li><li><span><a href="allegati/slide_attrito_viscoso.pdf">Slide, tema chiaro</a> <small>PDF, 262 kB</small></span></li><li><span><a href="allegati/slide_attrito_viscoso_dark.pdf">Slide, tema scuro</a> <small>PDF, 247 kB</small></span></li></ul><h2>App collegate</h2><ul class="materiali"><li><a href="../../../../apps/meccanica/dinamica/attrito-viscoso-vpython/scheda.html">Sferetta nella glicerina (VPython)</a><small>Simulazione VPython</small></li></ul></div>
-    <footer>Liceo «L. da Vinci» di Trento, prof. Massimo Bosetti.</footer>
+<p>Densità e viscosità dell'olio sono valori tipici, non misurati. Funziona su computer, tablet e telefono; i tre video (circa 3 MB) stanno nella stessa cartella dell'app.</p></div><div data-l="en"><h1>The golf ball in oil</h1>
+<p>A golf ball is dropped into a graduated cylinder full of seed oil. The video (4 October 2013, 30 frames per second) was analysed with Tracker: the app shows it in three steps, from the opening question to the graphs of position, velocity and acceleration.</p>
+<h2>How to use it</h2>
+<ol>
+<li>Open the app on the projector and start from the <strong>1 · The question</strong> tab. Show the video without saying anything and ask how the ball moves: does it speed up, slow down or move at constant speed?</li>
+<li>Go to <strong>2 · The markers</strong>. The red trail has one dot every 0.1 s: where the dots are equally spaced, the speed is constant. Use the ◀︎ 1 and 1 ▶︎ buttons to move back and forward by one frame.</li>
+<li>Finish with <strong>3 · The graphs</strong>: position, velocity and acceleration against time, in sync with the video. Open “The numbers from the video analysis” for the measured terminal velocity (0.117 m/s) and the comparison with the models.</li>
+</ol>
+<p>Keyboard: space plays and pauses, comma and full stop move by one frame. The ¼×, ½× and 1× buttons change the speed of the video.</p>
+<p>You can open a tab directly by adding <code>#domanda</code>, <code>#marcatori</code> or <code>#grafici</code> to the address.</p>
+<h2>What you see</h2>
+<ul>
+<li>In the first 0.2 s the ball enters the oil at about 0.22 m/s, faster than its terminal velocity, and slows down.</li>
+<li>For a moment it drops below the terminal velocity (about 0.09 m/s), then from 0.6 s onwards it moves at constant speed.</li>
+<li>Neither Stokes' law (2.9 m/s) nor quadratic drag (0.52 m/s) predicts the measured speed: the ball is almost as wide as the cylinder, and the oil has to flow back up through the narrow gap between the ball and the glass.</li>
+</ul>
+<h2>Related material</h2>
+<p>The lesson summary, the class problems and the slides on viscous drag are among the attachments (in Italian). The VPython simulation of a small ball in glycerine is the programming exercise for the same lesson.</p>
+<h2>Notes</h2>
+<p>The density and viscosity of the oil are typical values, not measured. The labels drawn inside the videos are in Italian. The app works on computers, tablets and phones; the three videos (about 3 MB) are in the same folder as the app.</p></div></div>
+    <div class="testo" id="materiali"><h2 data-l="it">Lezione collegata</h2><h2 data-l="en">Related lesson</h2><ul class="materiali"><li><span><a href="allegati/sintesi_attrito_viscoso.pdf" download><span data-l="it">Sintesi della lezione</span><span data-l="en">Lesson summary (Italian)</span></a> <small data-l="it">PDF, 347 kB</small><small data-l="en">PDF, 347 kB</small></span></li><li><span><a href="allegati/problemi_attrito_viscoso_studenti.pdf" download><span data-l="it">Problemi in classe (versione studenti)</span><span data-l="en">Problems for class (students&#x27; version, Italian)</span></a> <small data-l="it">PDF, 232 kB</small><small data-l="en">PDF, 232 kB</small></span></li><li><span><a href="allegati/slide_attrito_viscoso.pdf" download><span data-l="it">Slide, tema chiaro</span><span data-l="en">Slides, light theme (Italian)</span></a> <small data-l="it">PDF, 262 kB</small><small data-l="en">PDF, 262 kB</small></span></li><li><span><a href="allegati/slide_attrito_viscoso_dark.pdf" download><span data-l="it">Slide, tema scuro</span><span data-l="en">Slides, dark theme (Italian)</span></a> <small data-l="it">PDF, 247 kB</small><small data-l="en">PDF, 247 kB</small></span></li></ul><h2 data-l="it">App collegate</h2><h2 data-l="en">Related apps</h2><ul class="materiali"><li><a href="../../../../apps/meccanica/dinamica/attrito-viscoso-vpython/scheda.html"><span data-l="it">Sferetta nella glicerina (VPython)</span><span data-l="en">Small ball in glycerine (VPython)</span></a><small><span data-l="it">Simulazione VPython</span><span data-l="en">VPython simulation</span></small></li></ul></div>
+    <footer><span data-l="it">Liceo «L. da Vinci» di Trento, prof. Massimo Bosetti.</span><span data-l="en">Liceo «L. da Vinci», Trento, Prof. Massimo Bosetti.</span></footer>
   </main>
 </div>
 <script>
@@ -62,9 +87,9 @@ document.querySelectorAll('[data-copia]').forEach(b=>{
   const f=b.dataset.copia;
   if(!(f in codici)) codici[f]=fetch(f).then(r=>r.ok?r.text():null).catch(()=>null).then(t=>codici[f]=t);
   b.addEventListener('click',()=>{
-    const msg=document.getElementById('copiato'), t=codici[f];
-    const fatto=()=>msg.textContent='Codice copiato: su GlowScript scegli «Create New Program» e incollalo con Cmd+V o Ctrl+V.';
-    const errore=()=>msg.textContent='Non sono riuscito a copiare: scarica il file qui sotto e incollalo a mano.';
+    const msg=document.getElementById('copiato'), t=codici[f], en=document.documentElement.lang==='en';
+    const fatto=()=>msg.textContent=en?'Code copied: on GlowScript choose “Create New Program” and paste it with Cmd+V or Ctrl+V.':'Codice copiato: su GlowScript scegli «Create New Program» e incollalo con Cmd+V o Ctrl+V.';
+    const errore=()=>msg.textContent=en?'Could not copy: download the file below and paste it by hand.':'Non sono riuscito a copiare: scarica il file qui sotto e incollalo a mano.';
     if(typeof t==='string'&&navigator.clipboard) navigator.clipboard.writeText(t).then(fatto,errore); else errore();
     window.open('https://glowscript.org/','_blank','noopener');
   });

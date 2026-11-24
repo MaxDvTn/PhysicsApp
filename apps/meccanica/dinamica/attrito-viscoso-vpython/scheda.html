@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="it" data-titolo-it="Sferetta nella glicerina (VPython) · App di fisica" data-titolo-en="Small ball in glycerine (VPython) · Physics apps">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -9,9 +9,15 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../../../../sito/stile.css">
 <script>
-try{var t=localStorage.getItem('tema');if(t)document.documentElement.dataset.tema=t}catch(e){}
+(function(){var r=document.documentElement;
+try{var t=localStorage.getItem('tema');if(t)r.dataset.tema=t}catch(e){}
+var l=null;try{var q=new URLSearchParams(location.search).get('lang');if(q==='en'||q==='it'){l=q;localStorage.setItem('lingua',q)}else{var s=localStorage.getItem('lingua');if(s==='en'||s==='it')l=s}}catch(e){}
+if(!l)l=/^it/i.test(navigator.language||'it')?'it':'en';r.lang=l;})();
 function cambiaTema(){var r=document.documentElement,s=r.dataset.tema||(matchMedia('(prefers-color-scheme: dark)').matches?'scuro':'chiaro');
 r.dataset.tema=s==='scuro'?'chiaro':'scuro';try{localStorage.setItem('tema',r.dataset.tema)}catch(e){}}
+function cambiaLingua(){var r=document.documentElement;r.lang=r.lang==='en'?'it':'en';try{localStorage.setItem('lingua',r.lang)}catch(e){}aggiornaTitolo()}
+function aggiornaTitolo(){var r=document.documentElement,t=r.dataset['titolo'+(r.lang==='en'?'En':'It')];if(t)document.title=t}
+document.addEventListener('DOMContentLoaded',aggiornaTitolo);
 </script>
 </head>
 <body>
@@ -19,20 +25,21 @@ r.dataset.tema=s==='scuro'?'chiaro':'scuro';try{localStorage.setItem('tema',r.da
   <aside class="margine">
     <a class="marchio" href="../../../../index.html">PhysicsApp</a>
     <dl class="scheda-dati">
-      <dt>Argomento</dt><dd>Meccanica › Dinamica<br>Attrito viscoso e velocità limite</dd>
-      <dt>Anno</dt><dd><span class="classe">3º anno</span></dd>
-      <dt>Tipo</dt><dd>Simulazione VPython</dd>
-      <dt>Data</dt><dd>13/11/2026</dd>
+      <dt><span data-l="it">Argomento</span><span data-l="en">Topic</span></dt><dd><span data-l="it">Meccanica › Dinamica</span><span data-l="en">Mechanics › Dynamics</span><br><span data-l="it">Attrito viscoso e velocità limite</span><span data-l="en">Viscous drag and terminal velocity</span></dd>
+      <dt><span data-l="it">Anno</span><span data-l="en">Year</span></dt><dd><span class="classe" data-l="it">3º anno</span><span class="classe" data-l="en">Year 3</span></dd>
+      <dt><span data-l="it">Tipo</span><span data-l="en">Type</span></dt><dd><span data-l="it">Simulazione VPython</span><span data-l="en">VPython simulation</span></dd>
+      <dt><span data-l="it">Data</span><span data-l="en">Date</span></dt><dd>13/11/2026</dd>
     </dl>
-    <button class="tema-btn" type="button" onclick="cambiaTema()">Carta o lavagna</button>
+    <div class="comandi"><button class="tema-btn lingua-btn" type="button" onclick="cambiaLingua()"><span data-l="it" lang="en">English</span><span data-l="en" lang="it">Italiano</span></button><button class="tema-btn" type="button" onclick="cambiaTema()"><span data-l="it">Carta o lavagna</span><span data-l="en">Paper or blackboard</span></button></div>
   </aside>
   <main class="foglio scheda">
-    <p><a href="../../../../index.html#meccanica">Torna a tutte le app</a></p>
-    <h1>Sferetta nella glicerina (VPython)</h1>
-    <p class="lead">Simulazione passo per passo di una sferetta d&#x27;acciaio che cade nella glicerina, con grafici v(t) e a(t) e confronto con la legge di Stokes.</p>
-    <div class="azioni"><button class="bottone pieno" type="button" data-copia="attrito_viscoso_studenti.py">Copia il codice e apri GlowScript</button><a class="bottone" target="_blank" rel="noopener" href="https://colab.research.google.com/github/MaxDvTn/PhysicsApp/blob/main/apps/meccanica/dinamica/attrito-viscoso-vpython/attrito_viscoso_colab.ipynb">Apri in Colab</a><a class="bottone" href="https://github.com/MaxDvTn/PhysicsApp/tree/main/apps/meccanica/dinamica/attrito-viscoso-vpython">Codice su GitHub</a><span class="copiato" id="copiato" role="status"></span></div>
-    <div class="testo"><h1>Sferetta nella glicerina (VPython)</h1>
+    <p><a href="../../../../index.html#meccanica"><span data-l="it">Torna a tutte le app</span><span data-l="en">Back to all the apps</span></a></p>
+    <h1 data-l="it">Sferetta nella glicerina (VPython)</h1><h1 data-l="en">Small ball in glycerine (VPython)</h1>
+    <p class="lead" data-l="it">Simulazione passo per passo di una sferetta d&#x27;acciaio che cade nella glicerina, con grafici v(t) e a(t) e confronto con la legge di Stokes.</p><p class="lead" data-l="en">Step-by-step simulation of a small steel ball falling through glycerine, with v(t) and a(t) graphs and a comparison with Stokes&#x27; law.</p>
+    <div class="azioni"><button class="bottone pieno" type="button" data-l="it" data-copia="attrito_viscoso_studenti.py">Copia il codice e apri GlowScript</button><button class="bottone pieno" type="button" data-l="en" data-copia="viscous_drag_students_en.py">Copy the code and open GlowScript</button><a class="bottone" data-l="it" target="_blank" rel="noopener" href="https://colab.research.google.com/github/MaxDvTn/PhysicsApp/blob/main/apps/meccanica/dinamica/attrito-viscoso-vpython/attrito_viscoso_colab.ipynb">Apri in Colab</a><a class="bottone" data-l="en" target="_blank" rel="noopener" href="https://colab.research.google.com/github/MaxDvTn/PhysicsApp/blob/main/apps/meccanica/dinamica/attrito-viscoso-vpython/viscous_drag_colab_en.ipynb">Open in Colab</a><a class="bottone" href="https://github.com/MaxDvTn/PhysicsApp/tree/main/apps/meccanica/dinamica/attrito-viscoso-vpython"><span data-l="it">Codice su GitHub</span><span data-l="en">Code on GitHub</span></a><span class="copiato" id="copiato" role="status"></span></div>
+    <div class="testo"><div data-l="it"><h1>Sferetta nella glicerina (VPython)</h1>
 <p>Una sferetta d'acciaio (raggio 2 mm) cade in un cilindro di glicerina. Il programma calcola il moto passo per passo con il secondo principio, disegna i grafici v(t) e a(t), misura la velocità tra due tacche e la confronta con la formula di Stokes.</p>
+<p>Gli script e il notebook ci sono in italiano e in inglese (i file che finiscono con <code>_en</code>).</p>
 <h2>Come si usa</h2>
 <p><strong>Nel browser, senza installare niente (consigliato).</strong></p>
 <ol>
@@ -47,9 +54,26 @@ r.dataset.tema=s==='scuro'?'chiaro':'scuro';try{localStorage.setItem('tema',r.da
 <h2>Risultati attesi</h2>
 <p>Velocità limite 4,07 cm/s (simulata, misurata tra le tacche e teorica coincidono), tempo caratteristico τ ≈ 5 ms, numero di Reynolds 0,15.</p>
 <h2>Note</h2>
-<p>Nel programma l'accelerazione di gravità vale 9,81 m/s².</p></div>
-    <div class="testo" id="materiali"><h2>File dell'app</h2><ul class="materiali"><li><span><a href="attrito_viscoso_studenti.py" download>Versione da completare (studenti)</a> <small>PY, 4 kB</small></span> <button class="bottone" type="button" data-copia="attrito_viscoso_studenti.py">Copia e apri GlowScript</button></li><li><span><a href="attrito_viscoso_colab.ipynb" download>Notebook per Google Colab</a> <small>IPYNB, 5 kB</small></span></li></ul><h2 id="docente">Per il docente</h2><p>Versioni complete e soluzioni: utili per preparare la lezione o per proiettarle. Agli studenti conviene dare prima le versioni da completare.</p><ul class="materiali docente"><li><span><a href="docente/attrito_viscoso_completo.py" download>Simulazione completa</a> <small>PY, 4 kB</small></span> <button class="bottone" type="button" data-copia="docente/attrito_viscoso_completo.py">Copia e apri GlowScript</button></li></ul><h2>App collegate</h2><ul class="materiali"><li><a href="../../../../apps/meccanica/dinamica/pallina-nell-olio/scheda.html">La pallina da golf nell&#x27;olio</a><small>App nel browser</small></li></ul></div>
-    <footer>Liceo «L. da Vinci» di Trento, prof. Massimo Bosetti.</footer>
+<p>Nel programma l'accelerazione di gravità vale 9,81 m/s².</p></div><div data-l="en"><h1>Small ball in glycerine (VPython)</h1>
+<p>A small steel ball (radius 2 mm) falls through a cylinder of glycerine. The program computes the motion step by step with Newton's second law, draws the v(t) and a(t) graphs, measures the speed between two marks and compares it with Stokes' formula.</p>
+<p>The scripts and the notebook are available in Italian and in English (files ending in <code>_en</code>).</p>
+<h2>How to use it</h2>
+<p><strong>In the browser, with nothing to install (recommended).</strong></p>
+<ol>
+<li>Open <a target="_blank" rel="noopener" href="https://glowscript.org">glowscript.org</a>, sign in with a Google account and choose <strong>Create New Program</strong>.</li>
+<li>Copy the whole <code>.py</code> file and paste it. The first line must stay <code>Web VPython 3.2</code>.</li>
+<li>Press <strong>Run</strong>.</li>
+</ol>
+<p><strong>Students' version.</strong> <code>viscous_drag_students_en.py</code> already runs as it is (step 1: weight only). Students complete the <code>TODO</code>s one step at a time, running the program each time: weight, then buoyancy, then viscous drag, then the measurement between the marks. The questions are in the comments; at the end there are the v_L – r² table and the challenge (steel in water and the Reynolds number).</p>
+<p><strong>Complete version.</strong> In the “For the teacher” section, <code>docente/viscous_drag_complete_en.py</code> is the finished simulation, to project or to check against.</p>
+<p><strong>In Google Colab.</strong> VPython does not work in Colab: the notebook <code>viscous_drag_colab_en.ipynb</code> does the same calculation with numpy and the graphs with matplotlib. It opens directly in Colab from the app page.</p>
+<p><strong>On your computer.</strong> With <code>pip install vpython</code>, replace the first line with <code>from vpython import *</code>.</p>
+<h2>Expected results</h2>
+<p>Terminal velocity 4.07 cm/s (simulated, measured between the marks and theoretical all agree), characteristic time τ ≈ 5 ms, Reynolds number 0.15.</p>
+<h2>Notes</h2>
+<p>The program uses g = 9.81 m/s².</p></div></div>
+    <div class="testo" id="materiali"><h2 data-l="it">File dell&#x27;app</h2><h2 data-l="en">App files</h2><ul class="materiali"><li><span><a href="attrito_viscoso_studenti.py" download><span data-l="it">Versione da completare (studenti), in italiano</span><span data-l="en">Version to complete (students), Italian</span></a> <small data-l="it">PY, 4 kB</small><small data-l="en">PY, 4 kB</small></span> <button class="bottone" type="button" data-copia="attrito_viscoso_studenti.py"><span data-l="it">Copia e apri GlowScript</span><span data-l="en">Copy and open GlowScript</span></button></li><li><span><a href="attrito_viscoso_colab.ipynb" download><span data-l="it">Notebook per Google Colab, in italiano</span><span data-l="en">Google Colab notebook, Italian</span></a> <small data-l="it">IPYNB, 5 kB</small><small data-l="en">IPYNB, 5 kB</small></span></li><li><span><a href="viscous_drag_students_en.py" download><span data-l="it">Versione da completare (studenti), in inglese</span><span data-l="en">Version to complete (students), English</span></a> <small data-l="it">PY, 4 kB</small><small data-l="en">PY, 4 kB</small></span> <button class="bottone" type="button" data-copia="viscous_drag_students_en.py"><span data-l="it">Copia e apri GlowScript</span><span data-l="en">Copy and open GlowScript</span></button></li><li><span><a href="viscous_drag_colab_en.ipynb" download><span data-l="it">Notebook per Google Colab, in inglese</span><span data-l="en">Google Colab notebook, English</span></a> <small data-l="it">IPYNB, 6 kB</small><small data-l="en">IPYNB, 6 kB</small></span></li></ul><h2 id="docente" data-l="it">Per il docente</h2><h2 id="docente" data-l="en">For the teacher</h2><p data-l="it">Versioni complete e soluzioni: utili per preparare la lezione o per proiettarle. Agli studenti conviene dare prima le versioni da completare.</p><p data-l="en">Complete versions and solutions: useful for preparing the lesson or for projecting. It is better to give students the versions to complete first.</p><ul class="materiali docente"><li><span><a href="docente/attrito_viscoso_completo.py" download><span data-l="it">Simulazione completa, in italiano</span><span data-l="en">Complete simulation, Italian</span></a> <small data-l="it">PY, 4 kB</small><small data-l="en">PY, 4 kB</small></span> <button class="bottone" type="button" data-copia="docente/attrito_viscoso_completo.py"><span data-l="it">Copia e apri GlowScript</span><span data-l="en">Copy and open GlowScript</span></button></li><li><span><a href="docente/viscous_drag_complete_en.py" download><span data-l="it">Simulazione completa, in inglese</span><span data-l="en">Complete simulation, English</span></a> <small data-l="it">PY, 4 kB</small><small data-l="en">PY, 4 kB</small></span> <button class="bottone" type="button" data-copia="docente/viscous_drag_complete_en.py"><span data-l="it">Copia e apri GlowScript</span><span data-l="en">Copy and open GlowScript</span></button></li></ul><h2 data-l="it">App collegate</h2><h2 data-l="en">Related apps</h2><ul class="materiali"><li><a href="../../../../apps/meccanica/dinamica/pallina-nell-olio/scheda.html"><span data-l="it">La pallina da golf nell&#x27;olio</span><span data-l="en">The golf ball in oil</span></a><small><span data-l="it">App nel browser</span><span data-l="en">Browser app</span></small></li></ul></div>
+    <footer><span data-l="it">Liceo «L. da Vinci» di Trento, prof. Massimo Bosetti.</span><span data-l="en">Liceo «L. da Vinci», Trento, Prof. Massimo Bosetti.</span></footer>
   </main>
 </div>
 <script>
@@ -59,9 +83,9 @@ document.querySelectorAll('[data-copia]').forEach(b=>{
   const f=b.dataset.copia;
   if(!(f in codici)) codici[f]=fetch(f).then(r=>r.ok?r.text():null).catch(()=>null).then(t=>codici[f]=t);
   b.addEventListener('click',()=>{
-    const msg=document.getElementById('copiato'), t=codici[f];
-    const fatto=()=>msg.textContent='Codice copiato: su GlowScript scegli «Create New Program» e incollalo con Cmd+V o Ctrl+V.';
-    const errore=()=>msg.textContent='Non sono riuscito a copiare: scarica il file qui sotto e incollalo a mano.';
+    const msg=document.getElementById('copiato'), t=codici[f], en=document.documentElement.lang==='en';
+    const fatto=()=>msg.textContent=en?'Code copied: on GlowScript choose “Create New Program” and paste it with Cmd+V or Ctrl+V.':'Codice copiato: su GlowScript scegli «Create New Program» e incollalo con Cmd+V o Ctrl+V.';
+    const errore=()=>msg.textContent=en?'Could not copy: download the file below and paste it by hand.':'Non sono riuscito a copiare: scarica il file qui sotto e incollalo a mano.';
     if(typeof t==='string'&&navigator.clipboard) navigator.clipboard.writeText(t).then(fatto,errore); else errore();
     window.open('https://glowscript.org/','_blank','noopener');
   });

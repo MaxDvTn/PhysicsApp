@@ -57,55 +57,125 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline
 </style>
 </head>
 <body>
+<!-- LINGUA:INIZIO — commutatore italiano/inglese, uguale in tutte le app (strumenti/lingua_snippet.html) -->
+<style>
+.lingua-btn{position:fixed;right:12px;bottom:12px;z-index:1000;font:600 14px/1 system-ui,sans-serif;min-height:38px;padding:0 14px;border-radius:19px;border:1px solid #8889;background:Canvas;color:CanvasText;cursor:pointer;box-shadow:0 1px 4px #0003}
+.lingua-btn:focus-visible{outline:3px solid Highlight;outline-offset:2px}
+@media print{.lingua-btn{display:none}}
+</style>
+<button class="lingua-btn" id="linguaBtn" type="button"></button>
+<script>
+/* La lingua si sceglie così: ?lang=en|it nell'indirizzo, poi la scelta salvata (chiave «lingua»,
+   la stessa del sito PhysicsApp), poi la lingua del browser. Gli elementi con data-en mostrano
+   quel testo in inglese; il loro contenuto originale è l'italiano. Le app ascoltano l'evento «lingua». */
+window.I18N=(function(){
+  function iniziale(){
+    try{var q=new URLSearchParams(location.search).get('lang');if(q==='en'||q==='it')return q;
+        var s=localStorage.getItem('lingua');if(s==='en'||s==='it')return s}catch(e){}
+    return /^it/i.test(navigator.language||'it')?'it':'en';
+  }
+  var I={lingua:iniziale(),titolo:null,
+    t:function(it,en){return I.lingua==='en'?en:it},
+    num:function(x,d){var s=Number(x).toFixed(d);return I.lingua==='en'?s:s.replace('.',',')},
+    applica:function(){
+      document.documentElement.lang=I.lingua;
+      document.querySelectorAll('[data-en]').forEach(function(el){
+        if(el.dataset.it===undefined)el.dataset.it=el.innerHTML;
+        el.innerHTML=I.lingua==='en'?el.dataset.en:el.dataset.it;
+      });
+      document.querySelectorAll('[data-en-label]').forEach(function(el){
+        if(el.dataset.itLabel===undefined)el.dataset.itLabel=el.getAttribute('aria-label')||'';
+        el.setAttribute('aria-label',I.lingua==='en'?el.dataset.enLabel:el.dataset.itLabel);
+      });
+      if(I.titolo)document.title=I.t(I.titolo[0],I.titolo[1]);
+      var b=document.getElementById('linguaBtn');
+      b.textContent=I.lingua==='en'?'Italiano':'English';
+      b.setAttribute('lang',I.lingua==='en'?'it':'en');
+      b.setAttribute('aria-label',I.lingua==='en'?'Passa all’italiano':'Switch to English');
+      window.dispatchEvent(new Event('lingua'));
+    },
+    imposta:function(l){I.lingua=l;try{localStorage.setItem('lingua',l)}catch(e){}I.applica()},
+    /* Per le app con molti testi creati dal codice: dizionario {testo italiano: testo inglese}
+       e regole [[RegExp, sostituzione]], applicati ai nodi di testo e agli attributi
+       aria-label, placeholder e title, anche a quelli aggiunti dopo. */
+    dizionario:function(mappa,regole){
+      var stato=new WeakMap(),ATTR=['aria-label','placeholder','title'];
+      function inglese(it){var t=it.trim();if(!t)return null;var en=mappa[t];
+        if(en===undefined){for(var i=0;i<(regole||[]).length;i++){if(regole[i][0].test(t)){en=t.replace(regole[i][0],regole[i][1]);break}}}
+        return en===undefined?null:it.replace(t,en)}
+      function testo(n){var s=stato.get(n),it=(s&&n.nodeValue===s.en)?s.it:n.nodeValue,en=inglese(it);
+        if(en===null){stato.delete(n);return}stato.set(n,{it:it,en:en});
+        var v=I.lingua==='en'?en:it;if(n.nodeValue!==v)n.nodeValue=v}
+      function attributi(el){ATTR.forEach(function(a){if(!el.hasAttribute(a))return;var k='i18n'+a.replace(/-/g,''),
+        it=el.dataset[k]!==undefined&&el.getAttribute(a)===el.dataset[k+'En']?el.dataset[k]:el.getAttribute(a),en=inglese(it);
+        if(en===null)return;el.dataset[k]=it;el.dataset[k+'En']=en;var v=I.lingua==='en'?en:it;if(el.getAttribute(a)!==v)el.setAttribute(a,v)})}
+      function giro(radice){if(radice.nodeType===3){testo(radice);return}if(radice.nodeType!==1)return;
+        if(/^(SCRIPT|STYLE)$/.test(radice.tagName))return;attributi(radice);
+        var w=document.createTreeWalker(radice,NodeFilter.SHOW_TEXT|NodeFilter.SHOW_ELEMENT),n;
+        while((n=w.nextNode())){if(n.nodeType===3){if(!/^(SCRIPT|STYLE)$/.test(n.parentNode.tagName))testo(n)}else attributi(n)}}
+      var tutto=function(){giro(document.body)};
+      window.addEventListener('lingua',tutto);
+      new MutationObserver(function(ms){ms.forEach(function(m){
+        if(m.type==='characterData')testo(m.target);
+        else if(m.type==='attributes')attributi(m.target);
+        else m.addedNodes.forEach(giro)})}).observe(document.body,{subtree:true,childList:true,characterData:true,attributes:true,attributeFilter:ATTR});
+      tutto();
+    }
+  };
+  document.getElementById('linguaBtn').addEventListener('click',function(){I.imposta(I.lingua==='en'?'it':'en')});
+  return I;
+})();
+</script>
+<!-- LINGUA:FINE -->
 <div class="band">
-  <h1>Dal poligono al cerchio: dove punta la forza?</h1>
-  <p class="sub">Una pallina va dritta lungo i lati di un poligono regolare e in ogni vertice riceve un colpo. Cambia il numero di lati e guarda dove puntano i colpi e che angolo fanno con la velocità.</p>
+  <h1 data-en="From polygon to circle: where does the force point?">Dal poligono al cerchio: dove punta la forza?</h1>
+  <p class="sub" data-en="A ball moves straight along the sides of a regular polygon and gets a kick at every vertex. Change the number of sides and watch where the kicks point and what angle they make with the velocity.">Una pallina va dritta lungo i lati di un poligono regolare e in ogni vertice riceve un colpo. Cambia il numero di lati e guarda dove puntano i colpi e che angolo fanno con la velocità.</p>
   <div class="main">
-    <div class="fig" id="fig"><canvas id="cv" aria-label="Poligono regolare inscritto in una circonferenza, con la pallina, la velocità, i colpi e il triangolo delle velocità"></canvas></div>
+    <div class="fig" id="fig"><canvas id="cv" aria-label="Poligono regolare inscritto in una circonferenza, con la pallina, la velocità, i colpi e il triangolo delle velocità" data-en-label="Regular polygon inscribed in a circle, with the ball, the velocity, the kicks and the velocity triangle"></canvas></div>
     <div class="side">
       <div class="card">
-        <div class="nrow"><label for="n">Numero di lati</label><span class="nval" id="nval">3</span></div>
+        <div class="nrow"><label for="n" data-en="Number of sides">Numero di lati</label><span class="nval" id="nval">3</span></div>
         <input type="range" id="n" min="3" max="60" step="1" value="3">
         <div class="btns" id="preset"></div>
       </div>
       <div class="card" id="cardtri">
-        <h2>Triangolo delle velocità: <span class="d" id="ndv2">|Δv⟩ = |v₂⟩ − |v₁⟩</span></h2>
-        <div class="fig2" id="fig2"><canvas id="cv2" aria-label="Le due velocità disegnate dalla stessa origine e la loro differenza"></canvas></div>
-        <p class="nota" style="margin:6px 0 0">Le due velocità partono dallo stesso punto; <span class="d">|Δv⟩</span> va dalla punta della velocità di prima a quella di dopo. La linea rossa tratteggiata è la direzione verso il centro: <span class="d">|Δv⟩</span> ci sta sopra.</p>
+        <h2><span data-en="Velocity triangle">Triangolo delle velocità</span>: <span class="d" id="ndv2">|Δv⟩ = |v₂⟩ − |v₁⟩</span></h2>
+        <div class="fig2" id="fig2"><canvas id="cv2" aria-label="Le due velocità disegnate dalla stessa origine e la loro differenza" data-en-label="The two velocities drawn from the same origin and their difference"></canvas></div>
+        <p class="nota" style="margin:6px 0 0" data-en="Both velocities start from the same point; &lt;span class=&quot;d&quot;&gt;|Δv⟩&lt;/span&gt; goes from the tip of the velocity before to the tip of the velocity after. The dashed red line is the direction towards the centre: &lt;span class=&quot;d&quot;&gt;|Δv⟩&lt;/span&gt; lies on it.">Le due velocità partono dallo stesso punto; <span class="d">|Δv⟩</span> va dalla punta della velocità di prima a quella di dopo. La linea rossa tratteggiata è la direzione verso il centro: <span class="d">|Δv⟩</span> ci sta sopra.</p>
       </div>
       <div class="card">
         <div class="btns">
           <button id="play" aria-pressed="true">Pausa</button>
-          <button id="passo">Vai al vertice dopo</button>
+          <button id="passo" data-en="Go to the next vertex">Vai al vertice dopo</button>
         </div>
-        <label class="chk"><input type="checkbox" id="tutti" checked> Mostra i colpi in tutti i vertici</label>
-        <label class="chk"><input type="checkbox" id="tang" checked> Mostra la tangente alla circonferenza</label>
-                <label for="vel" style="font-weight:400">Velocità dell'animazione</label>
+        <label class="chk"><input type="checkbox" id="tutti" checked> <span data-en="Show the kicks at every vertex">Mostra i colpi in tutti i vertici</span></label>
+        <label class="chk"><input type="checkbox" id="tang" checked> <span data-en="Show the tangent to the circle">Mostra la tangente alla circonferenza</span></label>
+                <label for="vel" style="font-weight:400" data-en="Animation speed">Velocità dell'animazione</label>
         <input type="range" id="vel" min="0.2" max="3" step="0.1" value="1">
       </div>
       <div class="card">
-        <h2>Misure nell'ultimo vertice: <span class="d" id="ndv">|Δv⟩ = |v₂⟩ − |v₁⟩</span></h2>
+        <h2><span data-en="Measurements at the last vertex">Misure nell'ultimo vertice</span>: <span class="d" id="ndv">|Δv⟩ = |v₂⟩ − |v₁⟩</span></h2>
         <table class="mis"><tbody>
-          <tr><td>angolo tra <span class="f">|F⟩</span> e <span class="v" id="np">|v₁⟩</span> (prima)</td><td id="a1"></td></tr>
-          <tr><td>angolo tra <span class="f">|F⟩</span> e <span class="v" id="nd">|v₂⟩</span> (dopo)</td><td id="a2"></td></tr>
-          <tr><td>angolo tra <span class="f">|F⟩</span> e la tangente al cerchio</td><td id="a3"></td></tr>
-          <tr><td>la velocità ruota a ogni vertice di</td><td id="a4"></td></tr>
-          <tr><td><span class="d">|Δv|</span> / |v| = L / r</td><td id="a5"></td></tr>
-          <tr><td>forza media · r / (m v²)</td><td id="a6"></td></tr>
+          <tr><td><span data-en="angle between">angolo tra</span> <span class="f">|F⟩</span> <span data-en="and">e</span> <span class="v" id="np">|v₁⟩</span> <span data-en="(before)">(prima)</span></td><td id="a1"></td></tr>
+          <tr><td><span data-en="angle between">angolo tra</span> <span class="f">|F⟩</span> <span data-en="and">e</span> <span class="v" id="nd">|v₂⟩</span> <span data-en="(after)">(dopo)</span></td><td id="a2"></td></tr>
+          <tr><td><span data-en="angle between">angolo tra</span> <span class="f">|F⟩</span> <span data-en="and the tangent to the circle">e la tangente al cerchio</span></td><td id="a3"></td></tr>
+          <tr><td data-en="at every vertex the velocity turns by">la velocità ruota a ogni vertice di</td><td id="a4"></td></tr>
+          <tr><td><span class="d">|Δv|</span> / |v| = <span data-en="side">L</span> / r</td><td id="a5"></td></tr>
+          <tr><td data-en="average force · r / (m v²)">forza media · r / (m v²)</td><td id="a6"></td></tr>
         </tbody></table>
-        <div class="btns" style="margin-top:10px"><button id="reg">Scrivi nella tabella</button><button id="canc">Svuota</button></div>
-        <div class="scroll"><table class="reg" id="tab"><thead><tr><th>lati</th><th>F–v prima</th><th>F–v dopo</th><th>|Δv|/|v|</th></tr></thead><tbody></tbody></table></div>
+        <div class="btns" style="margin-top:10px"><button id="reg" data-en="Write in the table">Scrivi nella tabella</button><button id="canc" data-en="Clear">Svuota</button></div>
+        <div class="scroll"><table class="reg" id="tab"><thead><tr><th data-en="sides">lati</th><th data-en="F–v before">F–v prima</th><th data-en="F–v after">F–v dopo</th><th>|Δv|/|v|</th></tr></thead><tbody></tbody></table></div>
       </div>
     </div>
   </div>
 </div>
 <div class="band">
   <div class="spieg">
-    <div class="card"><h3>1. Sui lati nessuna forza</h3><p>Tra un vertice e l'altro la pallina va dritta a velocità costante (principio d'inerzia). Solo nei vertici un colpo cambia la direzione di <span class="v">|v⟩</span>, non il modulo.</p></div>
-    <div class="card"><h3>2. Il colpo punta al centro</h3><p>Per il secondo principio il colpo ha la direzione di <span class="d">|Δv⟩ = |v₂⟩ − |v₁⟩</span> (velocità dopo il vertice meno velocità prima). La retta dal vertice al centro è un asse di simmetria del poligono, e <span class="d">|Δv⟩</span> sta proprio su quella retta: in ogni vertice il colpo punta al centro <em>O</em>.</p></div>
-    <div class="card"><h3>3. Al limite: forza perpendicolare</h3><p>Con tanti lati, velocità prima e dopo quasi coincidono e gli angoli tendono a 90°. Con infiniti lati il poligono diventa la circonferenza: la forza punta sempre al centro, quindi è perpendicolare alla velocità, che è tangente. E la forza media vale sempre m v²/r, per ogni numero di lati.</p></div>
+    <div class="card"><h3 data-en="1. No force along the sides">1. Sui lati nessuna forza</h3><p data-en="Between one vertex and the next the ball moves straight at constant speed (law of inertia). Only at the vertices does a kick change the direction of &lt;span class=&quot;v&quot;&gt;|v⟩&lt;/span&gt;, not its magnitude.">Tra un vertice e l'altro la pallina va dritta a velocità costante (principio d'inerzia). Solo nei vertici un colpo cambia la direzione di <span class="v">|v⟩</span>, non il modulo.</p></div>
+    <div class="card"><h3 data-en="2. The kick points to the centre">2. Il colpo punta al centro</h3><p data-en="By Newton's second law the kick has the direction of &lt;span class=&quot;d&quot;&gt;|Δv⟩ = |v₂⟩ − |v₁⟩&lt;/span&gt; (velocity after the vertex minus velocity before). The line from the vertex to the centre is an axis of symmetry of the polygon, and &lt;span class=&quot;d&quot;&gt;|Δv⟩&lt;/span&gt; lies exactly on that line: at every vertex the kick points to the centre &lt;em&gt;O&lt;/em&gt;.">Per il secondo principio il colpo ha la direzione di <span class="d">|Δv⟩ = |v₂⟩ − |v₁⟩</span> (velocità dopo il vertice meno velocità prima). La retta dal vertice al centro è un asse di simmetria del poligono, e <span class="d">|Δv⟩</span> sta proprio su quella retta: in ogni vertice il colpo punta al centro <em>O</em>.</p></div>
+    <div class="card"><h3 data-en="3. In the limit: a perpendicular force">3. Al limite: forza perpendicolare</h3><p data-en="With many sides, the velocities before and after almost coincide and the angles tend to 90°. With infinitely many sides the polygon becomes the circle: the force always points to the centre, so it is perpendicular to the velocity, which is tangent. And the average force is always m v²/r, for any number of sides.">Con tanti lati, velocità prima e dopo quasi coincidono e gli angoli tendono a 90°. Con infiniti lati il poligono diventa la circonferenza: la forza punta sempre al centro, quindi è perpendicolare alla velocità, che è tangente. E la forza media vale sempre m v²/r, per ogni numero di lati.</p></div>
   </div>
-  <p class="nota">Fisica 3R · Liceo «L. da Vinci» di Trento · lezione sulla forza centripeta. Vettori scritti con il ket: |v⟩ è il vettore velocità, |v| il suo modulo.</p>
+  <p class="nota" data-en="Physics, Year 3 · Liceo «L. da Vinci», Trento · lesson on centripetal force. Vectors are written as kets: |v⟩ is the velocity vector, |v| its magnitude.">Fisica, 3º anno · Liceo «L. da Vinci» di Trento · lezione sulla forza centripeta. Vettori scritti con il ket: |v⟩ è il vettore velocità, |v| il suo modulo.</p>
 </div>
 <script>
 {
@@ -113,14 +183,14 @@ const $=id=>document.getElementById(id);
 const cv=$('cv'),fig=$('fig');let ctx=cv.getContext('2d');
 let n=3,cerchio=false,s=0,play=true,last=null,ultimo=0,flash=0;
 const deg=Math.PI/180;
-const fmt=(x,d=1)=>x.toFixed(d).replace('.',',');
+const fmt=(x,d=1)=>I18N.num(x,d);
 const sub=k=>String(k).split('').map(c=>'₀₁₂₃₄₅₆₇₈₉'[+c]).join('');
 const vk=k=>'|v'+sub(k)+'⟩';
 const lati=u=>[((u-1+n)%n)+1,u+1];
 const sonda=document.createElement('span');sonda.style.display='none';document.body.appendChild(sonda);
 const css=k=>{sonda.style.color=`var(${k})`;return getComputedStyle(sonda).color||'#888'};
 const presets=[3,4,5,6,8,12,36];
-$('preset').innerHTML=presets.map(p=>`<button data-n="${p}">${p}</button>`).join('')+'<button data-n="inf">cerchio</button>';
+const preset=()=>{$('preset').innerHTML=presets.map(p=>`<button data-n="${p}">${p}</button>`).join('')+'<button data-n="inf">'+I18N.t('cerchio','circle')+'</button>';for(const b of $('preset').children)b.classList.toggle('on',b.dataset.n===String(cerchio?'inf':n))};preset();
 function setN(v){
   if(v==='inf'){cerchio=true;$('nval').textContent='∞';}
   else{cerchio=false;n=+v;$('n').value=n;$('nval').textContent=n;s=Math.floor(s)%n;}
@@ -129,15 +199,16 @@ function setN(v){
 }
 $('preset').addEventListener('click',e=>{const b=e.target.closest('button');if(b)setN(b.dataset.n)});
 $('n').addEventListener('input',e=>setN(e.target.value));
-$('play').addEventListener('click',()=>{play=!play;$('play').textContent=play?'Pausa':'Avvia';$('play').setAttribute('aria-pressed',play)});
+const scriviPlay=()=>{$('play').textContent=play?I18N.t('Pausa','Pause'):I18N.t('Avvia','Play')};
+$('play').addEventListener('click',()=>{play=!play;scriviPlay();$('play').setAttribute('aria-pressed',play)});
 $('passo').addEventListener('click',()=>{if(cerchio){s+=0.25;}else{s=Math.floor(s)+1;ultimo=Math.round(s)%n;flash=1;misure();}});
 function misure(){
   const N=cerchio?Infinity:n,h=cerchio?0:180/n;
-  $('a1').textContent=fmt(90+h)+'°';$('a2').textContent=fmt(90-h)+'°';$('a3').textContent='90,0°';
+  $('a1').textContent=fmt(90+h)+'°';$('a2').textContent=fmt(90-h)+'°';$('a3').textContent=fmt(90)+'°';
   $('a4').textContent=cerchio?'→ 0°':fmt(360/n)+'°';
   $('a5').textContent=cerchio?'→ 0':fmt(2*Math.sin(h*deg),3);
-  $('a6').textContent='1,000';
-  if(cerchio){$('np').textContent='|v⟩';$('nd').textContent='|v⟩';$('ndv').textContent='forza continua';$('ndv2').textContent='forza continua';}
+  $('a6').textContent=fmt(1,3);
+  if(cerchio){$('np').textContent='|v⟩';$('nd').textContent='|v⟩';$('ndv').textContent=I18N.t('forza continua','continuous force');$('ndv2').textContent=$('ndv').textContent;}
   else{const[a,b]=lati(ultimo);$('np').textContent=vk(a);$('nd').textContent=vk(b);$('ndv').textContent='|Δv⟩ = '+vk(b)+' − '+vk(a);$('ndv2').textContent=$('ndv').textContent;}
 }
 $('reg').addEventListener('click',()=>{
@@ -171,7 +242,7 @@ function draw(){
     const[vx,vy]=dir(phi-90,lv);freccia(x,y,x+vx,y+vy,V);testo('|v⟩',x+vx*1.15,y+vy*1.15,V,'center');
     freccia(x,y,x+(cx-x)*0.5,y+(cy-y)*0.5,F);testo('|F⟩',x+(cx-x)*0.62,y+(cy-y)*0.62,F,'center');
     ctx.fillStyle=css('--panel');ctx.strokeStyle=I;ctx.lineWidth=2;ctx.beginPath();ctx.arc(x,y,9,0,2*Math.PI);ctx.fill();ctx.stroke();
-    testo('circonferenza: forza sempre verso O e perpendicolare a |v⟩',14,H-18,M);
+    testo(I18N.t('circonferenza: forza sempre verso O e perpendicolare a |v⟩','circle: force always towards O and perpendicular to |v⟩'),14,H-18,M);
     drawTri(0,0,0);return;
   }
   const passo=360/n,vert=k=>90-k*passo;
@@ -188,7 +259,7 @@ function draw(){
   const[vx,vy]=dir(av,lv);freccia(bx,by,bx+vx,by+vy,V);testo(vk(k+1),bx+vx*1.25,by+vy*1.25,V,'center');
   ctx.fillStyle=css('--panel');ctx.strokeStyle=I;ctx.lineWidth=2;ctx.beginPath();ctx.arc(bx,by,9,0,2*Math.PI);ctx.fill();ctx.stroke();
   drawTri(u,ain,aout);
-  testo('ultimo colpo: vertice evidenziato',14,H-18,M);
+  testo(I18N.t('ultimo colpo: vertice evidenziato','last kick: highlighted vertex'),14,H-18,M);
 }
 const cv2=$('cv2'),fig2=$('fig2'),ctx2=cv2.getContext('2d');
 function drawTri(u,ain,aout){
@@ -196,7 +267,7 @@ function drawTri(u,ain,aout){
   if(cv2.width!==Math.round(W*dpr)||cv2.height!==Math.round(H*dpr)){cv2.width=Math.round(W*dpr);cv2.height=Math.round(H*dpr);}
   const c0=ctx;ctx=ctx2;ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,H);
   const V=css('--vel'),F=css('--forza'),D=css('--dv'),M=css('--muted');
-  if(cerchio){testo('con il cerchio il colpo è continuo:',W/2,H/2-12,M,'center');testo('|F⟩ sempre verso il centro, ⟂ |v⟩',W/2,H/2+12,M,'center');ctx=c0;return;}
+  if(cerchio){testo(I18N.t('con il cerchio il colpo è continuo:','on the circle the kick is continuous:'),W/2,H/2-12,M,'center');testo(I18N.t('|F⟩ sempre verso il centro, ⟂ |v⟩','|F⟩ always towards the centre, ⟂ |v⟩'),W/2,H/2+12,M,'center');ctx=c0;return;}
   const[na,nb]=lati(u),L=Math.min(W*0.3,H*0.45)/Math.max(1,1.9*Math.sin(Math.PI/n));
   const d=(a)=>[L*Math.cos(a*deg),-L*Math.sin(a*deg)];
   const[ix,iy]=d(ain),[jx,jy]=d(aout),ox=W/2-(ix+jx)/3,oy=H/2-(iy+jy)/3;
@@ -206,13 +277,13 @@ function drawTri(u,ain,aout){
   freccia(ox,oy,ox+ix,oy+iy,V,3);freccia(ox,oy,ox+jx,oy+jy,V,3);freccia(ox+ix,oy+iy,ox+jx,oy+jy,D,3.5);
   const lab=(x,y,px,py,t,col,f=0.55)=>{let nx=-y,ny=x;const m=Math.hypot(nx,ny)||1;nx/=m;ny/=m;if(nx*px+ny*py>0){nx=-nx;ny=-ny;}
     const al=Math.abs(nx)<0.3?'center':(nx>0?'left':'right');testo(t,ox+x*f+nx*12,oy+y*f+ny*(Math.abs(nx)<0.3?14:6),col,al);};
-  lab(ix,iy,jx,jy,vk(na)+' prima',V);lab(jx,jy,ix,iy,vk(nb)+' dopo',V);
+  lab(ix,iy,jx,jy,vk(na)+' '+I18N.t('prima','before'),V);lab(jx,jy,ix,iy,vk(nb)+' '+I18N.t('dopo','after'),V);
   {let nx=-uy,ny=ux;if(nx*mx+ny*my<0){nx=-nx;ny=-ny;}const al=Math.abs(nx)<0.3?'center':(nx>0?'left':'right');testo('|Δv⟩',ox+mx+nx*12,oy+my+ny*(Math.abs(nx)<0.3?16:0),D,al);}
   ctx=c0;
 }
 const ro=new ResizeObserver(draw);ro.observe(fig);ro.observe(fig2);
 const ridotto=matchMedia('(prefers-reduced-motion: reduce)').matches;
-if(ridotto){play=false;$('play').textContent='Avvia';$('play').setAttribute('aria-pressed','false');}
+if(ridotto){play=false;$('play').setAttribute('aria-pressed','false');}
 function ciclo(ts){
   if(last!==null&&play){
     const dt=Math.min(0.05,(ts-last)/1000),v=+$('vel').value;
@@ -225,7 +296,9 @@ function ciclo(ts){
   }
   flash=Math.max(0,flash-0.02);last=ts;draw();requestAnimationFrame(ciclo);
 }
-setN(3);requestAnimationFrame(ciclo);
+window.addEventListener('lingua',()=>{preset();scriviPlay();misure();draw()});
+I18N.titolo=['Dal poligono al cerchio','From polygon to circle'];
+setN(3);I18N.applica();requestAnimationFrame(ciclo);
 }
 </script>
 </body>

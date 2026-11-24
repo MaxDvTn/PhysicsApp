@@ -5,7 +5,7 @@ Una pallina va dritta lungo i lati di un poligono regolare e in ogni vertice ric
 ## Come si usa
 
 1. Parti dal triangolo (3 lati). Prima di mostrare i colpi chiedi alla classe dove deve puntare il colpo nel vertice.
-2. Attiva **Mostra il triangolo delle velocità**: la variazione di velocità |Δv⟩ = |v dopo⟩ − |v prima⟩ è parallela al segmento dal vertice al centro, quindi il colpo punta al centro.
+2. Guarda il riquadro **Triangolo delle velocità**: le due velocità partono dallo stesso punto e la variazione |Δv⟩ = |v₂⟩ − |v₁⟩ sta sulla linea rossa tratteggiata, la direzione verso il centro. Quindi il colpo punta al centro.
 3. Usa i pulsanti 3, 4, 5, 6, 8, 12, 36 e poi **cerchio**. A ogni passo premi **Scrivi nella tabella**: gli angoli tra forza e velocità valgono 90° ± 180°/n e tendono a 90°.
 4. Con **Vai al vertice dopo** si procede un colpo alla volta; il cursore della velocità rallenta l'animazione.
 5. Chiudi con la riga «forza media · r / (m v²)»: vale 1 per ogni numero di lati, quindi la forza media è m v²/r.

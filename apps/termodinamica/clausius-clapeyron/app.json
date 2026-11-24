@@ -10,6 +10,14 @@
   "tema": "Transizioni di fase",
   "anno": 4,
   "data": "2025-12-27",
+  "en": {
+    "titolo": "Clausius-Clapeyron explorer",
+    "sommario": "Why water boils below 100 °C in a mountain hut and where the «7 % per degree» of water vapour in a warmer climate comes from: models compared with real data.",
+    "tema": "Phase transitions",
+    "argomento": [
+      "Thermodynamics"
+    ]
+  },
   "file": [],
   "allegati": [],
   "docente": [],
