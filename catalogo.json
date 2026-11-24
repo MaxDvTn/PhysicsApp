@@ -9,15 +9,12 @@
       "Astronomia"
     ],
     "tema": "Moti della Terra",
-    "classi": [
-      "3R",
-      "3P"
-    ],
     "anno": 3,
     "data": "2026-09-29",
-    "collegate": [],
     "file": [],
     "allegati": [],
+    "docente": [],
+    "collegate": [],
     "cartella": "apps/astronomia/giorno-solare-siderale",
     "categoria": "astronomia",
     "sottocategoria": null
@@ -32,12 +29,12 @@
       "Intelligenza artificiale"
     ],
     "tema": "Reti neurali",
-    "classi": [],
     "anno": null,
     "data": "2026-09-23",
-    "collegate": [],
     "file": [],
     "allegati": [],
+    "docente": [],
+    "collegate": [],
     "cartella": "apps/intelligenza-artificiale/somme-di-sigmoidi",
     "categoria": "intelligenza-artificiale",
     "sottocategoria": null
@@ -52,12 +49,12 @@
       "Matematica"
     ],
     "tema": "Teoria dei numeri",
-    "classi": [],
     "anno": null,
     "data": "2026-11-21",
-    "collegate": [],
     "file": [],
     "allegati": [],
+    "docente": [],
+    "collegate": [],
     "cartella": "apps/matematica/mappa-riemann",
     "categoria": "matematica",
     "sottocategoria": null
@@ -73,9 +70,6 @@
       "Cinematica"
     ],
     "tema": "Moto parabolico",
-    "classi": [
-      "3R"
-    ],
     "anno": 3,
     "data": "2026-10-09",
     "file": [
@@ -96,8 +90,14 @@
         "Passo 2: dardo e scimmia insieme"
       ]
     ],
-    "collegate": [],
     "allegati": [],
+    "docente": [
+      [
+        "docente/soluzione_docente.pdf",
+        "Soluzione per il docente (tre atti e simulazione)"
+      ]
+    ],
+    "collegate": [],
     "cartella": "apps/meccanica/cinematica/tiro-impossibile",
     "categoria": "meccanica",
     "sottocategoria": "cinematica"
@@ -113,9 +113,6 @@
       "Dinamica"
     ],
     "tema": "Attrito viscoso e velocità limite",
-    "classi": [
-      "3R"
-    ],
     "anno": 3,
     "data": "2026-11-13",
     "file": [
@@ -124,19 +121,21 @@
         "Versione da completare (studenti)"
       ],
       [
-        "attrito_viscoso_completo.py",
-        "Versione completa (docente)"
-      ],
-      [
         "attrito_viscoso_colab.ipynb",
         "Notebook per Google Colab"
       ]
     ],
     "colab": "attrito_viscoso_colab.ipynb",
+    "allegati": [],
+    "docente": [
+      [
+        "docente/attrito_viscoso_completo.py",
+        "Simulazione completa"
+      ]
+    ],
     "collegate": [
       "pallina-nell-olio"
     ],
-    "allegati": [],
     "cartella": "apps/meccanica/dinamica/attrito-viscoso-vpython",
     "categoria": "meccanica",
     "sottocategoria": "dinamica"
@@ -152,11 +151,9 @@
       "Dinamica"
     ],
     "tema": "Forza centripeta",
-    "classi": [
-      "3R"
-    ],
     "anno": 3,
     "data": "2026-11-24",
+    "file": [],
     "allegati": [
       [
         "allegati/sintesi_forza_centripeta.pdf",
@@ -171,10 +168,10 @@
         "Slide, tema scuro"
       ]
     ],
+    "docente": [],
     "collegate": [
       "forza-centripeta-vpython"
     ],
-    "file": [],
     "cartella": "apps/meccanica/dinamica/dal-poligono-al-cerchio",
     "categoria": "meccanica",
     "sottocategoria": "dinamica"
@@ -190,9 +187,6 @@
       "Dinamica"
     ],
     "tema": "Forza centripeta",
-    "classi": [
-      "3R"
-    ],
     "anno": 3,
     "data": "2026-11-13",
     "file": [
@@ -201,19 +195,21 @@
         "Versione da completare (studenti)"
       ],
       [
-        "forza_centripeta_completo.py",
-        "Versione completa (docente)"
-      ],
-      [
         "forza_centripeta_colab.ipynb",
         "Notebook per Google Colab"
       ]
     ],
     "colab": "forza_centripeta_colab.ipynb",
+    "allegati": [],
+    "docente": [
+      [
+        "docente/forza_centripeta_completo.py",
+        "Simulazione completa"
+      ]
+    ],
     "collegate": [
       "dal-poligono-al-cerchio"
     ],
-    "allegati": [],
     "cartella": "apps/meccanica/dinamica/forza-centripeta-vpython",
     "categoria": "meccanica",
     "sottocategoria": "dinamica"
@@ -229,12 +225,9 @@
       "Dinamica"
     ],
     "tema": "Attrito viscoso e velocità limite",
-    "classi": [
-      "3R",
-      "3P"
-    ],
     "anno": 3,
     "data": "2026-11-24",
+    "file": [],
     "allegati": [
       [
         "allegati/sintesi_attrito_viscoso.pdf",
@@ -253,12 +246,32 @@
         "Slide, tema scuro"
       ]
     ],
+    "docente": [],
     "collegate": [
       "attrito-viscoso-vpython"
     ],
-    "file": [],
     "cartella": "apps/meccanica/dinamica/pallina-nell-olio",
     "categoria": "meccanica",
     "sottocategoria": "dinamica"
+  },
+  {
+    "id": "clausius-clapeyron",
+    "titolo": "Esploratore Clausius-Clapeyron",
+    "tipo": "web",
+    "avvio": "index.html",
+    "sommario": "Perché in montagna l'acqua bolle a meno di 100 °C e perché un clima più caldo porta piogge più intense: due cursori, la quota e il riscaldamento.",
+    "argomento": [
+      "Termodinamica"
+    ],
+    "tema": "Transizioni di fase",
+    "anno": 4,
+    "data": "2025-12-27",
+    "file": [],
+    "allegati": [],
+    "docente": [],
+    "collegate": [],
+    "cartella": "apps/termodinamica/clausius-clapeyron",
+    "categoria": "termodinamica",
+    "sottocategoria": null
   }
 ]

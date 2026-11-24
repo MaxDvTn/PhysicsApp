@@ -2,7 +2,7 @@
 """Genera il sito e il catalogo di PhysicsApp a partire dalle cartelle in apps/.
 
 Ogni app sta in apps/<categoria>/[<sottocategoria>/]<id>/ con:
-  app.json   dati dell'app (titolo, tipo, classi, allegati...)
+  app.json   dati dell'app (titolo, tipo, anno, allegati, materiali del docente...)
   README.md  descrizione e istruzioni d'uso
 e i suoi file (index.html, .py, .ipynb, PDF...).
 
@@ -59,7 +59,7 @@ def leggi_app():
         d["sottocategoria"] = rel[1] if len(rel) > 2 else None
         assert d["id"] == rel[-1], f"{f}: id diverso dal nome della cartella"
         assert d["tipo"] in TIPI, f"{f}: tipo sconosciuto {d['tipo']}"
-        for p, _ in d.get("file", []) + d.get("allegati", []):
+        for p, _ in d.get("file", []) + d.get("allegati", []) + d.get("docente", []):
             assert (f.parent / p).exists(), f"{f}: manca {p}"
         if d.get("avvio"):
             assert (f.parent / d["avvio"]).exists(), f"{f}: manca {d['avvio']}"
@@ -114,13 +114,19 @@ def stroboscopio():
             f'<text x="{w}" y="{y0+28}" text-anchor="end">un punto ogni 0,1 s</text></svg>')
 
 
+def nome_anno(n):
+    return f"{n}º anno"
+
+
 def scheda_url(a):
     return f'{a["cartella"]}/scheda.html'
 
 
 def riga_app(a, base=""):
     tipo = TIPI[a["tipo"]][0]
-    classi = "".join(f'<span class="classe">{e(c)}</span>' for c in a["classi"])
+    classi = f'<span class="classe">{e(nome_anno(a["anno"]))}</span>' if a.get("anno") else ""
+    if a.get("docente"):
+        classi += '<span>con materiali per il docente</span>'
     apri = ""
     if a.get("avvio"):
         apri = f'<a class="bottone pieno" href="{base}{a["cartella"]}/{a["avvio"]}">Apri l\'app</a>'
@@ -130,7 +136,7 @@ def riga_app(a, base=""):
         apri = f'<a class="bottone pieno" href="{base}{scheda_url(a)}#materiali">Scarica le schede</a>'
     filtri = {
         "data-categoria": a["categoria"],
-        "data-classi": " ".join(a["classi"]),
+        "data-anno": str(a.get("anno") or ""),
         "data-tipo": a["tipo"],
         "data-testo": " ".join([a["titolo"], a["sommario"], a.get("tema", ""), *a["argomento"]]).lower(),
     }
@@ -160,13 +166,13 @@ def pagina_indice(apps):
             blocchi.append(f'<div class="sotto">{titolo}{righe}</div>')
         sezioni.append(f'<section class="categoria" id="{k}" data-categoria="{k}"><h2>{e(nome_categoria(apps, k, 0))}</h2>{"".join(blocchi)}</section>')
 
-    classi = sorted({c for a in apps for c in a["classi"]})
-    def bottoni(nome, voci):
-        b = [f'<button type="button" data-filtro="{nome}" data-valore="" aria-pressed="true">Tutte</button>']
+    anni = sorted({a["anno"] for a in apps if a.get("anno")})
+    def bottoni(nome, voci, tutte="Tutte"):
+        b = [f'<button type="button" data-filtro="{nome}" data-valore="" aria-pressed="true">{tutte}</button>']
         b += [f'<button type="button" data-filtro="{nome}" data-valore="{e(v)}" aria-pressed="false">{e(t)}</button>' for v, t in voci]
         return "".join(b)
     f_cat = bottoni("categoria", [(k, nome_categoria(apps, k, 0)) for k, _ in alb])
-    f_cla = bottoni("classi", [(c, c) for c in classi])
+    f_cla = bottoni("anno", [(str(n), nome_anno(n)) for n in anni], "Tutti")
     f_tip = bottoni("tipo", [(t, TIPI[t][0]) for t in TIPI if any(a["tipo"] == t for a in apps)])
 
     return f"""<!DOCTYPE html>
@@ -196,7 +202,7 @@ def pagina_indice(apps):
     </header>
     <div class="filtri" role="group" aria-label="Filtra le app">
       <div class="filtro"><span>Argomento</span>{f_cat}</div>
-      <div class="filtro"><span>Classe</span>{f_cla}</div>
+      <div class="filtro"><span>Anno</span>{f_cla}</div>
       <div class="filtro"><span>Tipo</span>{f_tip}</div>
       <div class="filtro"><span><label for="cerca">Cerca</label></span><input id="cerca" class="cerca" type="search" placeholder="velocità limite, forza centripeta…"></div>
     </div>
@@ -207,13 +213,13 @@ def pagina_indice(apps):
 </div>
 <script>
 {{
-const stato={{categoria:'',classi:'',tipo:'',testo:''}};
+const stato={{categoria:'',anno:'',tipo:'',testo:''}};
 const app=[...document.querySelectorAll('.app')];
 function aggiorna(){{
   let n=0;
   for(const a of app){{
     const ok=(!stato.categoria||a.dataset.categoria===stato.categoria)
-      &&(!stato.classi||a.dataset.classi.split(' ').includes(stato.classi))
+      &&(!stato.anno||a.dataset.anno===stato.anno)
       &&(!stato.tipo||a.dataset.tipo===stato.tipo)
       &&(!stato.testo||a.dataset.testo.includes(stato.testo));
     a.hidden=!ok; if(ok)n++;
@@ -268,12 +274,16 @@ def pagina_scheda(a, apps):
     if a.get("allegati"):
         materiali += "<h2>Lezione collegata</h2><ul class=\"materiali\">" + "".join(
             f'<li><span><a href="{e(p)}">{e(t)}</a> <small>PDF, {dimensione(cartella / p)}</small></span></li>' for p, t in a["allegati"]) + "</ul>"
+    if a.get("docente"):
+        materiali += ('<h2 id="docente">Per il docente</h2><p>Versioni complete e soluzioni: '
+                      'utili per preparare la lezione o per proiettarle. Agli studenti conviene dare prima le versioni da completare.</p>'
+                      '<ul class="materiali docente">' + "".join(voce(p, t) for p, t in a["docente"]) + "</ul>")
     collegate = [b for b in apps if b["id"] in a.get("collegate", [])]
     if collegate:
         materiali += "<h2>App collegate</h2><ul class=\"materiali\">" + "".join(
             f'<li><a href="{su}{scheda_url(b)}">{e(b["titolo"])}</a><small>{e(TIPI[b["tipo"]][0])}</small></li>' for b in collegate) + "</ul>"
 
-    classi = "".join(f'<span class="classe">{e(c)}</span> ' for c in a["classi"]) or "tutte"
+    classi = f'<span class="classe">{e(nome_anno(a["anno"]))}</span>' if a.get("anno") else "tutti"
     data = "/".join(reversed(a["data"].split("-")))
     return f"""<!DOCTYPE html>
 <html lang="it">
@@ -293,7 +303,7 @@ def pagina_scheda(a, apps):
     <a class="marchio" href="{su}index.html">PhysicsApp</a>
     <dl class="scheda-dati">
       <dt>Argomento</dt><dd>{e(' › '.join(a['argomento']))}<br>{e(a.get('tema',''))}</dd>
-      <dt>Classi</dt><dd>{classi}</dd>
+      <dt>Anno</dt><dd>{classi}</dd>
       <dt>Tipo</dt><dd>{e(TIPI[a['tipo']][0])}</dd>
       <dt>Data</dt><dd>{data}</dd>
     </dl>
@@ -336,9 +346,9 @@ def readme_catalogo(apps):
         for s, lista in sorted(sub.items(), key=lambda kv: kv[0] or ""):
             if s:
                 righe.append(f"\n**{nome_categoria(apps, s, 1)}**\n")
-            righe.append("| App | Tipo | Classi | Cartella |\n|---|---|---|---|")
+            righe.append("| App | Tipo | Anno | Cartella |\n|---|---|---|---|")
             for a in sorted(lista, key=lambda a: a["titolo"]):
-                righe.append(f"| [{a['titolo']}]({SITO}{scheda_url(a)}) | {TIPI[a['tipo']][0]} | {', '.join(a['classi']) or '–'} | [`{a['cartella']}`]({a['cartella']}) |")
+                righe.append(f"| [{a['titolo']}]({SITO}{scheda_url(a)}) | {TIPI[a['tipo']][0]} | {nome_anno(a['anno']) if a.get('anno') else '–'} | [`{a['cartella']}`]({a['cartella']}) |")
     return "\n".join(righe).strip()
 
 

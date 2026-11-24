@@ -28,6 +28,7 @@ h1{font-size:clamp(28px,4vw,42px);line-height:1.05;margin:0 0 6px;text-wrap:bala
 .fig{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:14px;aspect-ratio:1/0.92;min-height:320px}
 .fig canvas{position:absolute;inset:0;width:100%;height:100%}
 .side{display:grid;gap:14px}
+.fig2{position:relative;height:230px}.fig2 canvas{position:absolute;inset:0;width:100%;height:100%}
 .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px}
 .card h2{font-size:17px;margin:0 0 10px}
 label{font-weight:600}
@@ -67,6 +68,11 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline
         <input type="range" id="n" min="3" max="60" step="1" value="3">
         <div class="btns" id="preset"></div>
       </div>
+      <div class="card" id="cardtri">
+        <h2>Triangolo delle velocità: <span class="d" id="ndv2">|Δv⟩ = |v₂⟩ − |v₁⟩</span></h2>
+        <div class="fig2" id="fig2"><canvas id="cv2" aria-label="Le due velocità disegnate dalla stessa origine e la loro differenza"></canvas></div>
+        <p class="nota" style="margin:6px 0 0">Le due velocità partono dallo stesso punto; <span class="d">|Δv⟩</span> va dalla punta della velocità di prima a quella di dopo. La linea rossa tratteggiata è la direzione verso il centro: <span class="d">|Δv⟩</span> ci sta sopra.</p>
+      </div>
       <div class="card">
         <div class="btns">
           <button id="play" aria-pressed="true">Pausa</button>
@@ -74,15 +80,14 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline
         </div>
         <label class="chk"><input type="checkbox" id="tutti" checked> Mostra i colpi in tutti i vertici</label>
         <label class="chk"><input type="checkbox" id="tang" checked> Mostra la tangente alla circonferenza</label>
-        <label class="chk"><input type="checkbox" id="tri" checked> Mostra il triangolo delle velocità</label>
-        <label for="vel" style="font-weight:400">Velocità dell'animazione</label>
+                <label for="vel" style="font-weight:400">Velocità dell'animazione</label>
         <input type="range" id="vel" min="0.2" max="3" step="0.1" value="1">
       </div>
       <div class="card">
-        <h2>Misure nell'ultimo vertice</h2>
+        <h2>Misure nell'ultimo vertice: <span class="d" id="ndv">|Δv⟩ = |v₂⟩ − |v₁⟩</span></h2>
         <table class="mis"><tbody>
-          <tr><td>angolo tra <span class="f">|F⟩</span> e <span class="v">|v<sub>prima</sub>⟩</span></td><td id="a1"></td></tr>
-          <tr><td>angolo tra <span class="f">|F⟩</span> e <span class="v">|v<sub>dopo</sub>⟩</span></td><td id="a2"></td></tr>
+          <tr><td>angolo tra <span class="f">|F⟩</span> e <span class="v" id="np">|v₁⟩</span> (prima)</td><td id="a1"></td></tr>
+          <tr><td>angolo tra <span class="f">|F⟩</span> e <span class="v" id="nd">|v₂⟩</span> (dopo)</td><td id="a2"></td></tr>
           <tr><td>angolo tra <span class="f">|F⟩</span> e la tangente al cerchio</td><td id="a3"></td></tr>
           <tr><td>la velocità ruota a ogni vertice di</td><td id="a4"></td></tr>
           <tr><td><span class="d">|Δv|</span> / |v| = L / r</td><td id="a5"></td></tr>
@@ -97,7 +102,7 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline
 <div class="band">
   <div class="spieg">
     <div class="card"><h3>1. Sui lati nessuna forza</h3><p>Tra un vertice e l'altro la pallina va dritta a velocità costante (principio d'inerzia). Solo nei vertici un colpo cambia la direzione di <span class="v">|v⟩</span>, non il modulo.</p></div>
-    <div class="card"><h3>2. Il colpo punta al centro</h3><p>Per il secondo principio il colpo ha la direzione di <span class="d">|Δv⟩ = |v<sub>dopo</sub>⟩ − |v<sub>prima</sub>⟩</span>. La retta dal vertice al centro è un asse di simmetria del poligono, e <span class="d">|Δv⟩</span> sta proprio su quella retta: in ogni vertice il colpo punta al centro <em>O</em>.</p></div>
+    <div class="card"><h3>2. Il colpo punta al centro</h3><p>Per il secondo principio il colpo ha la direzione di <span class="d">|Δv⟩ = |v₂⟩ − |v₁⟩</span> (velocità dopo il vertice meno velocità prima). La retta dal vertice al centro è un asse di simmetria del poligono, e <span class="d">|Δv⟩</span> sta proprio su quella retta: in ogni vertice il colpo punta al centro <em>O</em>.</p></div>
     <div class="card"><h3>3. Al limite: forza perpendicolare</h3><p>Con tanti lati, velocità prima e dopo quasi coincidono e gli angoli tendono a 90°. Con infiniti lati il poligono diventa la circonferenza: la forza punta sempre al centro, quindi è perpendicolare alla velocità, che è tangente. E la forza media vale sempre m v²/r, per ogni numero di lati.</p></div>
   </div>
   <p class="nota">Fisica 3R · Liceo «L. da Vinci» di Trento · lezione sulla forza centripeta. Vettori scritti con il ket: |v⟩ è il vettore velocità, |v| il suo modulo.</p>
@@ -105,10 +110,13 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline
 <script>
 {
 const $=id=>document.getElementById(id);
-const cv=$('cv'),fig=$('fig'),ctx=cv.getContext('2d');
+const cv=$('cv'),fig=$('fig');let ctx=cv.getContext('2d');
 let n=3,cerchio=false,s=0,play=true,last=null,ultimo=0,flash=0;
 const deg=Math.PI/180;
 const fmt=(x,d=1)=>x.toFixed(d).replace('.',',');
+const sub=k=>String(k).split('').map(c=>'₀₁₂₃₄₅₆₇₈₉'[+c]).join('');
+const vk=k=>'|v'+sub(k)+'⟩';
+const lati=u=>[((u-1+n)%n)+1,u+1];
 const sonda=document.createElement('span');sonda.style.display='none';document.body.appendChild(sonda);
 const css=k=>{sonda.style.color=`var(${k})`;return getComputedStyle(sonda).color||'#888'};
 const presets=[3,4,5,6,8,12,36];
@@ -129,6 +137,8 @@ function misure(){
   $('a4').textContent=cerchio?'→ 0°':fmt(360/n)+'°';
   $('a5').textContent=cerchio?'→ 0':fmt(2*Math.sin(h*deg),3);
   $('a6').textContent='1,000';
+  if(cerchio){$('np').textContent='|v⟩';$('nd').textContent='|v⟩';$('ndv').textContent='forza continua';$('ndv2').textContent='forza continua';}
+  else{const[a,b]=lati(ultimo);$('np').textContent=vk(a);$('nd').textContent=vk(b);$('ndv').textContent='|Δv⟩ = '+vk(b)+' − '+vk(a);$('ndv2').textContent=$('ndv').textContent;}
 }
 $('reg').addEventListener('click',()=>{
   const h=cerchio?0:180/n,tr=document.createElement('tr');
@@ -148,7 +158,7 @@ function draw(){
   if(cv.width!==Math.round(W*dpr)||cv.height!==Math.round(H*dpr)){cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);}
   ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,H);
   const V=css('--vel'),F=css('--forza'),D=css('--dv'),C=css('--cerchio'),I=css('--ink'),M=css('--muted');
-  const R=Math.min(W*0.3,H*0.4),cx=W*0.37,cy=H*0.47;
+  const R=Math.min(W*0.36,H*0.4),cx=W*0.47,cy=H*0.47;
   const P=phi=>[cx+R*Math.cos(phi*deg),cy-R*Math.sin(phi*deg)];
   const dir=(a,l)=>[l*Math.cos(a*deg),-l*Math.sin(a*deg)];
   ctx.setLineDash([5,6]);ctx.strokeStyle=C;ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(cx,cy,R,0,2*Math.PI);ctx.stroke();ctx.setLineDash([]);
@@ -162,32 +172,45 @@ function draw(){
     freccia(x,y,x+(cx-x)*0.5,y+(cy-y)*0.5,F);testo('|F⟩',x+(cx-x)*0.62,y+(cy-y)*0.62,F,'center');
     ctx.fillStyle=css('--panel');ctx.strokeStyle=I;ctx.lineWidth=2;ctx.beginPath();ctx.arc(x,y,9,0,2*Math.PI);ctx.fill();ctx.stroke();
     testo('circonferenza: forza sempre verso O e perpendicolare a |v⟩',14,H-18,M);
-    return;
+    drawTri(0,0,0);return;
   }
   const passo=360/n,vert=k=>90-k*passo;
   ctx.strokeStyle=V;ctx.lineWidth=2.5;ctx.beginPath();
   for(let k=0;k<=n;k++){const[x,y]=P(vert(k));k?ctx.lineTo(x,y):ctx.moveTo(x,y);}ctx.stroke();
   if($('tutti').checked){for(let k=0;k<n;k++){const[x,y]=P(vert(k));freccia(x,y,x+(cx-x)*0.28,y+(cy-y)*0.28,F,n>24?1.4:2);}}
+  if(n<=8){for(let j=0;j<n;j++){const[xa,ya]=P(vert(j)),[xb,yb]=P(vert(j+1)),mx=(xa+xb)/2,my=(ya+yb)/2,dd=Math.hypot(mx-cx,my-cy)||1;testo(vk(j+1),mx+(mx-cx)/dd*22,my+(my-cy)/dd*16,V,'center');}}
   const k=Math.floor(s)%n,t=s-Math.floor(s),[x0,y0]=P(vert(k)),[x1,y1]=P(vert(k+1));
   const bx=x0+(x1-x0)*t,by=y0+(y1-y0)*t,av=vert(k)-90-passo/2;
   const u=ultimo,[ux,uy]=P(vert(u)),ain=vert(u)-90+passo/2,aout=vert(u)-90-passo/2;
   if($('tang').checked){const[tx,ty]=dir(vert(u)-90,R*0.6);ctx.setLineDash([4,5]);ctx.strokeStyle=M;ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(ux-tx,uy-ty);ctx.lineTo(ux+tx,uy+ty);ctx.stroke();ctx.setLineDash([]);}
   ctx.globalAlpha=0.35+0.65*flash;freccia(ux,uy,ux+(cx-ux)*0.55,uy+(cy-uy)*0.55,F,4);ctx.globalAlpha=1;
   testo('|F⟩',ux+(cx-ux)*0.66,uy+(cy-uy)*0.66,F,'center');
-  const[vx,vy]=dir(av,lv);freccia(bx,by,bx+vx,by+vy,V);testo('|v⟩',bx+vx*1.2,by+vy*1.2,V,'center');
+  const[vx,vy]=dir(av,lv);freccia(bx,by,bx+vx,by+vy,V);testo(vk(k+1),bx+vx*1.25,by+vy*1.25,V,'center');
   ctx.fillStyle=css('--panel');ctx.strokeStyle=I;ctx.lineWidth=2;ctx.beginPath();ctx.arc(bx,by,9,0,2*Math.PI);ctx.fill();ctx.stroke();
-  if($('tri').checked){
-    const L=Math.min(W*0.1,H*0.1),bx0=W-L*1.4-10,by0=L*1.8+14,[ix,iy]=dir(ain,L),[ox2,oy2]=dir(aout,L);
-    ctx.fillStyle=css('--bg');ctx.strokeStyle=css('--line');ctx.lineWidth=1;ctx.beginPath();ctx.rect(bx0-L*1.4,by0-L*1.75,L*2.8,L*3.2);ctx.fill();ctx.stroke();
-    testo('velocità',bx0,by0-L*1.45,M,'center');
-    const ox=bx0-(ix+ox2)/3,oy=by0+L*0.15-(iy+oy2)/3;
-    freccia(ox,oy,ox+ix,oy+iy,V,2.5);freccia(ox,oy,ox+ox2,oy+oy2,V,2.5);freccia(ox+ix,oy+iy,ox+ox2,oy+oy2,D,3);
-    const[dx,dy]=dir(vert(u)+180,L*0.9);ctx.setLineDash([3,4]);ctx.strokeStyle=F;ctx.lineWidth=1.2;ctx.beginPath();ctx.moveTo(ox+(ix+ox2)/2-dx/2,oy+(iy+oy2)/2-dy/2);ctx.lineTo(ox+(ix+ox2)/2+dx/2,oy+(iy+oy2)/2+dy/2);ctx.stroke();ctx.setLineDash([]);
-    const mx=(ix+ox2)/2,my=(iy+oy2)/2,mm=Math.hypot(mx,my)||1;testo('|Δv⟩',ox+mx+mx/mm*26,oy+my+my/mm*18,D,'center');
-  }
+  drawTri(u,ain,aout);
   testo('ultimo colpo: vertice evidenziato',14,H-18,M);
 }
-const ro=new ResizeObserver(draw);ro.observe(fig);
+const cv2=$('cv2'),fig2=$('fig2'),ctx2=cv2.getContext('2d');
+function drawTri(u,ain,aout){
+  const W=fig2.clientWidth,H=fig2.clientHeight,dpr=window.devicePixelRatio||1;
+  if(cv2.width!==Math.round(W*dpr)||cv2.height!==Math.round(H*dpr)){cv2.width=Math.round(W*dpr);cv2.height=Math.round(H*dpr);}
+  const c0=ctx;ctx=ctx2;ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,H);
+  const V=css('--vel'),F=css('--forza'),D=css('--dv'),M=css('--muted');
+  if(cerchio){testo('con il cerchio il colpo è continuo:',W/2,H/2-12,M,'center');testo('|F⟩ sempre verso il centro, ⟂ |v⟩',W/2,H/2+12,M,'center');ctx=c0;return;}
+  const[na,nb]=lati(u),L=Math.min(W*0.3,H*0.45)/Math.max(1,1.9*Math.sin(Math.PI/n));
+  const d=(a)=>[L*Math.cos(a*deg),-L*Math.sin(a*deg)];
+  const[ix,iy]=d(ain),[jx,jy]=d(aout),ox=W/2-(ix+jx)/3,oy=H/2-(iy+jy)/3;
+  const dx=jx-ix,dy=jy-iy,dm=Math.hypot(dx,dy)||1,ux=dx/dm,uy=dy/dm,mx=(ix+jx)/2,my=(iy+jy)/2;
+  const cd=(ain+aout)/2-90,[kx,ky]=[Math.cos(cd*deg),-Math.sin(cd*deg)],ext=dm/2+26;
+  ctx.setLineDash([4,5]);ctx.strokeStyle=F;ctx.lineWidth=1.3;ctx.beginPath();ctx.moveTo(ox+mx-kx*ext,oy+my-ky*ext);ctx.lineTo(ox+mx+kx*ext,oy+my+ky*ext);ctx.stroke();ctx.setLineDash([]);
+  freccia(ox,oy,ox+ix,oy+iy,V,3);freccia(ox,oy,ox+jx,oy+jy,V,3);freccia(ox+ix,oy+iy,ox+jx,oy+jy,D,3.5);
+  const lab=(x,y,px,py,t,col,f=0.55)=>{let nx=-y,ny=x;const m=Math.hypot(nx,ny)||1;nx/=m;ny/=m;if(nx*px+ny*py>0){nx=-nx;ny=-ny;}
+    const al=Math.abs(nx)<0.3?'center':(nx>0?'left':'right');testo(t,ox+x*f+nx*12,oy+y*f+ny*(Math.abs(nx)<0.3?14:6),col,al);};
+  lab(ix,iy,jx,jy,vk(na)+' prima',V);lab(jx,jy,ix,iy,vk(nb)+' dopo',V);
+  {let nx=-uy,ny=ux;if(nx*mx+ny*my<0){nx=-nx;ny=-ny;}const al=Math.abs(nx)<0.3?'center':(nx>0?'left':'right');testo('|Δv⟩',ox+mx+nx*12,oy+my+ny*(Math.abs(nx)<0.3?16:0),D,al);}
+  ctx=c0;
+}
+const ro=new ResizeObserver(draw);ro.observe(fig);ro.observe(fig2);
 const ridotto=matchMedia('(prefers-reduced-motion: reduce)').matches;
 if(ridotto){play=false;$('play').textContent='Avvia';$('play').setAttribute('aria-pressed','false');}
 function ciclo(ts){

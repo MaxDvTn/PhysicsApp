@@ -9,11 +9,9 @@
     "Dinamica"
   ],
   "tema": "Forza centripeta",
-  "classi": [
-    "3R"
-  ],
   "anno": 3,
   "data": "2026-11-24",
+  "file": [],
   "allegati": [
     [
       "allegati/sintesi_forza_centripeta.pdf",
@@ -28,8 +26,8 @@
       "Slide, tema scuro"
     ]
   ],
+  "docente": [],
   "collegate": [
     "forza-centripeta-vpython"
-  ],
-  "file": []
+  ]
 }

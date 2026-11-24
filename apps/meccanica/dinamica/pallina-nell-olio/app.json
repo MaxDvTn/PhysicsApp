@@ -9,12 +9,9 @@
     "Dinamica"
   ],
   "tema": "Attrito viscoso e velocità limite",
-  "classi": [
-    "3R",
-    "3P"
-  ],
   "anno": 3,
   "data": "2026-11-24",
+  "file": [],
   "allegati": [
     [
       "allegati/sintesi_attrito_viscoso.pdf",
@@ -33,8 +30,8 @@
       "Slide, tema scuro"
     ]
   ],
+  "docente": [],
   "collegate": [
     "attrito-viscoso-vpython"
-  ],
-  "file": []
+  ]
 }

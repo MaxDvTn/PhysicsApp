@@ -9,9 +9,6 @@
     "Cinematica"
   ],
   "tema": "Moto parabolico",
-  "classi": [
-    "3R"
-  ],
   "anno": 3,
   "data": "2026-10-09",
   "file": [
@@ -32,6 +29,12 @@
       "Passo 2: dardo e scimmia insieme"
     ]
   ],
-  "collegate": [],
-  "allegati": []
+  "allegati": [],
+  "docente": [
+    [
+      "docente/soluzione_docente.pdf",
+      "Soluzione per il docente (tre atti e simulazione)"
+    ]
+  ],
+  "collegate": []
 }

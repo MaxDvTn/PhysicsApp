@@ -12,7 +12,7 @@ Una sferetta d'acciaio (raggio 2 mm) cade in un cilindro di glicerina. Il progra
 
 **Versione studenti.** Il file `attrito_viscoso_studenti.py` gira già così com'è (passo 1: solo il peso). Si completano i `TODO` un passo alla volta, rilanciando ogni volta: peso, poi spinta di Archimede, poi attrito viscoso, poi misura tra le tacche. Le domande sono nei commenti; in fondo ci sono la tabella v_L – r² e la sfida (acciaio in acqua e numero di Reynolds).
 
-**Versione completa.** `attrito_viscoso_completo.py` è la simulazione finita, da proiettare o da usare per controllare.
+**Versione completa.** Nella parte «Per il docente», `docente/attrito_viscoso_completo.py` è la simulazione finita, da proiettare o da usare per controllare.
 
 **In Google Colab.** VPython non funziona in Colab: il notebook `attrito_viscoso_colab.ipynb` fa lo stesso calcolo con numpy e i grafici con matplotlib. Dalla scheda dell'app si apre direttamente in Colab.
 

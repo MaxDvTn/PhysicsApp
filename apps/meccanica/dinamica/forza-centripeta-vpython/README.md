@@ -12,7 +12,7 @@ Una pallina di massa m parte con velocità v₀. Su di lei agisce una forza di m
 
 **Versione studenti.** `forza_centripeta_studenti.py` si completa un passo alla volta: completa le righe con `# TODO`, lancia, osserva e rispondi alle domande nei commenti. In cima ci sono i parametri (massa, forza, velocità iniziale, passo temporale) da cambiare per le prove.
 
-**Versione completa.** `forza_centripeta_completo.py` è la simulazione finita, da proiettare.
+**Versione completa.** Nella parte «Per il docente», `docente/forza_centripeta_completo.py` è la simulazione finita, da proiettare.
 
 **In Google Colab.** Il notebook `forza_centripeta_colab.ipynb` usa lo stesso metodo passo per passo con i grafici di matplotlib. Dalla scheda dell'app si apre direttamente in Colab.
 

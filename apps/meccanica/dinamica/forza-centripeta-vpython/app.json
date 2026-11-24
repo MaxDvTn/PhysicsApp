@@ -9,9 +9,6 @@
     "Dinamica"
   ],
   "tema": "Forza centripeta",
-  "classi": [
-    "3R"
-  ],
   "anno": 3,
   "data": "2026-11-13",
   "file": [
@@ -20,17 +17,19 @@
       "Versione da completare (studenti)"
     ],
     [
-      "forza_centripeta_completo.py",
-      "Versione completa (docente)"
-    ],
-    [
       "forza_centripeta_colab.ipynb",
       "Notebook per Google Colab"
     ]
   ],
   "colab": "forza_centripeta_colab.ipynb",
+  "allegati": [],
+  "docente": [
+    [
+      "docente/forza_centripeta_completo.py",
+      "Simulazione completa"
+    ]
+  ],
   "collegate": [
     "dal-poligono-al-cerchio"
-  ],
-  "allegati": []
+  ]
 }

@@ -9,9 +9,6 @@
     "Dinamica"
   ],
   "tema": "Attrito viscoso e velocità limite",
-  "classi": [
-    "3R"
-  ],
   "anno": 3,
   "data": "2026-11-13",
   "file": [
@@ -20,17 +17,19 @@
       "Versione da completare (studenti)"
     ],
     [
-      "attrito_viscoso_completo.py",
-      "Versione completa (docente)"
-    ],
-    [
       "attrito_viscoso_colab.ipynb",
       "Notebook per Google Colab"
     ]
   ],
   "colab": "attrito_viscoso_colab.ipynb",
+  "allegati": [],
+  "docente": [
+    [
+      "docente/attrito_viscoso_completo.py",
+      "Simulazione completa"
+    ]
+  ],
   "collegate": [
     "pallina-nell-olio"
-  ],
-  "allegati": []
+  ]
 }

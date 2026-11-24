@@ -17,4 +17,4 @@ Con i dati di esempio (h = 8 m, d = 30 m, v₀ = 60 m/s) la simulazione finisce 
 
 ## Note
 
-Le schede usano g = 9,81 m/s². La soluzione per il docente non è pubblicata qui.
+Le schede usano g = 9,81 m/s². La soluzione per il docente (dimostrazione, dati di esempio e simulazione completa) è nella parte «Per il docente».

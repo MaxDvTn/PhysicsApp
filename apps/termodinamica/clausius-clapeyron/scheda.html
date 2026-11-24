@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Cg fill=%22%231d3d8f%22%3E%3Ccircle cx=%225%22 cy=%2226%22 r=%223%22/%3E%3Ccircle cx=%2212%22 cy=%2212%22 r=%223%22/%3E%3Ccircle cx=%2220%22 cy=%228%22 r=%223%22/%3E%3Ccircle cx=%2228%22 cy=%2216%22 r=%223%22/%3E%3C/g%3E%3C/svg%3E">
+<title>Esploratore Clausius-Clapeyron · App di fisica</title>
+<meta name="description" content="Perché in montagna l&#x27;acqua bolle a meno di 100 °C e perché un clima più caldo porta piogge più intense: due cursori, la quota e il riscaldamento.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../sito/stile.css">
+<script>
+try{var t=localStorage.getItem('tema');if(t)document.documentElement.dataset.tema=t}catch(e){}
+function cambiaTema(){var r=document.documentElement,s=r.dataset.tema||(matchMedia('(prefers-color-scheme: dark)').matches?'scuro':'chiaro');
+r.dataset.tema=s==='scuro'?'chiaro':'scuro';try{localStorage.setItem('tema',r.dataset.tema)}catch(e){}}
+</script>
+</head>
+<body>
+<div class="pagina">
+  <aside class="margine">
+    <a class="marchio" href="../../../index.html">PhysicsApp</a>
+    <dl class="scheda-dati">
+      <dt>Argomento</dt><dd>Termodinamica<br>Transizioni di fase</dd>
+      <dt>Anno</dt><dd><span class="classe">4º anno</span></dd>
+      <dt>Tipo</dt><dd>App nel browser</dd>
+      <dt>Data</dt><dd>27/12/2025</dd>
+    </dl>
+    <button class="tema-btn" type="button" onclick="cambiaTema()">Carta o lavagna</button>
+  </aside>
+  <main class="foglio scheda">
+    <p><a href="../../../index.html#termodinamica">Torna a tutte le app</a></p>
+    <h1>Esploratore Clausius-Clapeyron</h1>
+    <p class="lead">Perché in montagna l&#x27;acqua bolle a meno di 100 °C e perché un clima più caldo porta piogge più intense: due cursori, la quota e il riscaldamento.</p>
+    <div class="azioni"><a class="bottone pieno" href="index.html">Apri l'app</a><a class="bottone" href="https://github.com/MaxDvTn/PhysicsApp/tree/main/apps/termodinamica/clausius-clapeyron">Codice su GitHub</a><span class="copiato" id="copiato" role="status"></span></div>
+    <div class="testo"><h1>Esploratore Clausius-Clapeyron</h1>
+<p>Una simulazione in due parti che accompagna la lezione «L'equazione della montagna e del clima» (dicembre 2025). Nella prima si sale di quota e si vede scendere la temperatura di ebollizione dell'acqua; nella seconda si riscalda l'atmosfera e si vede crescere il vapore che può contenere.</p>
+<h2>Come si usa</h2>
+<ol>
+<li><strong>L'ebollizione in quota.</strong> Muovi il cursore dell'altitudine da 0 a 9000 m: l'app calcola la pressione con l'atmosfera standard e la temperatura di ebollizione con l'equazione di Clausius-Clapeyron. Chiedi prima una previsione: a che temperatura bolle l'acqua in un rifugio a 2500 m? E sul Monte Bianco?</li>
+<li><strong>La regola del 7 %.</strong> Muovi il cursore del riscaldamento: la nuvola cresce di circa il 7 % per ogni grado in più. Da qui si discute perché un clima più caldo porta precipitazioni più intense.</li>
+</ol>
+<p>Si apre nel browser, anche senza rete.</p>
+<h2>Da sapere</h2>
+<ul>
+<li>Sul Monte Bianco il modello dà circa 83 °C.</li>
+<li>La prima parte fa il conto vero. La seconda <strong>non</strong> calcola il 7 %: lo usa come dato. Con il calore latente costante (40,7 kJ/mol, il valore a 100 °C) la pendenza a 15 °C viene circa il 6 % per grado. Il 7 % esce solo se si tiene conto che a bassa temperatura il calore latente è più grande: è un buon spunto per discutere l'ipotesi «L costante».</li>
+<li>Meglio evitare l'idea dell'«aria come una spugna»: la pressione di vapore saturo dipende solo dalla temperatura e ci sarebbe anche senza aria.</li>
+<li>Nell'app i decimali sono scritti con il punto.</li>
+</ul></div>
+    <div class="testo" id="materiali"></div>
+    <footer>Liceo «L. da Vinci» di Trento, prof. Massimo Bosetti.</footer>
+  </main>
+</div>
+<script>
+// Il codice si scarica subito, così al clic si copia e si apre GlowScript nello stesso gesto.
+const codici={};
+document.querySelectorAll('[data-copia]').forEach(b=>{
+  const f=b.dataset.copia;
+  if(!(f in codici)) codici[f]=fetch(f).then(r=>r.ok?r.text():null).catch(()=>null).then(t=>codici[f]=t);
+  b.addEventListener('click',()=>{
+    const msg=document.getElementById('copiato'), t=codici[f];
+    const fatto=()=>msg.textContent='Codice copiato: su GlowScript scegli «Create New Program» e incollalo con Cmd+V o Ctrl+V.';
+    const errore=()=>msg.textContent='Non sono riuscito a copiare: scarica il file qui sotto e incollalo a mano.';
+    if(typeof t==='string'&&navigator.clipboard) navigator.clipboard.writeText(t).then(fatto,errore); else errore();
+    window.open('https://glowscript.org/','_blank','noopener');
+  });
+});
+</script>
+</body>
+</html>

@@ -2,7 +2,7 @@
 
 1. **Scegli la cartella** per argomento: `apps/<categoria>/<sottocategoria>/<id-app>/`, con nomi in minuscolo e trattini (`apps/meccanica/dinamica/piano-inclinato/`). Se la categoria non esiste ancora, creala. La classe non va nel percorso: si scrive in `app.json`.
 2. **Copia i file dell'app**: `index.html` per un'app nel browser (con eventuali video e immagini nella stessa cartella), i `.py` e il notebook per una simulazione VPython, i PDF per le schede.
-3. **Allegati della lezione**: sintesi e slide in PDF vanno in `allegati/`. Solo prodotti finiti, mai sorgenti, soluzioni riservate al docente o dati degli studenti.
+3. **Allegati della lezione**: sintesi e slide in PDF vanno in `allegati/`. Solo prodotti finiti, mai sorgenti o dati degli studenti. Soluzioni e versioni complete vanno in `docente/`.
 4. **Scrivi `app.json`**:
 
    ```json
@@ -14,11 +14,11 @@
      "sommario": "Una frase che dice che cosa fa l'app.",
      "argomento": ["Meccanica", "Dinamica"],
      "tema": "Forze e piano inclinato",
-     "classi": ["2P"],
      "anno": 2,
      "data": "2026-12-01",
      "file": [],
      "allegati": [["allegati/sintesi_piano_inclinato.pdf", "Sintesi della lezione"]],
+     "docente": [],
      "collegate": []
    }
    ```
@@ -28,6 +28,8 @@
    - `file`: coppie `[percorso, descrizione]` dei file da scaricare (script, notebook, schede).
    - `colab` (facoltativo): il notebook da aprire con il pulsante «Apri in Colab».
    - `argomento`: categoria e sottocategoria, con i nomi da mostrare nel sito.
+   - `anno`: l'anno di corso (1–5) per cui è pensata, oppure `null` se va bene per tutti.
+   - `docente`: coppie `[percorso, descrizione]` dei materiali per il docente (versioni complete, soluzioni), messi nella sottocartella `docente/`. Nel sito stanno in una parte separata.
    - `collegate`: gli `id` delle app della stessa lezione.
 
 5. **Scrivi `README.md`** con un titolo, due righe su che cos'è, la sezione `## Come si usa` (passi numerati, pensati per la classe) e, se serve, `## Da sapere` o `## Note`.

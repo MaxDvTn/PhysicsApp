@@ -18,7 +18,7 @@ r.dataset.tema=s==='scuro'?'chiaro':'scuro';try{localStorage.setItem('tema',r.da
 <div class="pagina">
   <nav class="margine" aria-label="Argomenti">
     <a class="marchio" href="./">PhysicsApp</a>
-    <ul class="indice"><li><a href="#meccanica">Meccanica</a> <small>5</small></li><li><a href="#astronomia">Astronomia</a> <small>1</small></li><li><a href="#matematica">Matematica</a> <small>1</small></li><li><a href="#intelligenza-artificiale">Intelligenza artificiale</a> <small>1</small></li></ul>
+    <ul class="indice"><li><a href="#meccanica">Meccanica</a> <small>5</small></li><li><a href="#termodinamica">Termodinamica</a> <small>1</small></li><li><a href="#astronomia">Astronomia</a> <small>1</small></li><li><a href="#matematica">Matematica</a> <small>1</small></li><li><a href="#intelligenza-artificiale">Intelligenza artificiale</a> <small>1</small></li></ul>
     <button class="tema-btn" type="button" onclick="cambiaTema()">Carta o lavagna</button>
   </nav>
   <main class="foglio">
@@ -28,64 +28,72 @@ r.dataset.tema=s==='scuro'?'chiaro':'scuro';try{localStorage.setItem('tema',r.da
       <p>Simulazioni, videoanalisi e schede di laboratorio costruite per le lezioni del prof. Massimo Bosetti al Liceo «L. da Vinci» di Trento. Ogni app ha le istruzioni per usarla in classe e, quando c'è, la lezione collegata.</p>
     </header>
     <div class="filtri" role="group" aria-label="Filtra le app">
-      <div class="filtro"><span>Argomento</span><button type="button" data-filtro="categoria" data-valore="" aria-pressed="true">Tutte</button><button type="button" data-filtro="categoria" data-valore="meccanica" aria-pressed="false">Meccanica</button><button type="button" data-filtro="categoria" data-valore="astronomia" aria-pressed="false">Astronomia</button><button type="button" data-filtro="categoria" data-valore="matematica" aria-pressed="false">Matematica</button><button type="button" data-filtro="categoria" data-valore="intelligenza-artificiale" aria-pressed="false">Intelligenza artificiale</button></div>
-      <div class="filtro"><span>Classe</span><button type="button" data-filtro="classi" data-valore="" aria-pressed="true">Tutte</button><button type="button" data-filtro="classi" data-valore="3P" aria-pressed="false">3P</button><button type="button" data-filtro="classi" data-valore="3R" aria-pressed="false">3R</button></div>
+      <div class="filtro"><span>Argomento</span><button type="button" data-filtro="categoria" data-valore="" aria-pressed="true">Tutte</button><button type="button" data-filtro="categoria" data-valore="meccanica" aria-pressed="false">Meccanica</button><button type="button" data-filtro="categoria" data-valore="termodinamica" aria-pressed="false">Termodinamica</button><button type="button" data-filtro="categoria" data-valore="astronomia" aria-pressed="false">Astronomia</button><button type="button" data-filtro="categoria" data-valore="matematica" aria-pressed="false">Matematica</button><button type="button" data-filtro="categoria" data-valore="intelligenza-artificiale" aria-pressed="false">Intelligenza artificiale</button></div>
+      <div class="filtro"><span>Anno</span><button type="button" data-filtro="anno" data-valore="" aria-pressed="true">Tutti</button><button type="button" data-filtro="anno" data-valore="3" aria-pressed="false">3º anno</button><button type="button" data-filtro="anno" data-valore="4" aria-pressed="false">4º anno</button></div>
       <div class="filtro"><span>Tipo</span><button type="button" data-filtro="tipo" data-valore="" aria-pressed="true">Tutte</button><button type="button" data-filtro="tipo" data-valore="web" aria-pressed="false">App nel browser</button><button type="button" data-filtro="tipo" data-valore="vpython" aria-pressed="false">Simulazione VPython</button><button type="button" data-filtro="tipo" data-valore="schede" aria-pressed="false">Schede di laboratorio</button></div>
       <div class="filtro"><span><label for="cerca">Cerca</label></span><input id="cerca" class="cerca" type="search" placeholder="velocità limite, forza centripeta…"></div>
     </div>
     <p class="vuoto" id="vuoto" hidden>Nessuna app con questi filtri. Togli un filtro o cambia la ricerca.</p>
-    <section class="categoria" id="meccanica" data-categoria="meccanica"><h2>Meccanica</h2><div class="sotto"><h3>Cinematica</h3><article class="app" data-categoria="meccanica" data-classi="3R" data-tipo="schede" data-testo="il tiro impossibile il problema del cacciatore e della scimmia: un&#x27;indagine in tre atti e una simulazione vpython costruita dagli studenti in tre passi. moto parabolico meccanica cinematica">
+    <section class="categoria" id="meccanica" data-categoria="meccanica"><h2>Meccanica</h2><div class="sotto"><h3>Cinematica</h3><article class="app" data-categoria="meccanica" data-anno="3" data-tipo="schede" data-testo="il tiro impossibile il problema del cacciatore e della scimmia: un&#x27;indagine in tre atti e una simulazione vpython costruita dagli studenti in tre passi. moto parabolico meccanica cinematica">
   <svg class="icona" viewBox="0 0 32 32" aria-hidden="true"><path d="M8 3h11l6 6v20H8z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 15h9M12 19h9M12 23h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
   <div>
     <h4><a href="apps/meccanica/cinematica/tiro-impossibile/scheda.html">Il tiro impossibile</a></h4>
     <p>Il problema del cacciatore e della scimmia: un&#x27;indagine in tre atti e una simulazione VPython costruita dagli studenti in tre passi.</p>
-    <div class="dati"><span>Schede di laboratorio</span><span>Moto parabolico</span><span class="classe">3R</span></div>
+    <div class="dati"><span>Schede di laboratorio</span><span>Moto parabolico</span><span class="classe">3º anno</span><span>con materiali per il docente</span></div>
     <div class="azioni"><a class="bottone pieno" href="apps/meccanica/cinematica/tiro-impossibile/scheda.html#materiali">Scarica le schede</a><a class="bottone" href="apps/meccanica/cinematica/tiro-impossibile/scheda.html">Come si usa</a></div>
   </div>
-</article></div><div class="sotto"><h3>Dinamica</h3><article class="app" data-categoria="meccanica" data-classi="3R" data-tipo="web" data-testo="dal poligono al cerchio una pallina percorre un poligono regolare e riceve un colpo in ogni vertice: aumentando i lati si arriva alla forza centripeta. forza centripeta meccanica dinamica">
+</article></div><div class="sotto"><h3>Dinamica</h3><article class="app" data-categoria="meccanica" data-anno="3" data-tipo="web" data-testo="dal poligono al cerchio una pallina percorre un poligono regolare e riceve un colpo in ogni vertice: aumentando i lati si arriva alla forza centripeta. forza centripeta meccanica dinamica">
   <svg class="icona" viewBox="0 0 32 32" aria-hidden="true"><rect x="3" y="5" width="26" height="20" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M13 10.5v9l7.5-4.5z" fill="currentColor"/></svg>
   <div>
     <h4><a href="apps/meccanica/dinamica/dal-poligono-al-cerchio/scheda.html">Dal poligono al cerchio</a></h4>
     <p>Una pallina percorre un poligono regolare e riceve un colpo in ogni vertice: aumentando i lati si arriva alla forza centripeta.</p>
-    <div class="dati"><span>App nel browser</span><span>Forza centripeta</span><span class="classe">3R</span></div>
+    <div class="dati"><span>App nel browser</span><span>Forza centripeta</span><span class="classe">3º anno</span></div>
     <div class="azioni"><a class="bottone pieno" href="apps/meccanica/dinamica/dal-poligono-al-cerchio/index.html">Apri l'app</a><a class="bottone" href="apps/meccanica/dinamica/dal-poligono-al-cerchio/scheda.html">Come si usa</a></div>
   </div>
 </article>
-<article class="app" data-categoria="meccanica" data-classi="3R" data-tipo="vpython" data-testo="forza sempre perpendicolare alla velocità (vpython) una forza di modulo costante, sempre perpendicolare alla velocità, piega la traiettoria in una circonferenza. con il tasto «taglia il filo» la pallina parte lungo la tangente. forza centripeta meccanica dinamica">
+<article class="app" data-categoria="meccanica" data-anno="3" data-tipo="vpython" data-testo="forza sempre perpendicolare alla velocità (vpython) una forza di modulo costante, sempre perpendicolare alla velocità, piega la traiettoria in una circonferenza. con il tasto «taglia il filo» la pallina parte lungo la tangente. forza centripeta meccanica dinamica">
   <svg class="icona" viewBox="0 0 32 32" aria-hidden="true"><path d="M11 6c-3 0-4 1.5-4 4v3c0 1.5-1 3-3 3 2 0 3 1.5 3 3v3c0 2.5 1 4 4 4M21 6c3 0 4 1.5 4 4v3c0 1.5 1 3 3 3-2 0-3 1.5-3 3v3c0 2.5-1 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="16" cy="16" r="2.5" fill="currentColor"/></svg>
   <div>
     <h4><a href="apps/meccanica/dinamica/forza-centripeta-vpython/scheda.html">Forza sempre perpendicolare alla velocità (VPython)</a></h4>
     <p>Una forza di modulo costante, sempre perpendicolare alla velocità, piega la traiettoria in una circonferenza. Con il tasto «Taglia il filo» la pallina parte lungo la tangente.</p>
-    <div class="dati"><span>Simulazione VPython</span><span>Forza centripeta</span><span class="classe">3R</span></div>
+    <div class="dati"><span>Simulazione VPython</span><span>Forza centripeta</span><span class="classe">3º anno</span><span>con materiali per il docente</span></div>
     <div class="azioni"><a class="bottone pieno" href="apps/meccanica/dinamica/forza-centripeta-vpython/scheda.html#materiali">Prendi il codice</a><a class="bottone" href="apps/meccanica/dinamica/forza-centripeta-vpython/scheda.html">Come si usa</a></div>
   </div>
 </article>
-<article class="app" data-categoria="meccanica" data-classi="3R 3P" data-tipo="web" data-testo="la pallina da golf nell&#x27;olio videoanalisi di una pallina che cade in un cilindro d&#x27;olio: dal moto osservato alla velocità limite. attrito viscoso e velocità limite meccanica dinamica">
+<article class="app" data-categoria="meccanica" data-anno="3" data-tipo="web" data-testo="la pallina da golf nell&#x27;olio videoanalisi di una pallina che cade in un cilindro d&#x27;olio: dal moto osservato alla velocità limite. attrito viscoso e velocità limite meccanica dinamica">
   <svg class="icona" viewBox="0 0 32 32" aria-hidden="true"><rect x="3" y="5" width="26" height="20" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M13 10.5v9l7.5-4.5z" fill="currentColor"/></svg>
   <div>
     <h4><a href="apps/meccanica/dinamica/pallina-nell-olio/scheda.html">La pallina da golf nell&#x27;olio</a></h4>
     <p>Videoanalisi di una pallina che cade in un cilindro d&#x27;olio: dal moto osservato alla velocità limite.</p>
-    <div class="dati"><span>App nel browser</span><span>Attrito viscoso e velocità limite</span><span class="classe">3R</span><span class="classe">3P</span></div>
+    <div class="dati"><span>App nel browser</span><span>Attrito viscoso e velocità limite</span><span class="classe">3º anno</span></div>
     <div class="azioni"><a class="bottone pieno" href="apps/meccanica/dinamica/pallina-nell-olio/index.html">Apri l'app</a><a class="bottone" href="apps/meccanica/dinamica/pallina-nell-olio/scheda.html">Come si usa</a></div>
   </div>
 </article>
-<article class="app" data-categoria="meccanica" data-classi="3R" data-tipo="vpython" data-testo="sferetta nella glicerina (vpython) simulazione passo per passo di una sferetta d&#x27;acciaio che cade nella glicerina, con grafici v(t) e a(t) e confronto con la legge di stokes. attrito viscoso e velocità limite meccanica dinamica">
+<article class="app" data-categoria="meccanica" data-anno="3" data-tipo="vpython" data-testo="sferetta nella glicerina (vpython) simulazione passo per passo di una sferetta d&#x27;acciaio che cade nella glicerina, con grafici v(t) e a(t) e confronto con la legge di stokes. attrito viscoso e velocità limite meccanica dinamica">
   <svg class="icona" viewBox="0 0 32 32" aria-hidden="true"><path d="M11 6c-3 0-4 1.5-4 4v3c0 1.5-1 3-3 3 2 0 3 1.5 3 3v3c0 2.5 1 4 4 4M21 6c3 0 4 1.5 4 4v3c0 1.5 1 3 3 3-2 0-3 1.5-3 3v3c0 2.5-1 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="16" cy="16" r="2.5" fill="currentColor"/></svg>
   <div>
     <h4><a href="apps/meccanica/dinamica/attrito-viscoso-vpython/scheda.html">Sferetta nella glicerina (VPython)</a></h4>
     <p>Simulazione passo per passo di una sferetta d&#x27;acciaio che cade nella glicerina, con grafici v(t) e a(t) e confronto con la legge di Stokes.</p>
-    <div class="dati"><span>Simulazione VPython</span><span>Attrito viscoso e velocità limite</span><span class="classe">3R</span></div>
+    <div class="dati"><span>Simulazione VPython</span><span>Attrito viscoso e velocità limite</span><span class="classe">3º anno</span><span>con materiali per il docente</span></div>
     <div class="azioni"><a class="bottone pieno" href="apps/meccanica/dinamica/attrito-viscoso-vpython/scheda.html#materiali">Prendi il codice</a><a class="bottone" href="apps/meccanica/dinamica/attrito-viscoso-vpython/scheda.html">Come si usa</a></div>
   </div>
-</article></div></section><section class="categoria" id="astronomia" data-categoria="astronomia"><h2>Astronomia</h2><div class="sotto"><article class="app" data-categoria="astronomia" data-classi="3R 3P" data-tipo="web" data-testo="giorno solare e giorno siderale perché il giorno solare dura circa 4 minuti più di quello siderale: la scheda per la classe terza sfogliabile, con i collegamenti a sei simulazioni. moti della terra astronomia">
+</article></div></section><section class="categoria" id="termodinamica" data-categoria="termodinamica"><h2>Termodinamica</h2><div class="sotto"><article class="app" data-categoria="termodinamica" data-anno="4" data-tipo="web" data-testo="esploratore clausius-clapeyron perché in montagna l&#x27;acqua bolle a meno di 100 °c e perché un clima più caldo porta piogge più intense: due cursori, la quota e il riscaldamento. transizioni di fase termodinamica">
+  <svg class="icona" viewBox="0 0 32 32" aria-hidden="true"><rect x="3" y="5" width="26" height="20" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M13 10.5v9l7.5-4.5z" fill="currentColor"/></svg>
+  <div>
+    <h4><a href="apps/termodinamica/clausius-clapeyron/scheda.html">Esploratore Clausius-Clapeyron</a></h4>
+    <p>Perché in montagna l&#x27;acqua bolle a meno di 100 °C e perché un clima più caldo porta piogge più intense: due cursori, la quota e il riscaldamento.</p>
+    <div class="dati"><span>App nel browser</span><span>Transizioni di fase</span><span class="classe">4º anno</span></div>
+    <div class="azioni"><a class="bottone pieno" href="apps/termodinamica/clausius-clapeyron/index.html">Apri l'app</a><a class="bottone" href="apps/termodinamica/clausius-clapeyron/scheda.html">Come si usa</a></div>
+  </div>
+</article></div></section><section class="categoria" id="astronomia" data-categoria="astronomia"><h2>Astronomia</h2><div class="sotto"><article class="app" data-categoria="astronomia" data-anno="3" data-tipo="web" data-testo="giorno solare e giorno siderale perché il giorno solare dura circa 4 minuti più di quello siderale: la scheda per la classe terza sfogliabile, con i collegamenti a sei simulazioni. moti della terra astronomia">
   <svg class="icona" viewBox="0 0 32 32" aria-hidden="true"><rect x="3" y="5" width="26" height="20" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M13 10.5v9l7.5-4.5z" fill="currentColor"/></svg>
   <div>
     <h4><a href="apps/astronomia/giorno-solare-siderale/scheda.html">Giorno solare e giorno siderale</a></h4>
     <p>Perché il giorno solare dura circa 4 minuti più di quello siderale: la scheda per la classe terza sfogliabile, con i collegamenti a sei simulazioni.</p>
-    <div class="dati"><span>App nel browser</span><span>Moti della Terra</span><span class="classe">3R</span><span class="classe">3P</span></div>
+    <div class="dati"><span>App nel browser</span><span>Moti della Terra</span><span class="classe">3º anno</span></div>
     <div class="azioni"><a class="bottone pieno" href="apps/astronomia/giorno-solare-siderale/index.html">Apri l'app</a><a class="bottone" href="apps/astronomia/giorno-solare-siderale/scheda.html">Come si usa</a></div>
   </div>
-</article></div></section><section class="categoria" id="matematica" data-categoria="matematica"><h2>Matematica</h2><div class="sotto"><article class="app" data-categoria="matematica" data-classi="" data-tipo="web" data-testo="la mappa della dimostrazione di riemann le sette tappe della dimostrazione annunciata dell&#x27;ipotesi di riemann, spiegate con la matematica del liceo, con il «sismografo dei primi» calcolato nel browser. teoria dei numeri matematica">
+</article></div></section><section class="categoria" id="matematica" data-categoria="matematica"><h2>Matematica</h2><div class="sotto"><article class="app" data-categoria="matematica" data-anno="" data-tipo="web" data-testo="la mappa della dimostrazione di riemann le sette tappe della dimostrazione annunciata dell&#x27;ipotesi di riemann, spiegate con la matematica del liceo, con il «sismografo dei primi» calcolato nel browser. teoria dei numeri matematica">
   <svg class="icona" viewBox="0 0 32 32" aria-hidden="true"><rect x="3" y="5" width="26" height="20" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M13 10.5v9l7.5-4.5z" fill="currentColor"/></svg>
   <div>
     <h4><a href="apps/matematica/mappa-riemann/scheda.html">La mappa della dimostrazione di Riemann</a></h4>
@@ -93,7 +101,7 @@ r.dataset.tema=s==='scuro'?'chiaro':'scuro';try{localStorage.setItem('tema',r.da
     <div class="dati"><span>App nel browser</span><span>Teoria dei numeri</span></div>
     <div class="azioni"><a class="bottone pieno" href="apps/matematica/mappa-riemann/index.html">Apri l'app</a><a class="bottone" href="apps/matematica/mappa-riemann/scheda.html">Come si usa</a></div>
   </div>
-</article></div></section><section class="categoria" id="intelligenza-artificiale" data-categoria="intelligenza-artificiale"><h2>Intelligenza artificiale</h2><div class="sotto"><article class="app" data-categoria="intelligenza-artificiale" data-classi="" data-tipo="web" data-testo="somme di sigmoidi il teorema di approssimazione universale da toccare con mano: un neurone, la dimostrazione costruttiva passo per passo e una rete che si addestra nel browser. reti neurali intelligenza artificiale">
+</article></div></section><section class="categoria" id="intelligenza-artificiale" data-categoria="intelligenza-artificiale"><h2>Intelligenza artificiale</h2><div class="sotto"><article class="app" data-categoria="intelligenza-artificiale" data-anno="" data-tipo="web" data-testo="somme di sigmoidi il teorema di approssimazione universale da toccare con mano: un neurone, la dimostrazione costruttiva passo per passo e una rete che si addestra nel browser. reti neurali intelligenza artificiale">
   <svg class="icona" viewBox="0 0 32 32" aria-hidden="true"><rect x="3" y="5" width="26" height="20" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M13 10.5v9l7.5-4.5z" fill="currentColor"/></svg>
   <div>
     <h4><a href="apps/intelligenza-artificiale/somme-di-sigmoidi/scheda.html">Somme di sigmoidi</a></h4>
@@ -102,18 +110,18 @@ r.dataset.tema=s==='scuro'?'chiaro':'scuro';try{localStorage.setItem('tema',r.da
     <div class="azioni"><a class="bottone pieno" href="apps/intelligenza-artificiale/somme-di-sigmoidi/index.html">Apri l'app</a><a class="bottone" href="apps/intelligenza-artificiale/somme-di-sigmoidi/scheda.html">Come si usa</a></div>
   </div>
 </article></div></section>
-    <footer>8 app. Il codice di tutte le app è nel repository <a href="https://github.com/MaxDvTn/PhysicsApp">MaxDvTn/PhysicsApp</a>.</footer>
+    <footer>9 app. Il codice di tutte le app è nel repository <a href="https://github.com/MaxDvTn/PhysicsApp">MaxDvTn/PhysicsApp</a>.</footer>
   </main>
 </div>
 <script>
 {
-const stato={categoria:'',classi:'',tipo:'',testo:''};
+const stato={categoria:'',anno:'',tipo:'',testo:''};
 const app=[...document.querySelectorAll('.app')];
 function aggiorna(){
   let n=0;
   for(const a of app){
     const ok=(!stato.categoria||a.dataset.categoria===stato.categoria)
-      &&(!stato.classi||a.dataset.classi.split(' ').includes(stato.classi))
+      &&(!stato.anno||a.dataset.anno===stato.anno)
       &&(!stato.tipo||a.dataset.tipo===stato.tipo)
       &&(!stato.testo||a.dataset.testo.includes(stato.testo));
     a.hidden=!ok; if(ok)n++;

@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Esploratore Clausius-Clapeyron</title>
+    <style>
+        :root {
+            --primary: #3498db;
+            --secondary: #e67e22;
+            --dark: #2c3e50;
+            --light: #ecf0f1;
+            --glass: rgba(255, 255, 255, 0.8);
+            --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #a8c0ff 0%, #3f2b96 100%);
+            min-height: 100vh;
+            color: var(--dark);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            background: var(--glass);
+            backdrop-filter: blur(8px);
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            padding: 30px;
+            margin: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        header {
+            text-align: center;
+            border-bottom: 2px solid rgba(0,0,0,0.1);
+            padding-bottom: 20px;
+        }
+
+        h1 { margin: 0; color: var(--dark); font-size: 2.5rem; }
+        p.subtitle { margin: 10px 0 0; color: var(--secondary); font-weight: bold; }
+
+        .modules {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .modules { grid-template-columns: 1fr; }
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover { transform: translateY(-5px); }
+
+        h2 { color: var(--primary); display: flex; align-items: center; gap: 10px; margin-top: 0; }
+        
+        .control-group {
+            margin: 20px 0;
+        }
+
+        label { display: block; font-weight: bold; margin-bottom: 10px; }
+        
+        input[type=range] {
+            width: 100%;
+            height: 10px;
+            border-radius: 5px;
+            background: #d3d3d3;
+            outline: none;
+            opacity: 0.7;
+            transition: .2s;
+            -webkit-appearance: none;
+        }
+
+        input[type=range]:hover { opacity: 1; }
+
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+        }
+
+        .output-display {
+            background: var(--dark);
+            color: #fff;
+            padding: 15px;
+            border-radius: 10px;
+            font-family: monospace;
+            font-size: 1.1rem;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .value-highlight { color: var(--secondary); font-weight: bold; }
+
+        /* Module 1 Visuals */
+        .mountain-scene {
+            height: 150px;
+            background: linear-gradient(to bottom, #87CEEB 0%, #ffffff 100%);
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+        
+        .mountain {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0; 
+            height: 0; 
+            border-left: 100px solid transparent;
+            border-right: 100px solid transparent;
+            border-bottom: 140px solid #7f8c8d;
+        }
+
+        .mountain::after {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: -30px;
+            width: 0;
+            height: 0;
+            border-left: 30px solid transparent;
+            border-right: 30px solid transparent;
+            border-bottom: 40px solid white; /* Snow cap */
+        }
+
+        .climber {
+            position: absolute;
+            bottom: 10px;
+            left: 55%; /* Start slightly offset */
+            font-size: 24px;
+            transition: bottom 0.3s ease, left 0.3s ease;
+        }
+
+        .pot {
+            position: absolute;
+            right: 20px;
+            bottom: 10px;
+            font-size: 30px;
+        }
+
+        .bubble {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 50%;
+            bottom: 100%;
+            animation: rise 2s infinite ease-in;
+        }
+
+        @keyframes rise {
+            0% { transform: translateY(0) scale(1); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateY(-50px) scale(1.5); opacity: 0; }
+        }
+
+        /* Module 2 Visuals */
+        .cloud-scene {
+            height: 150px;
+            background: #dff9fb;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            margin-top: 20px;
+        }
+
+        .cloud {
+            width: 80px;
+            height: 50px;
+            background: #fff;
+            border-radius: 50px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            position: relative;
+            transition: transform 0.3s ease, filter 0.3s ease, background 0.3s ease;
+        }
+
+        .cloud::before, .cloud::after {
+            content: '';
+            position: absolute;
+            background: inherit;
+            border-radius: 50%;
+        }
+        
+        .cloud::before { width: 40px; height: 40px; top: -20px; left: 10px; }
+        .cloud::after { width: 30px; height: 30px; top: -15px; right: 10px; }
+
+        .rain {
+            position: absolute;
+            top: 60px;
+            width: 100%;
+            height: 80px;
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .drop {
+            width: 2px;
+            height: 10px;
+            background: #3498db;
+            animation: rain 0.5s infinite linear;
+        }
+
+        @keyframes rain {
+            from { transform: translateY(0); }
+            to { transform: translateY(50px); }
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Dalla Montagna al Clima 🏔️🌡️</h1>
+        <p class="subtitle">Esplora l'Equazione di Clausius-Clapeyron</p>
+    </header>
+
+    <div class="modules">
+        <!-- Module 1: The Mountain -->
+        <div class="card">
+            <h2>1. L'Ebollizione in Quota</h2>
+            <p>Come cambia la temperatura di ebollizione dell'acqua salendo di quota?</p>
+            
+            <div class="control-group">
+                <label for="altitude">Altitudine: <span id="alt-val" class="value-highlight">0</span> m</label>
+                <input type="range" id="altitude" min="0" max="9000" value="0" step="50">
+                
+                <div class="mountain-scene">
+                    <div class="mountain"></div>
+                    <div class="climber" id="climber">⛺</div>
+                </div>
+            </div>
+
+            <div class="output-display">
+                Pressione: <span id="pressure-val" class="value-highlight">1.00</span> atm<br>
+                T. Ebollizione: <span id="boil-val" class="value-highlight">100.0</span> °C
+            </div>
+            <p class="small" style="font-size: 0.8rem; margin-top: 10px; color: #666;">
+                *Calcolato usando l'atmosfera standard e l'equazione di Clausius-Clapeyron.
+            </p>
+        </div>
+
+        <!-- Module 2: The Climate -->
+        <div class="card">
+            <h2>2. La Regola del 7%</h2>
+            <p>Quanto vapore acqueo in più può contenere l'atmosfera se si riscalda?</p>
+            
+            <div class="control-group">
+                <label for="temp-rise">Riscaldamento Globale: +<span id="temp-val" class="value-highlight">0.0</span> °C</label>
+                <input type="range" id="temp-rise" min="0" max="6" value="0" step="0.1">
+                
+                <div class="cloud-scene">
+                    <div class="cloud" id="cloud"></div>
+                    <div class="rain" id="rain"></div>
+                </div>
+            </div>
+
+            <div class="output-display">
+                Capacità Vapore: +<span id="capacity-val" class="value-highlight">0</span> %<br>
+                <span id="impact-text" style="font-size: 0.9rem; color: #e74c3c;">Stabile</span>
+            </div>
+            <p class="small" style="font-size: 0.8rem; margin-top: 10px; color: #666;">
+                *La capacità cresce esponenzialmente (~7% per ogni °C).
+            </p>
+        </div>
+    </div>
+</div>
+
+<script>
+    // --- Module 1 Logic ---
+    const altSlider = document.getElementById('altitude');
+    const altVal = document.getElementById('alt-val');
+    const pressureVal = document.getElementById('pressure-val');
+    const boilVal = document.getElementById('boil-val');
+    const climber = document.getElementById('climber');
+
+    // Constants
+    const P0 = 1.0; // atm
+    const T0 = 373.15; // K (100 C)
+    const L = 40700; // J/mol (Latent heat)
+    const R = 8.314; // J/mol*K
+
+    function updateMountain() {
+        const h = parseInt(altSlider.value);
+        altVal.textContent = h;
+
+        // 1. Calculate Pressure (Standard Atmosphere Approximation)
+        // P = P0 * (1 - 2.25577e-5 * h)^5.25588
+        const P_atm = P0 * Math.pow((1 - 2.25577e-5 * h), 5.25588);
+        pressureVal.textContent = P_atm.toFixed(2);
+
+        // 2. Calculate Boiling Temp (Inverse Clausius-Clapeyron)
+        // 1/T = 1/T0 - (R/L)*ln(P/P0)
+        // T = 1 / ( 1/T0 - (R/L)*ln(P/P0) )
+        const oneOverT = (1/T0) - (R/L) * Math.log(P_atm/P0);
+        const T_boil_K = 1 / oneOverT;
+        const T_boil_C = T_boil_K - 273.15;
+        
+        boilVal.textContent = T_boil_C.toFixed(1);
+
+        // 3. Visuals
+        // Move climber along the mountain: 
+        // Bottom-Left (0m) to Top-Center (9000m)
+        // Map 0-9000 to X: 10% -> 50%, Y: 10px -> 120px
+        const percent = h / 9000;
+        const newLeft = 10 + (40 * percent); // 10% to 50%
+        const newBottom = 10 + (100 * percent); // 10px to 110px
+        
+        climber.style.left = newLeft + '%';
+        climber.style.bottom = newBottom + 'px';
+    }
+
+    altSlider.addEventListener('input', updateMountain);
+
+    // --- Module 2 Logic ---
+    const tempSlider = document.getElementById('temp-rise');
+    const tempVal = document.getElementById('temp-val');
+    const capacityVal = document.getElementById('capacity-val');
+    const impactText = document.getElementById('impact-text');
+    const cloud = document.getElementById('cloud');
+    const rain = document.getElementById('rain');
+
+    function updateClimate() {
+        const dT = parseFloat(tempSlider.value);
+        tempVal.textContent = dT.toFixed(1);
+
+        // Rule of 7%: Capacity ~ 1.07^dT
+        const factor = Math.pow(1.07, dT);
+        const increasePercent = (factor - 1) * 100;
+        
+        capacityVal.textContent = increasePercent.toFixed(1);
+
+        // Visuals
+        // Cloud grows
+        const scale = 1 + (increasePercent / 100) * 1.5; // Scale up to 2.5x roughly
+        cloud.style.transform = `scale(${scale})`;
+        
+        // Cloud gets darker (grey)
+        const darkness = 255 - (increasePercent * 3); // minimal darkness
+        cloud.style.background = `rgb(${darkness}, ${darkness}, ${darkness})`;
+        
+        // Rain appears at high dT
+        if (dT > 2) {
+            rain.style.opacity = (dT - 2) / 4; // Fade in
+            // Generate drops
+            rain.innerHTML = '';
+            const dropCount = Math.floor(dT * 3);
+            for(let i=0; i<dropCount; i++) {
+                const drop = document.createElement('div');
+                drop.className = 'drop';
+                drop.style.left = Math.random() * 100 + '%';
+                drop.style.animationDuration = (0.5 + Math.random()*0.5) + 's';
+                rain.appendChild(drop);
+            }
+        } else {
+            rain.style.opacity = 0;
+            rain.innerHTML = '';
+        }
+
+        // Text
+        if (dT < 1) { impactText.textContent = "Situazione Stabile"; impactText.style.color = "#27ae60"; }
+        else if (dT < 2) { impactText.textContent = "Aumento Precipitazioni"; impactText.style.color = "#f39c12"; }
+        else if (dT < 4) { impactText.textContent = "Rischio Eventi Estremi"; impactText.style.color = "#e67e22"; }
+        else { impactText.textContent = "CRITICO: Supercelle & Alluvioni"; impactText.style.color = "#c0392b"; }
+    }
+
+    tempSlider.addEventListener('input', updateClimate);
+
+    // Init
+    updateMountain();
+    updateClimate();
+
+</script>
+
+</body>
+</html>
