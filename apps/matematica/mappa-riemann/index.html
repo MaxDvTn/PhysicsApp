@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mappa della dimostrazione di Riemann</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&display=swap" rel="stylesheet">
+<style>
+/* Idea di layout: una colonna di lettura; la mappa è un percorso verticale numerato,
+   una linea continua unisce le sette tappe, dal teorema (in alto) alle fondamenta (in basso). */
+:root{
+  --bg:#f3f6f8; --surface:#ffffff; --ink:#15202b; --muted:#566575;
+  --line:#cfd8e0; --accent:#0a6b8c; --accent-soft:#e0f0f5;
+  --warn:#9a5200; --warn-soft:#fbefdc;
+  --display:"Bricolage Grotesque","Trebuchet MS",system-ui,sans-serif;
+  --body:"Atkinson Hyperlegible",Verdana,system-ui,sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0f151b; --surface:#18212a; --ink:#e7eef4; --muted:#96a5b4;
+    --line:#2c3945; --accent:#62c6e2; --accent-soft:#143440;
+    --warn:#f1b55f; --warn-soft:#3a2c14;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0f151b; --surface:#18212a; --ink:#e7eef4; --muted:#96a5b4;
+  --line:#2c3945; --accent:#62c6e2; --accent-soft:#143440;
+  --warn:#f1b55f; --warn-soft:#3a2c14;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.6}
+main{max-width:44rem;margin:0 auto;padding:2rem 1.1rem 4rem;display:flex;flex-direction:column;gap:2.4rem}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;line-height:1.15;margin:0}
+h1{font-size:clamp(2rem,7vw,3rem);font-weight:700;letter-spacing:-.01em}
+h2{font-size:1.55rem;font-weight:700}
+h3{font-size:1.2rem;font-weight:700}
+p{margin:0}
+a{color:var(--accent)}
+a:focus-visible,summary:focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:4px}
+.eyebrow{font-family:var(--display);font-weight:500;color:var(--accent);font-size:.95rem;letter-spacing:.04em;text-transform:uppercase}
+.lead{font-size:1.15rem;color:var(--ink)}
+.stack{display:flex;flex-direction:column;gap:.9rem}
+.note{background:var(--warn-soft);border-left:4px solid var(--warn);padding:.9rem 1rem;border-radius:0 8px 8px 0}
+.note strong{color:var(--warn)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:1.1rem 1.15rem}
+.muted{color:var(--muted)}
+.small{font-size:.92rem}
+
+/* grafico */
+.chart-wrap{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:.8rem .8rem .6rem}
+canvas{display:block;width:100%;height:260px}
+.legend{display:flex;flex-wrap:wrap;gap:.4rem 1.2rem;font-size:.9rem;color:var(--muted);padding:.5rem .3rem 0}
+.legend span{display:inline-flex;align-items:center;gap:.45rem}
+.sw{width:22px;height:0;border-top:3px solid var(--accent)}
+.sw.band{border-top:2px dashed var(--warn)}
+
+/* mappa */
+.route{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:1.1rem;position:relative}
+.route::before{content:"";position:absolute;left:1.15rem;top:1.2rem;bottom:1.2rem;width:3px;background:var(--line);border-radius:2px}
+.stop{position:relative;padding-left:3.3rem}
+.num{position:absolute;left:0;top:.9rem;width:2.4rem;height:2.4rem;border-radius:50%;background:var(--accent);color:var(--surface);font-family:var(--display);font-weight:700;font-size:1.15rem;display:grid;place-items:center;border:3px solid var(--bg)}
+.stop .card{display:flex;flex-direction:column;gap:.7rem}
+.one{font-weight:700}
+.why{border-top:1px dashed var(--line);padding-top:.65rem;color:var(--muted);font-size:.95rem}
+.why b{color:var(--ink)}
+.chip{align-self:flex-start;font-size:.8rem;font-weight:700;padding:.15rem .6rem;border-radius:99px;background:var(--warn-soft);color:var(--warn);border:1px solid var(--warn)}
+.analogy{background:var(--accent-soft);border-radius:8px;padding:.7rem .85rem;font-size:.97rem}
+.analogy b{color:var(--accent)}
+details{font-size:.95rem}
+summary{cursor:pointer;color:var(--accent);font-weight:700}
+.formula{overflow-x:auto;padding:.5rem 0}
+.ends{font-family:var(--display);font-weight:500;color:var(--muted);font-size:.95rem;padding-left:3.3rem}
+
+dl{margin:0;display:grid;gap:.7rem}
+dt{font-weight:700;font-family:var(--display)}
+dd{margin:0;color:var(--muted)}
+.two{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(15rem,1fr))}
+.two h3{margin-bottom:.5rem}
+ul.plain{margin:0;padding-left:1.1rem;display:flex;flex-direction:column;gap:.35rem}
+footer{font-size:.9rem;color:var(--muted);border-top:1px solid var(--line);padding-top:1rem}
+</style>
+<script>
+window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']]},svg:{fontCache:'global'}};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script>
+</head>
+<body>
+<main>
+
+<header class="stack">
+  <p class="eyebrow">Ipotesi di Riemann · annuncio del 20 novembre 2026</p>
+  <h1>La mappa della dimostrazione, tappa per tappa</h1>
+  <p class="lead">Il matematico Levent Alpöge ha annunciato una dimostrazione dell'ipotesi di Riemann, scritta in un linguaggio che un computer può controllare riga per riga. Qui trovi la strada che segue, in sette tappe, spiegata con la matematica del liceo.</p>
+  <p class="note"><strong>Prima di partire.</strong> Due programmi indipendenti hanno accettato la dimostrazione, ma nessun matematico l'ha ancora letta e approvata per intero. Questa pagina segue la mappa di lettura del repository <a href="https://github.com/nasqret/riemann-rev">nasqret/riemann-rev</a>, che non è la dimostrazione e non la certifica.</p>
+</header>
+
+<section class="stack">
+  <h2>Di che cosa parla</h2>
+  <p>I numeri primi (2, 3, 5, 7, 11…) sembrano sparsi a caso. Eppure, se li conti fino a un numero grande, il totale segue una legge molto regolare. La domanda è: <b>di quanto sbaglia quella legge?</b></p>
+  <p>L'ipotesi di Riemann (1859) dice che lo sbaglio è il più piccolo possibile: cresce più o meno come \(\sqrt{x}\). Se conti i primi fino a un milione, l'errore è dell'ordine di mille, non di centomila.</p>
+  <p>Riemann lo formulò con una funzione, la <b>zeta</b> \(\zeta(s)\), e con i punti in cui vale zero. L'ipotesi dice che tutti gli zeri interessanti stanno su una stessa retta verticale, quella dei numeri con parte reale \(\tfrac12\). Zeri allineati e primi regolari sono la stessa affermazione vista da due lati.</p>
+</section>
+
+<section class="stack">
+  <h2>Il sismografo dei primi</h2>
+  <p>La dimostrazione non guarda gli zeri direttamente. Usa una quantità \(G(y)\) che somma i primi fino a \(y\) con certi pesi e toglie il valore previsto. Funziona come un sismografo: registra quanto i primi si scostano dalla legge.</p>
+  <p>Il grafico qui sotto è calcolato adesso, nel tuo browser, con tutti i primi fino a un milione. La curva è \(G(y)\) divisa per \(\sqrt{y}\). Se l'ipotesi è vera, non esce mai dalla fascia tratteggiata.</p>
+  <div class="chart-wrap">
+    <canvas id="chart" role="img" aria-label="Grafico di G(y) diviso radice di y, per y da 10 a un milione: la curva oscilla vicino a zero e resta dentro la fascia tratteggiata prevista dall'ipotesi di Riemann."></canvas>
+    <div class="legend">
+      <span><i class="sw"></i>scarto dei primi, diviso \(\sqrt{y}\)</span>
+      <span><i class="sw band"></i>fascia imposta dall'ipotesi (±0,046)</span>
+    </div>
+  </div>
+  <p class="muted small">La guida del repository riporta lo stesso controllo fino a dieci milioni: la curva resta sotto 0,023, metà della fascia. Un grafico però non dimostra nulla, perché l'ipotesi parla di tutti i numeri. Serve a vedere che cosa si vuole dimostrare.</p>
+  <details>
+    <summary>La formula del sismografo</summary>
+    <div class="formula">\[G(y)=\sum_{n\le y}\Lambda(n)\Bigl(\frac{y}{n}-1\Bigr)-y\ln y+(1+\gamma)\,y\]</div>
+    <p class="muted">\(\Lambda(n)\) vale \(\ln p\) se \(n\) è una potenza del primo \(p\), altrimenti zero: è il modo in cui la somma «vede» solo i primi. \(\gamma\approx0{,}577\) è la costante di Eulero. Nel grafico si toglie anche la costante \(\ln 2\pi\).</p>
+  </details>
+</section>
+
+<section class="stack">
+  <h2>Le sette tappe</h2>
+  <p>La strada si legge dall'alto: si parte dal teorema e a ogni tappa ci si chiede «che cosa mi serve per arrivare fin qui?». La risposta è la tappa successiva.</p>
+  <p class="ends">▲ Il teorema: tutti gli zeri stanno sulla retta \(\tfrac12\)</p>
+  <ol class="route">
+
+    <li class="stop"><span class="num">1</span>
+      <div class="card">
+        <h3>Lo specchio</h3>
+        <p class="one">Basta controllare metà del piano.</p>
+        <p>La funzione zeta ha una simmetria: la retta \(\tfrac12\) fa da specchio. Uno zero a sinistra avrebbe un gemello a destra. Quindi basta dimostrare che a destra della retta non ce n'è nessuno.</p>
+        <p class="why"><b>Che cosa manca:</b> un modo per escludere gli zeri a destra. Gli zeri sono difficili da afferrare, meglio tradurre il problema.</p>
+      </div>
+    </li>
+
+    <li class="stop"><span class="num">2</span>
+      <div class="card">
+        <h3>Dagli zeri ai primi</h3>
+        <p class="one">Si traduce tutto in un conto sui numeri primi.</p>
+        <p>È il sismografo \(G(y)\) del grafico. Vale un'equivalenza esatta: l'ipotesi è vera se e solo se \(G(y)\) resta di taglia \(\sqrt{y}\). Uno zero fuori posto farebbe crescere le oscillazioni più in fretta.</p>
+        <p class="why"><b>Che cosa manca:</b> controllare \(G(y)\) per tutti gli \(y\) è troppo. Serve un criterio più economico.</p>
+      </div>
+    </li>
+
+    <li class="stop"><span class="num">3</span>
+      <div class="card">
+        <h3>Le finestre</h3>
+        <p class="one">Non serve guardare ovunque: bastano dei tratti lunghi, sempre più lontani.</p>
+        <p>Si ragiona per assurdo. Uno zero a destra della retta produrrebbe un'onda che cresce senza sosta e si vedrebbe in ogni tratto abbastanza lungo. Se trovi finestre, anche molto lontane, in cui il sismografo resta calmo, quello zero non può esistere.</p>
+        <div class="analogy"><b>Come dire:</b> se ci fosse un terremoto continuo e sempre più forte, nessuna registrazione lunga potrebbe risultare piatta. Una registrazione piatta lo esclude.</div>
+        <p class="why"><b>Che cosa manca:</b> la parte vera del lavoro, cioè dimostrare che in quelle finestre la somma sui primi è piccola. È il compito delle tappe 4, 5 e 6.</p>
+        <details>
+          <summary>Con le formule</summary>
+          <p class="muted">Le finestre hanno la forma \([Y,\,Y^{1+\delta}]\). Se c'è uno zero con parte reale maggiore di \(\theta\), ogni finestra abbastanza lontana contiene un punto in cui la somma supera \(C\,y^{\theta}\). Quindi basta una stima <i>dall'alto</i>, da un lato solo. Funziona perché i pesi sono tutti positivi: i contributi si sommano e non possono cancellarsi tra loro. È una versione «locale» di un teorema di Landau.</p>
+          <p class="muted">L'obiettivo delle tappe successive, che la guida chiama \((\star)\): esistono \(Y\) grandi quanto si vuole con \(G(x)\le x^{1/2+9\varepsilon}\) per ogni \(x\) in \([Y,\,Y^{3/2}]\).</p>
+        </details>
+      </div>
+    </li>
+
+    <li class="stop"><span class="num">4</span>
+      <div class="card">
+        <span class="chip">controllata solo in parte dal progetto di lettura</span>
+        <h3>Divisibile, quindi grande</h3>
+        <p class="one">Un numero intero diverso da zero, divisibile per tanti primi, non può essere piccolo.</p>
+        <p>Se un numero è divisibile per 2, 3, 5 e 7 vale almeno 210. La dimostrazione costruisce numeri speciali che sono divisibili per moltissimi primi e di cui si sa anche quanto sono grandi al massimo. Confrontando le due informazioni, i primi coinvolti non possono «pesare» troppo: ecco la stima cercata.</p>
+        <div class="analogy"><b>Un'idea che conosci già:</b> un polinomio di grado \(n\) ha al massimo \(n\) radici. Se ne ha tante, il grado deve essere alto. Negli anni Sessanta Stepanov usò questo confronto per un problema simile sui campi finiti. Qui «avere tante radici» diventa «essere divisibile per tanti primi» e «grado» diventa «grandezza».</div>
+        <div class="analogy"><b>Da dove viene la radice quadrata:</b> la costruzione si ripete \(m\) volte e ha due costi, \(\dfrac{x}{m}\) e \(m\). Uno scende e l'altro sale. La somma è minima quando sono uguali, cioè per \(m=\sqrt{x}\). È un problema di minimo da quarta liceo, ed è il motivo per cui nell'ipotesi compare \(\sqrt{x}\).</div>
+        <p class="why"><b>Che cosa manca:</b> la stima che esce contiene anche pezzi che non c'entrano, e alcuni col segno sbagliato.</p>
+        <details>
+          <summary>Con le formule</summary>
+          <div class="formula">\[\frac1b\bigl(\mathrm{ASK}(a)-\mathrm{MAIN}(a)\bigr)\le x^{O(\varepsilon)}\Bigl(\frac{x}{m}+m+\sqrt{x}\Bigr)\]</div>
+          <p class="muted">ASK misura la divisibilità guadagnata, MAIN il valore atteso. I numeri speciali sono derivate di funzioni theta, legate ai campi \(\mathbb{Q}(\sqrt{-d})\): la derivata di ordine \(a\) è divisibile per \(p^{\,a/p+a/p^2+\cdots}\) per certi primi \(p\). La costruzione si ripete in una catena di \(m\) «sollevamenti theta». Il confronto tra divisibilità e grandezza si fa con una disuguaglianza di Bost sulle «pendenze» dei reticoli.</p>
+        </details>
+      </div>
+    </li>
+
+    <li class="stop"><span class="num">5</span>
+      <div class="card">
+        <h3>Il filtro</h3>
+        <p class="one">Si isola il pezzo che interessa, come una nota in un accordo.</p>
+        <p>La stima della tappa 4 è un miscuglio di contributi diversi (i matematici li chiamano caratteri). Con l'analisi di Fourier, la stessa idea che separa un suono nelle sue frequenze, si tiene solo il contributo voluto. I pesi sono scelti in modo che tutto resti positivo, come chiede la tappa 3.</p>
+        <p>Restano alcuni contributi indesiderati. Per eliminarli la costruzione usa due numeri primi ausiliari, \(q\) e \(d\), che si possono scegliere. Una media su tutti i candidati mostra che per ogni finestra esiste una coppia buona. La costruzione quindi si rifà da capo per ogni finestra.</p>
+        <p class="why"><b>Che cosa manca:</b> la divisibilità della tappa 4 non è perfetta. C'è una perdita, e bisogna dimostrare che è sopportabile.</p>
+      </div>
+    </li>
+
+    <li class="stop"><span class="num">6</span>
+      <div class="card">
+        <span class="chip">controllata solo in parte dal progetto di lettura</span>
+        <h3>Il prezzo da pagare</h3>
+        <p class="one">La perdita non deve essere zero: basta che sia contenuta in qualche finestra.</p>
+        <p>Un teorema del 1979 (Ferrero e Washington) permette di dire che i casi «costosi» sono al massimo un numero fisso \(R\), per quanto lontano si guardi. Ognuno rovina solo un tratto di scale. Allora, tra tante finestre possibili, almeno una li evita tutti.</p>
+        <div class="analogy"><b>Principio dei cassetti:</b> se hai più cassetti che calzini, almeno un cassetto è vuoto. Qui i calzini sono gli \(R\) casi costosi e i cassetti le finestre. Ecco perché alla tappa 3 bastavano le finestre.</div>
+        <p class="why"><b>Che cosa manca:</b> gli oggetti che misurano la perdita, e i numeri speciali della tappa 4, devono esistere e avere le proprietà giuste.</p>
+      </div>
+    </li>
+
+    <li class="stop"><span class="num">7</span>
+      <div class="card">
+        <span class="chip">solo letta nel sorgente, non ricontrollata</span>
+        <h3>Le fondamenta</h3>
+        <p class="one">Tutto poggia su una teoria profonda che lega simmetrie e numeri.</p>
+        <p>Sono le «rappresentazioni di Galois associate a forme automorfe»: un dizionario tra le simmetrie delle equazioni e certe funzioni molto regolari. Appartengono alla stessa famiglia di idee usata per l'ultimo teorema di Fermat. Qui il liceo non basta più: è la parte più difficile e la meno verificata della mappa.</p>
+        <p class="why"><b>Da tenere d'occhio:</b> la guida elenca sette ingredienti («seven inputs») da cui dipende l'assemblaggio finale. Gli autori della guida li hanno letti nel codice, non ricostruiti a mano.</p>
+      </div>
+    </li>
+  </ol>
+  <p class="ends">▼ Gli assiomi della matematica</p>
+</section>
+
+<section class="stack">
+  <h2>Che cosa sappiamo e che cosa no</h2>
+  <div class="two">
+    <div class="card">
+      <h3>Dichiarato nel repository</h3>
+      <ul class="plain">
+        <li>Due programmi di controllo indipendenti hanno accettato la dimostrazione completa.</li>
+        <li>È lunga 175.187 file scritti in Lean.</li>
+        <li>Usa solo i tre assiomi standard di Lean.</li>
+        <li>Copre anche una versione più generale dell'ipotesi.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Ancora aperto</h3>
+      <ul class="plain">
+        <li>Nessuna revisione da parte di altri matematici.</li>
+        <li>Non esiste ancora una versione scritta per essere letta da persone.</li>
+        <li>Un computer che dice «corretto» non spiega <i>perché</i> è vero.</li>
+        <li>I documenti del repository descrivono la tappa 4 in modi diversi.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="stack">
+  <h2>Parole da sapere</h2>
+  <dl class="card">
+    <div><dt>Zero di una funzione</dt><dd>Un valore in cui la funzione vale 0, come \(x=2\) per \(x^2-4\).</dd></div>
+    <div><dt>Retta critica</dt><dd>Nel piano dei numeri complessi, la retta verticale dei numeri con parte reale \(\tfrac12\).</dd></div>
+    <div><dt>Lean</dt><dd>Un linguaggio in cui si scrivono dimostrazioni. Un piccolo programma, il kernel, controlla ogni passaggio.</dd></div>
+    <div><dt>Dimostrazione per assurdo</dt><dd>Si suppone il contrario di ciò che si vuole e si arriva a una contraddizione.</dd></div>
+  </dl>
+</section>
+
+<footer>
+  Fonti: README del repository <a href="https://github.com/nasqret/riemann-rev">github.com/nasqret/riemann-rev</a> e la sua <a href="https://nasqret.github.io/riemann-rev/guide/proof-guide.pdf">guida PDF di 11 pagine</a>, stato registrato il 20 novembre 2026. Le analogie sono semplificazioni didattiche e non fanno parte della dimostrazione.
+</footer>
+</main>
+
+<script>
+(function(){
+  var N=1000000, GAMMA=0.5772156649015329, BAND=2+GAMMA-Math.log(4*Math.PI);
+  var pts=[];
+  function compute(){
+    var L=new Float64Array(N+1), s=new Uint8Array(N+1), p, q, lp;
+    for(p=2;p<=N;p++){ if(!s[p]){ for(q=p*2;q<=N;q+=p) s[q]=1; lp=Math.log(p); for(q=p;q<=N;q*=p) L[q]=lp; } }
+    var A=0,P=0,next=10,step=Math.pow(10,5/900),c=Math.log(2*Math.PI);
+    for(var y=1;y<=N;y++){
+      A+=L[y]/y; P+=L[y];
+      if(y>=next||y===N){
+        var G=y*A-P-y*Math.log(y)+(1+GAMMA)*y;
+        pts.push([Math.log10(y),(G-c)/Math.sqrt(y)]);
+        while(next<=y) next*=step;
+      }
+    }
+  }
+  function css(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim();}
+  function draw(){
+    var cv=document.getElementById('chart'), r=cv.getBoundingClientRect(), d=window.devicePixelRatio||1;
+    if(!r.width) return;
+    cv.width=r.width*d; cv.height=r.height*d;
+    var g=cv.getContext('2d'); g.scale(d,d);
+    var W=r.width,H=r.height,l=46,rt=10,t=12,b=30, YM=0.06;
+    function X(v){return l+(v-1)/5*(W-l-rt);}
+    function Y(v){return t+(YM-v)/(2*YM)*(H-t-b);}
+    g.clearRect(0,0,W,H);
+    g.font='12px '+css('--body'); g.fillStyle=css('--muted'); g.strokeStyle=css('--line'); g.lineWidth=1;
+    var sup=['¹','²','³','⁴','⁵','⁶'];
+    g.textAlign='center'; g.textBaseline='top';
+    for(var e=1;e<=6;e++){ g.beginPath(); g.moveTo(X(e),t); g.lineTo(X(e),H-b); g.stroke(); g.fillText('10'+(e>1?sup[e-1]:''),Math.min(X(e),W-14),H-b+7); }
+    g.textAlign='right'; g.textBaseline='middle';
+    [-0.05,0,0.05].forEach(function(v){ g.beginPath(); g.moveTo(l,Y(v)); g.lineTo(W-rt,Y(v)); g.stroke(); g.fillText(v.toFixed(2).replace('.',','),l-6,Y(v)); });
+    g.strokeStyle=css('--warn'); g.lineWidth=1.5; g.setLineDash([6,5]);
+    [BAND,-BAND].forEach(function(v){ g.beginPath(); g.moveTo(l,Y(v)); g.lineTo(W-rt,Y(v)); g.stroke(); });
+    g.setLineDash([]);
+    g.strokeStyle=css('--accent'); g.lineWidth=1.6; g.lineJoin='round'; g.beginPath();
+    pts.forEach(function(p,i){ if(i) g.lineTo(X(p[0]),Y(p[1])); else g.moveTo(X(p[0]),Y(p[1])); });
+    g.stroke();
+    var last=pts[pts.length-1]; g.fillStyle=css('--accent'); g.beginPath(); g.arc(X(last[0]),Y(last[1]),3.5,0,7); g.fill();
+  }
+  try{ compute(); draw(); }catch(e){}
+  window.addEventListener('resize',draw);
+  if(window.matchMedia) matchMedia('(prefers-color-scheme: dark)').addEventListener('change',draw);
+  new MutationObserver(draw).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+  if(document.fonts&&document.fonts.ready) document.fonts.ready.then(draw);
+})();
+</script>
+</body>
+</html>

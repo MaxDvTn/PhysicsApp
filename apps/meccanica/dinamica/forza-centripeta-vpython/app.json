@@ -1,0 +1,36 @@
+{
+  "id": "forza-centripeta-vpython",
+  "titolo": "Forza sempre perpendicolare alla velocità (VPython)",
+  "tipo": "vpython",
+  "avvio": null,
+  "sommario": "Una forza di modulo costante, sempre perpendicolare alla velocità, piega la traiettoria in una circonferenza. Con il tasto «Taglia il filo» la pallina parte lungo la tangente.",
+  "argomento": [
+    "Meccanica",
+    "Dinamica"
+  ],
+  "tema": "Forza centripeta",
+  "classi": [
+    "3R"
+  ],
+  "anno": 3,
+  "data": "2026-11-13",
+  "file": [
+    [
+      "forza_centripeta_studenti.py",
+      "Versione da completare (studenti)"
+    ],
+    [
+      "forza_centripeta_completo.py",
+      "Versione completa (docente)"
+    ],
+    [
+      "forza_centripeta_colab.ipynb",
+      "Notebook per Google Colab"
+    ]
+  ],
+  "colab": "forza_centripeta_colab.ipynb",
+  "collegate": [
+    "dal-poligono-al-cerchio"
+  ],
+  "allegati": []
+}

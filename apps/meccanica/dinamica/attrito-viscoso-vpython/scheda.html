@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Cg fill=%22%231d3d8f%22%3E%3Ccircle cx=%225%22 cy=%2226%22 r=%223%22/%3E%3Ccircle cx=%2212%22 cy=%2212%22 r=%223%22/%3E%3Ccircle cx=%2220%22 cy=%228%22 r=%223%22/%3E%3Ccircle cx=%2228%22 cy=%2216%22 r=%223%22/%3E%3C/g%3E%3C/svg%3E">
+<title>Sferetta nella glicerina (VPython) · App di fisica</title>
+<meta name="description" content="Simulazione passo per passo di una sferetta d&#x27;acciaio che cade nella glicerina, con grafici v(t) e a(t) e confronto con la legge di Stokes.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../../sito/stile.css">
+<script>
+try{var t=localStorage.getItem('tema');if(t)document.documentElement.dataset.tema=t}catch(e){}
+function cambiaTema(){var r=document.documentElement,s=r.dataset.tema||(matchMedia('(prefers-color-scheme: dark)').matches?'scuro':'chiaro');
+r.dataset.tema=s==='scuro'?'chiaro':'scuro';try{localStorage.setItem('tema',r.dataset.tema)}catch(e){}}
+</script>
+</head>
+<body>
+<div class="pagina">
+  <aside class="margine">
+    <a class="marchio" href="../../../../index.html">PhysicsApp</a>
+    <dl class="scheda-dati">
+      <dt>Argomento</dt><dd>Meccanica › Dinamica<br>Attrito viscoso e velocità limite</dd>
+      <dt>Classi</dt><dd><span class="classe">3R</span> </dd>
+      <dt>Tipo</dt><dd>Simulazione VPython</dd>
+      <dt>Data</dt><dd>13/11/2026</dd>
+    </dl>
+    <button class="tema-btn" type="button" onclick="cambiaTema()">Carta o lavagna</button>
+  </aside>
+  <main class="foglio scheda">
+    <p><a href="../../../../index.html#meccanica">Torna a tutte le app</a></p>
+    <h1>Sferetta nella glicerina (VPython)</h1>
+    <p class="lead">Simulazione passo per passo di una sferetta d&#x27;acciaio che cade nella glicerina, con grafici v(t) e a(t) e confronto con la legge di Stokes.</p>
+    <div class="azioni"><button class="bottone pieno" type="button" data-copia="attrito_viscoso_studenti.py">Copia il codice e apri GlowScript</button><a class="bottone" target="_blank" rel="noopener" href="https://colab.research.google.com/github/MaxDvTn/PhysicsApp/blob/main/apps/meccanica/dinamica/attrito-viscoso-vpython/attrito_viscoso_colab.ipynb">Apri in Colab</a><a class="bottone" href="https://github.com/MaxDvTn/PhysicsApp/tree/main/apps/meccanica/dinamica/attrito-viscoso-vpython">Codice su GitHub</a><span class="copiato" id="copiato" role="status"></span></div>
+    <div class="testo"><h1>Sferetta nella glicerina (VPython)</h1>
+<p>Una sferetta d'acciaio (raggio 2 mm) cade in un cilindro di glicerina. Il programma calcola il moto passo per passo con il secondo principio, disegna i grafici v(t) e a(t), misura la velocità tra due tacche e la confronta con la formula di Stokes.</p>
+<h2>Come si usa</h2>
+<p><strong>Nel browser, senza installare niente (consigliato).</strong></p>
+<ol>
+<li>Apri <a target="_blank" rel="noopener" href="https://glowscript.org">glowscript.org</a>, accedi con un account Google e scegli <strong>Create New Program</strong>.</li>
+<li>Copia tutto il file <code>.py</code> e incollalo. La prima riga deve restare <code>Web VPython 3.2</code>.</li>
+<li>Premi <strong>Run</strong>.</li>
+</ol>
+<p><strong>Versione studenti.</strong> Il file <code>attrito_viscoso_studenti.py</code> gira già così com'è (passo 1: solo il peso). Si completano i <code>TODO</code> un passo alla volta, rilanciando ogni volta: peso, poi spinta di Archimede, poi attrito viscoso, poi misura tra le tacche. Le domande sono nei commenti; in fondo ci sono la tabella v_L – r² e la sfida (acciaio in acqua e numero di Reynolds).</p>
+<p><strong>Versione completa.</strong> <code>attrito_viscoso_completo.py</code> è la simulazione finita, da proiettare o da usare per controllare.</p>
+<p><strong>In Google Colab.</strong> VPython non funziona in Colab: il notebook <code>attrito_viscoso_colab.ipynb</code> fa lo stesso calcolo con numpy e i grafici con matplotlib. Dalla scheda dell'app si apre direttamente in Colab.</p>
+<p><strong>Sul computer.</strong> Con <code>pip install vpython</code>, sostituisci la prima riga con <code>from vpython import *</code>.</p>
+<h2>Risultati attesi</h2>
+<p>Velocità limite 4,07 cm/s (simulata, misurata tra le tacche e teorica coincidono), tempo caratteristico τ ≈ 5 ms, numero di Reynolds 0,15.</p>
+<h2>Note</h2>
+<p>Nel programma l'accelerazione di gravità vale 9,81 m/s².</p></div>
+    <div class="testo" id="materiali"><h2>File dell'app</h2><ul class="materiali"><li><span><a href="attrito_viscoso_studenti.py" download>Versione da completare (studenti)</a> <small>PY, 4 kB</small></span> <button class="bottone" type="button" data-copia="attrito_viscoso_studenti.py">Copia e apri GlowScript</button></li><li><span><a href="attrito_viscoso_completo.py" download>Versione completa (docente)</a> <small>PY, 4 kB</small></span> <button class="bottone" type="button" data-copia="attrito_viscoso_completo.py">Copia e apri GlowScript</button></li><li><span><a href="attrito_viscoso_colab.ipynb" download>Notebook per Google Colab</a> <small>IPYNB, 5 kB</small></span></li></ul><h2>App collegate</h2><ul class="materiali"><li><a href="../../../../apps/meccanica/dinamica/pallina-nell-olio/scheda.html">La pallina da golf nell&#x27;olio</a><small>App nel browser</small></li></ul></div>
+    <footer>Liceo «L. da Vinci» di Trento, prof. Massimo Bosetti.</footer>
+  </main>
+</div>
+<script>
+// Il codice si scarica subito, così al clic si copia e si apre GlowScript nello stesso gesto.
+const codici={};
+document.querySelectorAll('[data-copia]').forEach(b=>{
+  const f=b.dataset.copia;
+  if(!(f in codici)) codici[f]=fetch(f).then(r=>r.ok?r.text():null).catch(()=>null).then(t=>codici[f]=t);
+  b.addEventListener('click',()=>{
+    const msg=document.getElementById('copiato'), t=codici[f];
+    const fatto=()=>msg.textContent='Codice copiato: su GlowScript scegli «Create New Program» e incollalo con Cmd+V o Ctrl+V.';
+    const errore=()=>msg.textContent='Non sono riuscito a copiare: scarica il file qui sotto e incollalo a mano.';
+    if(typeof t==='string'&&navigator.clipboard) navigator.clipboard.writeText(t).then(fatto,errore); else errore();
+    window.open('https://glowscript.org/','_blank','noopener');
+  });
+});
+</script>
+</body>
+</html>

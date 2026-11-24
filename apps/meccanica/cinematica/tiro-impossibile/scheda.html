@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Cg fill=%22%231d3d8f%22%3E%3Ccircle cx=%225%22 cy=%2226%22 r=%223%22/%3E%3Ccircle cx=%2212%22 cy=%2212%22 r=%223%22/%3E%3Ccircle cx=%2220%22 cy=%228%22 r=%223%22/%3E%3Ccircle cx=%2228%22 cy=%2216%22 r=%223%22/%3E%3C/g%3E%3C/svg%3E">
+<title>Il tiro impossibile · App di fisica</title>
+<meta name="description" content="Il problema del cacciatore e della scimmia: un&#x27;indagine in tre atti e una simulazione VPython costruita dagli studenti in tre passi.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../../sito/stile.css">
+<script>
+try{var t=localStorage.getItem('tema');if(t)document.documentElement.dataset.tema=t}catch(e){}
+function cambiaTema(){var r=document.documentElement,s=r.dataset.tema||(matchMedia('(prefers-color-scheme: dark)').matches?'scuro':'chiaro');
+r.dataset.tema=s==='scuro'?'chiaro':'scuro';try{localStorage.setItem('tema',r.dataset.tema)}catch(e){}}
+</script>
+</head>
+<body>
+<div class="pagina">
+  <aside class="margine">
+    <a class="marchio" href="../../../../index.html">PhysicsApp</a>
+    <dl class="scheda-dati">
+      <dt>Argomento</dt><dd>Meccanica › Cinematica<br>Moto parabolico</dd>
+      <dt>Classi</dt><dd><span class="classe">3R</span> </dd>
+      <dt>Tipo</dt><dd>Schede di laboratorio</dd>
+      <dt>Data</dt><dd>09/10/2026</dd>
+    </dl>
+    <button class="tema-btn" type="button" onclick="cambiaTema()">Carta o lavagna</button>
+  </aside>
+  <main class="foglio scheda">
+    <p><a href="../../../../index.html#meccanica">Torna a tutte le app</a></p>
+    <h1>Il tiro impossibile</h1>
+    <p class="lead">Il problema del cacciatore e della scimmia: un&#x27;indagine in tre atti e una simulazione VPython costruita dagli studenti in tre passi.</p>
+    <div class="azioni"><a class="bottone" href="https://github.com/MaxDvTn/PhysicsApp/tree/main/apps/meccanica/cinematica/tiro-impossibile">Codice su GitHub</a><span class="copiato" id="copiato" role="status"></span></div>
+    <div class="testo"><h1>Il tiro impossibile</h1>
+<p>Un fotografo-veterinario mira con un fucile a dardi dritto a una scimmia appesa a un ramo. La scimmia si lascia cadere nell'istante dello sparo. La colpisce lo stesso? È il classico problema del cacciatore e della scimmia, trasformato in un'indagine in tre atti e in una simulazione VPython che gli studenti costruiscono da soli.</p>
+<h2>Come si usa</h2>
+<ol>
+<li><strong>Scheda dell'indagine</strong> (90 minuti, da soli o in coppia). Nell'Atto 1 ogni studente sceglie e motiva i propri dati: quota della scimmia h, distanza d, velocità del dardo v₀. Nell'Atto 2 fa una previsione e la giustifica con le leggi orarie.</li>
+<li><strong>Passo 1: il dardo in orizzontale</strong> (45 minuti). Si simula solo il moto orizzontale del dardo, rettilineo uniforme con vₓ = v₀ cos θ, e si confronta il tempo simulato con d/vₓ.</li>
+<li><strong>Passo 1B: la scimmia che cade</strong>. Si simula la caduta libera della scimmia.</li>
+<li><strong>Passo 2: dardo e scimmia insieme</strong> (60 minuti). Si uniscono i due programmi: la simulazione decide da sola se il dardo colpisce o manca. Il «dardo fantasma», che si muove senza gravità lungo la linea di mira, fa capire perché funziona.</li>
+</ol>
+<p>Il codice si scrive su <a target="_blank" rel="noopener" href="https://glowscript.org">glowscript.org</a> (prima riga <code>Web VPython 3.2</code>) oppure in Python con <code>from vpython import *</code>. Ogni scheda ha le parti da completare (<code>___</code>), le domande da rispondere nei commenti e alcune sfide: dardo troppo lento, gravità della Luna e di Giove, passo temporale grande, scimmia che si lancia verso il basso.</p>
+<h2>Risultato atteso</h2>
+<p>Con i dati di esempio (h = 8 m, d = 30 m, v₀ = 60 m/s) la simulazione finisce a t ≈ 0,52 s con il verdetto <strong>COLPITA</strong>: dardo e scimmia cadono della stessa quantità rispetto a dove sarebbero senza gravità.</p>
+<h2>Note</h2>
+<p>Le schede usano g = 9,81 m/s². La soluzione per il docente non è pubblicata qui.</p></div>
+    <div class="testo" id="materiali"><h2>File dell'app</h2><ul class="materiali"><li><span><a href="schede/scheda_tiro_impossibile.pdf" download>Scheda dell&#x27;indagine (tre atti)</a> <small>PDF, 104 kB</small></span></li><li><span><a href="schede/passo1_dardo.pdf" download>Passo 1: il dardo in orizzontale</a> <small>PDF, 124 kB</small></span></li><li><span><a href="schede/passo1B_scimmia.pdf" download>Passo 1B: la scimmia che cade</a> <small>PDF, 110 kB</small></span></li><li><span><a href="schede/passo2_dardo_e_scimmia.pdf" download>Passo 2: dardo e scimmia insieme</a> <small>PDF, 149 kB</small></span></li></ul></div>
+    <footer>Liceo «L. da Vinci» di Trento, prof. Massimo Bosetti.</footer>
+  </main>
+</div>
+<script>
+// Il codice si scarica subito, così al clic si copia e si apre GlowScript nello stesso gesto.
+const codici={};
+document.querySelectorAll('[data-copia]').forEach(b=>{
+  const f=b.dataset.copia;
+  if(!(f in codici)) codici[f]=fetch(f).then(r=>r.ok?r.text():null).catch(()=>null).then(t=>codici[f]=t);
+  b.addEventListener('click',()=>{
+    const msg=document.getElementById('copiato'), t=codici[f];
+    const fatto=()=>msg.textContent='Codice copiato: su GlowScript scegli «Create New Program» e incollalo con Cmd+V o Ctrl+V.';
+    const errore=()=>msg.textContent='Non sono riuscito a copiare: scarica il file qui sotto e incollalo a mano.';
+    if(typeof t==='string'&&navigator.clipboard) navigator.clipboard.writeText(t).then(fatto,errore); else errore();
+    window.open('https://glowscript.org/','_blank','noopener');
+  });
+});
+</script>
+</body>
+</html>

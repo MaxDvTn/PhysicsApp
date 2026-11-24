@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Cg fill=%22%231d3d8f%22%3E%3Ccircle cx=%225%22 cy=%2226%22 r=%223%22/%3E%3Ccircle cx=%2212%22 cy=%2212%22 r=%223%22/%3E%3Ccircle cx=%2220%22 cy=%228%22 r=%223%22/%3E%3Ccircle cx=%2228%22 cy=%2216%22 r=%223%22/%3E%3C/g%3E%3C/svg%3E">
+<title>Dal poligono al cerchio · App di fisica</title>
+<meta name="description" content="Una pallina percorre un poligono regolare e riceve un colpo in ogni vertice: aumentando i lati si arriva alla forza centripeta.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../../sito/stile.css">
+<script>
+try{var t=localStorage.getItem('tema');if(t)document.documentElement.dataset.tema=t}catch(e){}
+function cambiaTema(){var r=document.documentElement,s=r.dataset.tema||(matchMedia('(prefers-color-scheme: dark)').matches?'scuro':'chiaro');
+r.dataset.tema=s==='scuro'?'chiaro':'scuro';try{localStorage.setItem('tema',r.dataset.tema)}catch(e){}}
+</script>
+</head>
+<body>
+<div class="pagina">
+  <aside class="margine">
+    <a class="marchio" href="../../../../index.html">PhysicsApp</a>
+    <dl class="scheda-dati">
+      <dt>Argomento</dt><dd>Meccanica › Dinamica<br>Forza centripeta</dd>
+      <dt>Classi</dt><dd><span class="classe">3R</span> </dd>
+      <dt>Tipo</dt><dd>App nel browser</dd>
+      <dt>Data</dt><dd>24/11/2026</dd>
+    </dl>
+    <button class="tema-btn" type="button" onclick="cambiaTema()">Carta o lavagna</button>
+  </aside>
+  <main class="foglio scheda">
+    <p><a href="../../../../index.html#meccanica">Torna a tutte le app</a></p>
+    <h1>Dal poligono al cerchio</h1>
+    <p class="lead">Una pallina percorre un poligono regolare e riceve un colpo in ogni vertice: aumentando i lati si arriva alla forza centripeta.</p>
+    <div class="azioni"><a class="bottone pieno" href="index.html">Apri l'app</a><a class="bottone" href="https://github.com/MaxDvTn/PhysicsApp/tree/main/apps/meccanica/dinamica/dal-poligono-al-cerchio">Codice su GitHub</a><span class="copiato" id="copiato" role="status"></span></div>
+    <div class="testo"><h1>Dal poligono al cerchio</h1>
+<p>Una pallina va dritta lungo i lati di un poligono regolare e in ogni vertice riceve un colpo. Aumentando il numero di lati il poligono diventa la circonferenza: si vede perché la forza punta sempre al centro e diventa perpendicolare alla velocità.</p>
+<h2>Come si usa</h2>
+<ol>
+<li>Parti dal triangolo (3 lati). Prima di mostrare i colpi chiedi alla classe dove deve puntare il colpo nel vertice.</li>
+<li>Attiva <strong>Mostra il triangolo delle velocità</strong>: la variazione di velocità |Δv⟩ = |v dopo⟩ − |v prima⟩ è parallela al segmento dal vertice al centro, quindi il colpo punta al centro.</li>
+<li>Usa i pulsanti 3, 4, 5, 6, 8, 12, 36 e poi <strong>cerchio</strong>. A ogni passo premi <strong>Scrivi nella tabella</strong>: gli angoli tra forza e velocità valgono 90° ± 180°/n e tendono a 90°.</li>
+<li>Con <strong>Vai al vertice dopo</strong> si procede un colpo alla volta; il cursore della velocità rallenta l'animazione.</li>
+<li>Chiudi con la riga «forza media · r / (m v²)»: vale 1 per ogni numero di lati, quindi la forza media è m v²/r.</li>
+</ol>
+<h2>Da sapere</h2>
+<p>Sul poligono il colpo punta al centro ma <strong>non</strong> è perpendicolare alla velocità: nel triangolo fa 150° con la velocità di prima e 30° con quella di dopo. Diventa perpendicolare solo al limite, sulla circonferenza. La sequenza è costruita apposta perché gli studenti vedano gli angoli avvicinarsi a 90°.</p>
+<p>I vettori sono scritti con il ket, come nelle classi terze: |v⟩ è il vettore velocità, |v| il suo modulo.</p>
+<h2>Materiali collegati</h2>
+<p>Sintesi e slide della lezione sulla forza centripeta sono tra gli allegati. La simulazione VPython «Forza sempre perpendicolare alla velocità» mostra lo stesso fenomeno con una forza continua.</p></div>
+    <div class="testo" id="materiali"><h2>Lezione collegata</h2><ul class="materiali"><li><span><a href="allegati/sintesi_forza_centripeta.pdf">Sintesi della lezione</a> <small>PDF, 213 kB</small></span></li><li><span><a href="allegati/slide_forza_centripeta.pdf">Slide, tema chiaro</a> <small>PDF, 226 kB</small></span></li><li><span><a href="allegati/slide_forza_centripeta_dark.pdf">Slide, tema scuro</a> <small>PDF, 215 kB</small></span></li></ul><h2>App collegate</h2><ul class="materiali"><li><a href="../../../../apps/meccanica/dinamica/forza-centripeta-vpython/scheda.html">Forza sempre perpendicolare alla velocità (VPython)</a><small>Simulazione VPython</small></li></ul></div>
+    <footer>Liceo «L. da Vinci» di Trento, prof. Massimo Bosetti.</footer>
+  </main>
+</div>
+<script>
+// Il codice si scarica subito, così al clic si copia e si apre GlowScript nello stesso gesto.
+const codici={};
+document.querySelectorAll('[data-copia]').forEach(b=>{
+  const f=b.dataset.copia;
+  if(!(f in codici)) codici[f]=fetch(f).then(r=>r.ok?r.text():null).catch(()=>null).then(t=>codici[f]=t);
+  b.addEventListener('click',()=>{
+    const msg=document.getElementById('copiato'), t=codici[f];
+    const fatto=()=>msg.textContent='Codice copiato: su GlowScript scegli «Create New Program» e incollalo con Cmd+V o Ctrl+V.';
+    const errore=()=>msg.textContent='Non sono riuscito a copiare: scarica il file qui sotto e incollalo a mano.';
+    if(typeof t==='string'&&navigator.clipboard) navigator.clipboard.writeText(t).then(fatto,errore); else errore();
+    window.open('https://glowscript.org/','_blank','noopener');
+  });
+});
+</script>
+</body>
+</html>

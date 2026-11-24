@@ -1,0 +1,37 @@
+{
+  "id": "tiro-impossibile",
+  "titolo": "Il tiro impossibile",
+  "tipo": "schede",
+  "avvio": null,
+  "sommario": "Il problema del cacciatore e della scimmia: un'indagine in tre atti e una simulazione VPython costruita dagli studenti in tre passi.",
+  "argomento": [
+    "Meccanica",
+    "Cinematica"
+  ],
+  "tema": "Moto parabolico",
+  "classi": [
+    "3R"
+  ],
+  "anno": 3,
+  "data": "2026-10-09",
+  "file": [
+    [
+      "schede/scheda_tiro_impossibile.pdf",
+      "Scheda dell'indagine (tre atti)"
+    ],
+    [
+      "schede/passo1_dardo.pdf",
+      "Passo 1: il dardo in orizzontale"
+    ],
+    [
+      "schede/passo1B_scimmia.pdf",
+      "Passo 1B: la scimmia che cade"
+    ],
+    [
+      "schede/passo2_dardo_e_scimmia.pdf",
+      "Passo 2: dardo e scimmia insieme"
+    ]
+  ],
+  "collegate": [],
+  "allegati": []
+}

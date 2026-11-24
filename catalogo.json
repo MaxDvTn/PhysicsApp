@@ -1,0 +1,264 @@
+[
+  {
+    "id": "giorno-solare-siderale",
+    "titolo": "Giorno solare e giorno siderale",
+    "tipo": "web",
+    "avvio": "index.html",
+    "sommario": "Perché il giorno solare dura circa 4 minuti più di quello siderale: la scheda per la classe terza sfogliabile, con i collegamenti a sei simulazioni.",
+    "argomento": [
+      "Astronomia"
+    ],
+    "tema": "Moti della Terra",
+    "classi": [
+      "3R",
+      "3P"
+    ],
+    "anno": 3,
+    "data": "2026-09-29",
+    "collegate": [],
+    "file": [],
+    "allegati": [],
+    "cartella": "apps/astronomia/giorno-solare-siderale",
+    "categoria": "astronomia",
+    "sottocategoria": null
+  },
+  {
+    "id": "somme-di-sigmoidi",
+    "titolo": "Somme di sigmoidi",
+    "tipo": "web",
+    "avvio": "index.html",
+    "sommario": "Il teorema di approssimazione universale da toccare con mano: un neurone, la dimostrazione costruttiva passo per passo e una rete che si addestra nel browser.",
+    "argomento": [
+      "Intelligenza artificiale"
+    ],
+    "tema": "Reti neurali",
+    "classi": [],
+    "anno": null,
+    "data": "2026-09-23",
+    "collegate": [],
+    "file": [],
+    "allegati": [],
+    "cartella": "apps/intelligenza-artificiale/somme-di-sigmoidi",
+    "categoria": "intelligenza-artificiale",
+    "sottocategoria": null
+  },
+  {
+    "id": "mappa-riemann",
+    "titolo": "La mappa della dimostrazione di Riemann",
+    "tipo": "web",
+    "avvio": "index.html",
+    "sommario": "Le sette tappe della dimostrazione annunciata dell'ipotesi di Riemann, spiegate con la matematica del liceo, con il «sismografo dei primi» calcolato nel browser.",
+    "argomento": [
+      "Matematica"
+    ],
+    "tema": "Teoria dei numeri",
+    "classi": [],
+    "anno": null,
+    "data": "2026-11-21",
+    "collegate": [],
+    "file": [],
+    "allegati": [],
+    "cartella": "apps/matematica/mappa-riemann",
+    "categoria": "matematica",
+    "sottocategoria": null
+  },
+  {
+    "id": "tiro-impossibile",
+    "titolo": "Il tiro impossibile",
+    "tipo": "schede",
+    "avvio": null,
+    "sommario": "Il problema del cacciatore e della scimmia: un'indagine in tre atti e una simulazione VPython costruita dagli studenti in tre passi.",
+    "argomento": [
+      "Meccanica",
+      "Cinematica"
+    ],
+    "tema": "Moto parabolico",
+    "classi": [
+      "3R"
+    ],
+    "anno": 3,
+    "data": "2026-10-09",
+    "file": [
+      [
+        "schede/scheda_tiro_impossibile.pdf",
+        "Scheda dell'indagine (tre atti)"
+      ],
+      [
+        "schede/passo1_dardo.pdf",
+        "Passo 1: il dardo in orizzontale"
+      ],
+      [
+        "schede/passo1B_scimmia.pdf",
+        "Passo 1B: la scimmia che cade"
+      ],
+      [
+        "schede/passo2_dardo_e_scimmia.pdf",
+        "Passo 2: dardo e scimmia insieme"
+      ]
+    ],
+    "collegate": [],
+    "allegati": [],
+    "cartella": "apps/meccanica/cinematica/tiro-impossibile",
+    "categoria": "meccanica",
+    "sottocategoria": "cinematica"
+  },
+  {
+    "id": "attrito-viscoso-vpython",
+    "titolo": "Sferetta nella glicerina (VPython)",
+    "tipo": "vpython",
+    "avvio": null,
+    "sommario": "Simulazione passo per passo di una sferetta d'acciaio che cade nella glicerina, con grafici v(t) e a(t) e confronto con la legge di Stokes.",
+    "argomento": [
+      "Meccanica",
+      "Dinamica"
+    ],
+    "tema": "Attrito viscoso e velocità limite",
+    "classi": [
+      "3R"
+    ],
+    "anno": 3,
+    "data": "2026-11-13",
+    "file": [
+      [
+        "attrito_viscoso_studenti.py",
+        "Versione da completare (studenti)"
+      ],
+      [
+        "attrito_viscoso_completo.py",
+        "Versione completa (docente)"
+      ],
+      [
+        "attrito_viscoso_colab.ipynb",
+        "Notebook per Google Colab"
+      ]
+    ],
+    "colab": "attrito_viscoso_colab.ipynb",
+    "collegate": [
+      "pallina-nell-olio"
+    ],
+    "allegati": [],
+    "cartella": "apps/meccanica/dinamica/attrito-viscoso-vpython",
+    "categoria": "meccanica",
+    "sottocategoria": "dinamica"
+  },
+  {
+    "id": "dal-poligono-al-cerchio",
+    "titolo": "Dal poligono al cerchio",
+    "tipo": "web",
+    "avvio": "index.html",
+    "sommario": "Una pallina percorre un poligono regolare e riceve un colpo in ogni vertice: aumentando i lati si arriva alla forza centripeta.",
+    "argomento": [
+      "Meccanica",
+      "Dinamica"
+    ],
+    "tema": "Forza centripeta",
+    "classi": [
+      "3R"
+    ],
+    "anno": 3,
+    "data": "2026-11-24",
+    "allegati": [
+      [
+        "allegati/sintesi_forza_centripeta.pdf",
+        "Sintesi della lezione"
+      ],
+      [
+        "allegati/slide_forza_centripeta.pdf",
+        "Slide, tema chiaro"
+      ],
+      [
+        "allegati/slide_forza_centripeta_dark.pdf",
+        "Slide, tema scuro"
+      ]
+    ],
+    "collegate": [
+      "forza-centripeta-vpython"
+    ],
+    "file": [],
+    "cartella": "apps/meccanica/dinamica/dal-poligono-al-cerchio",
+    "categoria": "meccanica",
+    "sottocategoria": "dinamica"
+  },
+  {
+    "id": "forza-centripeta-vpython",
+    "titolo": "Forza sempre perpendicolare alla velocità (VPython)",
+    "tipo": "vpython",
+    "avvio": null,
+    "sommario": "Una forza di modulo costante, sempre perpendicolare alla velocità, piega la traiettoria in una circonferenza. Con il tasto «Taglia il filo» la pallina parte lungo la tangente.",
+    "argomento": [
+      "Meccanica",
+      "Dinamica"
+    ],
+    "tema": "Forza centripeta",
+    "classi": [
+      "3R"
+    ],
+    "anno": 3,
+    "data": "2026-11-13",
+    "file": [
+      [
+        "forza_centripeta_studenti.py",
+        "Versione da completare (studenti)"
+      ],
+      [
+        "forza_centripeta_completo.py",
+        "Versione completa (docente)"
+      ],
+      [
+        "forza_centripeta_colab.ipynb",
+        "Notebook per Google Colab"
+      ]
+    ],
+    "colab": "forza_centripeta_colab.ipynb",
+    "collegate": [
+      "dal-poligono-al-cerchio"
+    ],
+    "allegati": [],
+    "cartella": "apps/meccanica/dinamica/forza-centripeta-vpython",
+    "categoria": "meccanica",
+    "sottocategoria": "dinamica"
+  },
+  {
+    "id": "pallina-nell-olio",
+    "titolo": "La pallina da golf nell'olio",
+    "tipo": "web",
+    "avvio": "index.html",
+    "sommario": "Videoanalisi di una pallina che cade in un cilindro d'olio: dal moto osservato alla velocità limite.",
+    "argomento": [
+      "Meccanica",
+      "Dinamica"
+    ],
+    "tema": "Attrito viscoso e velocità limite",
+    "classi": [
+      "3R",
+      "3P"
+    ],
+    "anno": 3,
+    "data": "2026-11-24",
+    "allegati": [
+      [
+        "allegati/sintesi_attrito_viscoso.pdf",
+        "Sintesi della lezione"
+      ],
+      [
+        "allegati/problemi_attrito_viscoso_studenti.pdf",
+        "Problemi in classe (versione studenti)"
+      ],
+      [
+        "allegati/slide_attrito_viscoso.pdf",
+        "Slide, tema chiaro"
+      ],
+      [
+        "allegati/slide_attrito_viscoso_dark.pdf",
+        "Slide, tema scuro"
+      ]
+    ],
+    "collegate": [
+      "attrito-viscoso-vpython"
+    ],
+    "file": [],
+    "cartella": "apps/meccanica/dinamica/pallina-nell-olio",
+    "categoria": "meccanica",
+    "sottocategoria": "dinamica"
+  }
+]

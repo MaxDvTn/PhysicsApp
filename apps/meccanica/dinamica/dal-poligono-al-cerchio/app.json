@@ -1,0 +1,35 @@
+{
+  "id": "dal-poligono-al-cerchio",
+  "titolo": "Dal poligono al cerchio",
+  "tipo": "web",
+  "avvio": "index.html",
+  "sommario": "Una pallina percorre un poligono regolare e riceve un colpo in ogni vertice: aumentando i lati si arriva alla forza centripeta.",
+  "argomento": [
+    "Meccanica",
+    "Dinamica"
+  ],
+  "tema": "Forza centripeta",
+  "classi": [
+    "3R"
+  ],
+  "anno": 3,
+  "data": "2026-11-24",
+  "allegati": [
+    [
+      "allegati/sintesi_forza_centripeta.pdf",
+      "Sintesi della lezione"
+    ],
+    [
+      "allegati/slide_forza_centripeta.pdf",
+      "Slide, tema chiaro"
+    ],
+    [
+      "allegati/slide_forza_centripeta_dark.pdf",
+      "Slide, tema scuro"
+    ]
+  ],
+  "collegate": [
+    "forza-centripeta-vpython"
+  ],
+  "file": []
+}

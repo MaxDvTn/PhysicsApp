@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Cg fill=%22%231d3d8f%22%3E%3Ccircle cx=%225%22 cy=%2226%22 r=%223%22/%3E%3Ccircle cx=%2212%22 cy=%2212%22 r=%223%22/%3E%3Ccircle cx=%2220%22 cy=%228%22 r=%223%22/%3E%3Ccircle cx=%2228%22 cy=%2216%22 r=%223%22/%3E%3C/g%3E%3C/svg%3E">
+<title>Giorno solare e giorno siderale · App di fisica</title>
+<meta name="description" content="Perché il giorno solare dura circa 4 minuti più di quello siderale: la scheda per la classe terza sfogliabile, con i collegamenti a sei simulazioni.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../sito/stile.css">
+<script>
+try{var t=localStorage.getItem('tema');if(t)document.documentElement.dataset.tema=t}catch(e){}
+function cambiaTema(){var r=document.documentElement,s=r.dataset.tema||(matchMedia('(prefers-color-scheme: dark)').matches?'scuro':'chiaro');
+r.dataset.tema=s==='scuro'?'chiaro':'scuro';try{localStorage.setItem('tema',r.dataset.tema)}catch(e){}}
+</script>
+</head>
+<body>
+<div class="pagina">
+  <aside class="margine">
+    <a class="marchio" href="../../../index.html">PhysicsApp</a>
+    <dl class="scheda-dati">
+      <dt>Argomento</dt><dd>Astronomia<br>Moti della Terra</dd>
+      <dt>Classi</dt><dd><span class="classe">3R</span> <span class="classe">3P</span> </dd>
+      <dt>Tipo</dt><dd>App nel browser</dd>
+      <dt>Data</dt><dd>29/09/2026</dd>
+    </dl>
+    <button class="tema-btn" type="button" onclick="cambiaTema()">Carta o lavagna</button>
+  </aside>
+  <main class="foglio scheda">
+    <p><a href="../../../index.html#astronomia">Torna a tutte le app</a></p>
+    <h1>Giorno solare e giorno siderale</h1>
+    <p class="lead">Perché il giorno solare dura circa 4 minuti più di quello siderale: la scheda per la classe terza sfogliabile, con i collegamenti a sei simulazioni.</p>
+    <div class="azioni"><a class="bottone pieno" href="index.html">Apri l'app</a><a class="bottone" href="https://github.com/MaxDvTn/PhysicsApp/tree/main/apps/astronomia/giorno-solare-siderale">Codice su GitHub</a><span class="copiato" id="copiato" role="status"></span></div>
+    <div class="testo"><h1>Giorno solare e giorno siderale</h1>
+<p>Perché il Sole torna nello stesso punto del cielo dopo 24 ore, mentre le stelle ci tornano dopo circa 23 ore e 56 minuti? La pagina contiene la scheda per la classe terza (5 pagine, con schemi) e i collegamenti a sei simulazioni esterne per vederlo in movimento.</p>
+<h2>Come si usa</h2>
+<ol>
+<li>Sfoglia le cinque pagine della scheda: si possono proiettare una alla volta.</li>
+<li>In fondo alla pagina apri le simulazioni. Per cominciare va bene quella di EduMedia (giorno solare); per confrontare i due giorni usa Science Sims o PhysSandbox.</li>
+<li>Con <strong>Stellarium Web</strong> si può guardare il cielo di Trento a 24 ore di distanza e a 23 ore e 56 minuti di distanza: nel secondo caso le stelle tornano nella stessa posizione.</li>
+</ol>
+<h2>Simulazioni collegate</h2>
+<ul>
+<li>EduMedia, Solar day</li>
+<li>Science Sims (CCNY), Solar vs Sidereal Day</li>
+<li>PhysSandbox, Sidereal vs Solar Day</li>
+<li>ComPADRE, Sidereal/Solar Day, Naked Eye</li>
+<li>University of Nebraska, Sidereal and Solar Time</li>
+<li>Stellarium Web</li>
+</ul>
+<p>Le simulazioni sono di altri autori e si aprono sui loro siti.</p></div>
+    <div class="testo" id="materiali"></div>
+    <footer>Liceo «L. da Vinci» di Trento, prof. Massimo Bosetti.</footer>
+  </main>
+</div>
+<script>
+// Il codice si scarica subito, così al clic si copia e si apre GlowScript nello stesso gesto.
+const codici={};
+document.querySelectorAll('[data-copia]').forEach(b=>{
+  const f=b.dataset.copia;
+  if(!(f in codici)) codici[f]=fetch(f).then(r=>r.ok?r.text():null).catch(()=>null).then(t=>codici[f]=t);
+  b.addEventListener('click',()=>{
+    const msg=document.getElementById('copiato'), t=codici[f];
+    const fatto=()=>msg.textContent='Codice copiato: su GlowScript scegli «Create New Program» e incollalo con Cmd+V o Ctrl+V.';
+    const errore=()=>msg.textContent='Non sono riuscito a copiare: scarica il file qui sotto e incollalo a mano.';
+    if(typeof t==='string'&&navigator.clipboard) navigator.clipboard.writeText(t).then(fatto,errore); else errore();
+    window.open('https://glowscript.org/','_blank','noopener');
+  });
+});
+</script>
+</body>
+</html>

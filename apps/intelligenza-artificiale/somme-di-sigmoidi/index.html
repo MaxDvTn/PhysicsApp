@@ -1,0 +1,601 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Somme di sigmoidi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap">
+<style>
+:root{
+  --ground:#F3F5F8; --panel:#FFFFFF; --ink:#18202C; --muted:#5A6576; --line:#D9DEE6; --grid:#E7EBF1;
+  --accent:#1F57C3; --accent-soft:#E3EBFA;
+  --c-f:#18202C; --c-s:#C06A0A; --c-g:#0B7F86; --c-n:#8D5BC9; --c-t:#C23B52; --c-pts:#18202C;
+  --radius:10px;
+  --f-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-disp:"Source Serif 4",Georgia,"Times New Roman",serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --ground:#11151C; --panel:#181E27; --ink:#E4E8EF; --muted:#98A3B5; --line:#2A3342; --grid:#1F2733;
+    --accent:#7FA6F5; --accent-soft:#1D2A45;
+    --c-f:#E4E8EF; --c-s:#F0A04B; --c-g:#3CC7CF; --c-n:#B792EE; --c-t:#F07A8E; --c-pts:#E4E8EF;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --ground:#11151C; --panel:#181E27; --ink:#E4E8EF; --muted:#98A3B5; --line:#2A3342; --grid:#1F2733;
+  --accent:#7FA6F5; --accent-soft:#1D2A45;
+  --c-f:#E4E8EF; --c-s:#F0A04B; --c-g:#3CC7CF; --c-n:#B792EE; --c-t:#F07A8E; --c-pts:#E4E8EF;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--ground);color:var(--ink);font:15px/1.5 var(--f-body);padding-inline:16px;padding-block:20px 40px}
+.wrap{max-width:1180px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+header{display:flex;flex-direction:column;gap:6px}
+.eyebrow{font:500 12px/1 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+h1{font:600 clamp(26px,4vw,38px)/1.1 var(--f-disp);margin:0;text-wrap:balance}
+.lede{margin:0;color:var(--muted);max-width:68ch}
+.lede code,.formula{font-family:var(--f-mono);font-size:.92em}
+nav.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);overflow-x:auto}
+nav.tabs button{appearance:none;border:0;background:none;color:var(--muted);font:500 14px var(--f-body);padding:10px 14px;border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap}
+nav.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+nav.tabs button:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.tabnum{font-family:var(--f-mono);color:var(--accent);margin-right:6px}
+.pane{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:18px;align-items:start}
+@media (max-width:860px){.pane{grid-template-columns:1fr}}
+.stage{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:12px;display:flex;flex-direction:column;gap:10px}
+canvas.plot{width:100%;aspect-ratio:16/10;max-width:100%;display:block}
+canvas.loss{width:100%;height:90px;display:block}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.sw{width:18px;height:3px;border-radius:2px;display:inline-block}
+.sw.dash{background:repeating-linear-gradient(90deg,currentColor 0 5px,transparent 5px 8px)!important}
+.controls{display:flex;flex-direction:column;gap:14px}
+.group{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:14px;display:flex;flex-direction:column;gap:10px}
+.group h3{margin:0;font:600 13px/1.2 var(--f-body);letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+.row{display:grid;grid-template-columns:68px 1fr 64px;align-items:center;gap:8px;font-size:14px}
+.row label{color:var(--muted)}
+.row output{font:500 13px var(--f-mono);text-align:right;font-variant-numeric:tabular-nums}
+input[type=range]{width:100%;accent-color:var(--accent)}
+select,input[type=text]{width:100%;font:14px var(--f-body);padding:7px 9px;border:1px solid var(--line);border-radius:7px;background:var(--ground);color:var(--ink)}
+.btns{display:flex;flex-wrap:wrap;gap:6px}
+button.b{appearance:none;border:1px solid var(--line);background:var(--ground);color:var(--ink);font:500 13px var(--f-body);padding:7px 11px;border-radius:7px;cursor:pointer}
+button.b:hover{border-color:var(--accent)}
+button.b.primary{background:var(--accent);border-color:var(--accent);color:var(--panel)}
+button.b[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent);color:var(--ink)}
+.checks{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:14px}
+.checks label{display:inline-flex;gap:6px;align-items:center;cursor:pointer}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px}
+.stat{border:1px solid var(--line);border-radius:8px;padding:8px 10px;display:flex;flex-direction:column;gap:2px}
+.stat .k{font-size:12px;color:var(--muted)}
+.stat .v{font:500 17px var(--f-mono);font-variant-numeric:tabular-nums}
+.neuron{border-top:1px dashed var(--line);padding-top:10px;display:flex;flex-direction:column;gap:6px}
+.neuron:first-of-type{border-top:0;padding-top:0}
+.neuron .head{display:flex;justify-content:space-between;align-items:center;font-size:14px;font-weight:500}
+.explain{font-size:14px;line-height:1.55;color:var(--ink)}
+.explain p{margin:0 0 8px}
+.explain .formula{display:block;background:var(--ground);border:1px solid var(--line);border-radius:7px;padding:8px 10px;margin:6px 0;overflow-x:auto;white-space:nowrap}
+.note{font-size:13px;color:var(--muted)}
+.err{color:var(--c-t);font-size:13px}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:4px}
+.steps button{padding:7px 4px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Laboratorio · Teorema di approssimazione universale</div>
+    <h1>Somme di sigmoidi</h1>
+    <p class="lede">Un neurone con peso grande è quasi un gradino; tanti gradini disegnano qualsiasi funzione continua. Tre schede: prova un neurone, segui la dimostrazione costruttiva passo per passo, poi guarda una rete che impara da sola.</p>
+  </header>
+
+  <nav class="tabs" role="tablist">
+    <button role="tab" id="tab-1" aria-selected="true" aria-controls="p1"><span class="tabnum">1</span>Un neurone</button>
+    <button role="tab" id="tab-2" aria-selected="false" aria-controls="p2"><span class="tabnum">2</span>La dimostrazione</button>
+    <button role="tab" id="tab-3" aria-selected="false" aria-controls="p3"><span class="tabnum">3</span>Addestramento</button>
+  </nav>
+
+  <!-- ============ SCHEDA 1 ============ -->
+  <section class="pane" id="p1" role="tabpanel" aria-labelledby="tab-1">
+    <div class="stage">
+      <canvas class="plot" id="cv1"></canvas>
+      <div class="legend">
+        <span><i class="sw" style="background:var(--c-n)"></i>singoli neuroni c·σ(w(x−m))</span>
+        <span><i class="sw" style="background:var(--c-g)"></i>somma (uscita della rete)</span>
+        <span><i class="sw" style="background:var(--c-t)"></i>bersaglio della sfida</span>
+      </div>
+      <div class="stats">
+        <div class="stat"><span class="k">pendenza in x = m (neurone 1)</span><span class="v" id="s1slope">–</span></div>
+        <div class="stat"><span class="k">errore massimo dal bersaglio</span><span class="v" id="s1err">–</span></div>
+      </div>
+    </div>
+    <div class="controls">
+      <div class="group">
+        <h3>Sfida</h3>
+        <select id="target1">
+          <option value="none">Nessun bersaglio (esplorazione libera)</option>
+          <option value="bump" selected>Una gobba alta 2 su [−1, 1]</option>
+          <option value="stairs">Una scala: 1 su [−2, 0], 2 su [0, 2]</option>
+          <option value="tri">Un gradino in giù: 1 per x &lt; 0, −1 per x ≥ 0</option>
+        </select>
+        <p class="note">Muovi i cursori finché la curva verde copre quella rossa. Sotto 0,15 di errore la sfida è vinta.</p>
+        <div class="btns">
+          <button class="b" id="preset-step">Mostra: un gradino</button>
+          <button class="b" id="preset-bump">Mostra: una gobba</button>
+          <button class="b" id="preset-reset">Azzera</button>
+        </div>
+      </div>
+      <div class="group" id="neurons"></div>
+    </div>
+  </section>
+
+  <!-- ============ SCHEDA 2 ============ -->
+  <section class="pane" id="p2" role="tabpanel" aria-labelledby="tab-2" hidden>
+    <div class="stage">
+      <canvas class="plot" id="cv2"></canvas>
+      <div class="legend">
+        <span><i class="sw" style="background:var(--c-f)"></i>f</span>
+        <span><i class="sw" style="background:var(--c-s)"></i>funzione a scala S</span>
+        <span><i class="sw" style="background:var(--c-g)"></i>rete G</span>
+        <span><i class="sw" style="background:var(--c-n)"></i>contributi Δₖ·σ(w(x−mₖ))</span>
+      </div>
+      <div class="stats">
+        <div class="stat"><span class="k">passo h</span><span class="v" id="s2h">–</span></div>
+        <div class="stat"><span class="k">w del teorema = 4 ln N / h</span><span class="v" id="s2wt">–</span></div>
+        <div class="stat"><span class="k">max |f − S|</span><span class="v" id="s2es">–</span></div>
+        <div class="stat"><span class="k">max |f − G|</span><span class="v" id="s2eg">–</span></div>
+        <div class="stat"><span class="k">parametri della rete</span><span class="v" id="s2p">–</span></div>
+      </div>
+    </div>
+    <div class="controls">
+      <div class="group">
+        <h3>Passo della dimostrazione</h3>
+        <div class="steps" role="group" aria-label="Passo">
+          <button class="b" data-step="1">Griglia</button>
+          <button class="b" data-step="2">Scala</button>
+          <button class="b" data-step="3" aria-pressed="true">Rete</button>
+          <button class="b" data-step="4">Neuroni</button>
+        </div>
+        <div class="explain" id="explain2"></div>
+      </div>
+      <div class="group">
+        <h3>Funzione e rete</h3>
+        <select id="f2">
+          <option value="0">sin 2x + 0,3x</option>
+          <option value="1">|x|</option>
+          <option value="2">e^(−x²)</option>
+          <option value="3">sin 5x</option>
+          <option value="4">x²/3 − 1</option>
+          <option value="custom">Scrivi tu…</option>
+        </select>
+        <div id="customWrap" hidden>
+          <input type="text" id="custom2" value="cos(3*x)*exp(-x*x/4)" aria-label="Espressione in x" spellcheck="false">
+          <p class="note">Usa x, + − * / ^, sin, cos, exp, abs, sqrt, log. Intervallo [−3, 3].</p>
+          <p class="err" id="customErr" hidden>Espressione non valida: controlla parentesi e nomi delle funzioni.</p>
+        </div>
+        <div class="row"><label for="N2">N</label><input type="range" id="N2" min="2" max="80" value="12"><output id="N2o">12</output></div>
+        <div class="row"><label for="w2">w</label><input type="range" id="w2" min="0" max="1000" value="500"><output id="w2o">–</output></div>
+        <div class="btns"><button class="b primary" id="wTheo">Usa il w del teorema</button></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SCHEDA 3 ============ -->
+  <section class="pane" id="p3" role="tabpanel" aria-labelledby="tab-3" hidden>
+    <div class="stage">
+      <canvas class="plot" id="cv3"></canvas>
+      <div class="legend">
+        <span><i class="sw" style="background:var(--c-f)"></i>f</span>
+        <span><i class="sw" style="background:var(--c-pts);height:6px;width:6px;border-radius:50%"></i>campioni</span>
+        <span><i class="sw" style="background:var(--c-g)"></i>rete addestrata</span>
+        <span style="color:var(--c-s)"><i class="sw dash"></i>rete costruita (stesso N)</span>
+        <span><i class="sw" style="background:var(--c-n)"></i>posizioni dei gradini −b/w</span>
+      </div>
+      <canvas class="loss" id="cvLoss" aria-label="Errore quadratico medio durante l'addestramento"></canvas>
+      <div class="stats">
+        <div class="stat"><span class="k">passi</span><span class="v" id="s3it">0</span></div>
+        <div class="stat"><span class="k">errore quadratico medio</span><span class="v" id="s3mse">–</span></div>
+        <div class="stat"><span class="k">max |f − rete| su [−3, 3]</span><span class="v" id="s3max">–</span></div>
+        <div class="stat"><span class="k">max |f − costruita|</span><span class="v" id="s3cons">–</span></div>
+      </div>
+    </div>
+    <div class="controls">
+      <div class="group">
+        <h3>Addestra</h3>
+        <div class="btns">
+          <button class="b primary" id="play3">Avvia</button>
+          <button class="b" id="reset3">Nuova inizializzazione</button>
+        </div>
+        <p class="note">Discesa del gradiente con Adam sull'errore quadratico medio, calcolata nel browser. Ogni “Nuova inizializzazione” parte da pesi casuali diversi.</p>
+      </div>
+      <div class="group">
+        <h3>Rete e dati</h3>
+        <select id="f3">
+          <option value="0">sin 2x + 0,3x</option>
+          <option value="1">|x|</option>
+          <option value="2">e^(−x²)</option>
+          <option value="3">sin 5x</option>
+          <option value="4">x²/3 − 1</option>
+        </select>
+        <select id="act3" aria-label="Attivazione">
+          <option value="sig">Attivazione: sigmoide</option>
+          <option value="relu">Attivazione: ReLU</option>
+        </select>
+        <div class="row"><label for="N3">neuroni</label><input type="range" id="N3" min="1" max="60" value="12"><output id="N3o">12</output></div>
+        <div class="row"><label for="n3">campioni</label><input type="range" id="n3" min="5" max="120" value="60"><output id="n3o">60</output></div>
+        <div class="row"><label for="noise3">rumore</label><input type="range" id="noise3" min="0" max="50" value="0"><output id="noise3o">0.00</output></div>
+        <div class="row"><label for="lr3">passo</label><input type="range" id="lr3" min="1" max="100" value="20"><output id="lr3o">0.020</output></div>
+        <div class="checks">
+          <label><input type="checkbox" id="wide3"> Mostra [−6, 6]</label>
+          <label><input type="checkbox" id="cons3" checked> Rete costruita</label>
+          <label><input type="checkbox" id="knots3" checked> Gradini</label>
+        </div>
+      </div>
+      <div class="group">
+        <h3>Da osservare</h3>
+        <div class="explain">
+          <p>La rete addestrata di solito batte quella costruita con lo stesso N: usa pesi diversi per ogni neurone e mette i gradini dove servono.</p>
+          <p>Con “Mostra [−6, 6]” si vede che fuori dai dati non c'è alcuna garanzia. Con pochi campioni, rumore e molti neuroni compare il sovradattamento.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+(() => {
+'use strict';
+const $ = id => document.getElementById(id);
+const tok = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const sig = t => 1 / (1 + Math.exp(-t));
+const relu = t => t > 0 ? t : 0;
+const fmt = (v, d = 3) => Number.isFinite(v) ? v.toFixed(d).replace('.', ',') : '–';
+
+const FUNCS = [
+  x => Math.sin(2 * x) + 0.3 * x,
+  x => Math.abs(x),
+  x => Math.exp(-x * x),
+  x => Math.sin(5 * x),
+  x => x * x / 3 - 1,
+];
+
+/* ---------- Plot ---------- */
+class Plot {
+  constructor(cv) { this.cv = cv; this.ctx = cv.getContext('2d'); }
+  setup(x0, x1, y0, y1) {
+    const cv = this.cv, dpr = window.devicePixelRatio || 1;
+    const W = cv.clientWidth, H = cv.clientHeight;
+    if (cv.width !== Math.round(W * dpr) || cv.height !== Math.round(H * dpr)) { cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr); }
+    const c = this.ctx; c.setTransform(dpr, 0, 0, dpr, 0, 0);
+    Object.assign(this, { W, H, x0, x1, y0, y1, pl: 38, pr: 10, pt: 10, pb: 24 });
+    c.clearRect(0, 0, W, H);
+  }
+  X(x) { return this.pl + (x - this.x0) / (this.x1 - this.x0) * (this.W - this.pl - this.pr); }
+  Y(y) { return this.pt + (this.y1 - y) / (this.y1 - this.y0) * (this.H - this.pt - this.pb); }
+  axes() {
+    const c = this.ctx; c.font = '11px ' + tok('--f-mono'); c.fillStyle = tok('--muted');
+    c.lineWidth = 1;
+    const step = niceStep(this.y1 - this.y0), xs = niceStep(this.x1 - this.x0);
+    for (let y = Math.ceil(this.y0 / step) * step; y <= this.y1 + 1e-9; y += step) {
+      c.strokeStyle = Math.abs(y) < 1e-9 ? tok('--line') : tok('--grid');
+      c.beginPath(); c.moveTo(this.pl, this.Y(y)); c.lineTo(this.W - this.pr, this.Y(y)); c.stroke();
+      c.textAlign = 'right'; c.textBaseline = 'middle'; c.fillText(trimNum(y), this.pl - 6, this.Y(y));
+    }
+    for (let x = Math.ceil(this.x0 / xs) * xs; x <= this.x1 + 1e-9; x += xs) {
+      c.strokeStyle = Math.abs(x) < 1e-9 ? tok('--line') : tok('--grid');
+      c.beginPath(); c.moveTo(this.X(x), this.pt); c.lineTo(this.X(x), this.H - this.pb); c.stroke();
+      c.textAlign = 'center'; c.textBaseline = 'top'; c.fillText(trimNum(x), this.X(x), this.H - this.pb + 6);
+    }
+  }
+  curve(fn, color, width = 2, opts = {}) {
+    const c = this.ctx, n = opts.n || Math.max(400, Math.round(this.W * 1.5));
+    c.save(); c.strokeStyle = color; c.lineWidth = width; c.globalAlpha = opts.alpha ?? 1;
+    if (opts.dash) c.setLineDash(opts.dash);
+    c.beginPath(); c.rect(this.pl, this.pt, this.W - this.pl - this.pr, this.H - this.pt - this.pb); c.clip();
+    c.beginPath();
+    const a = opts.a ?? this.x0, b = opts.b ?? this.x1;
+    for (let i = 0; i <= n; i++) {
+      const x = a + (b - a) * i / n, y = fn(x);
+      const py = this.Y(Math.max(this.y0 - 10, Math.min(this.y1 + 10, y)));
+      i ? c.lineTo(this.X(x), py) : c.moveTo(this.X(x), py);
+    }
+    c.stroke(); c.restore();
+  }
+  step(xs, ys, color, width = 1.5) { // piecewise constant: value ys[i] on [xs[i], xs[i+1]]
+    const c = this.ctx; c.save(); c.strokeStyle = color; c.lineWidth = width; c.beginPath();
+    for (let i = 0; i < ys.length; i++) {
+      const X0 = this.X(xs[i]), X1 = this.X(xs[i + 1]), Yv = this.Y(ys[i]);
+      if (i === 0) c.moveTo(X0, Yv); else c.lineTo(X0, Yv);
+      c.lineTo(X1, Yv);
+    }
+    c.stroke(); c.restore();
+  }
+  points(xs, ys, color, r = 2.6) {
+    const c = this.ctx; c.save(); c.fillStyle = color;
+    for (let i = 0; i < xs.length; i++) { c.beginPath(); c.arc(this.X(xs[i]), this.Y(ys[i]), r, 0, 7); c.fill(); }
+    c.restore();
+  }
+  vlines(xs, color, alpha = .5, dash = [3, 3]) {
+    const c = this.ctx; c.save(); c.strokeStyle = color; c.globalAlpha = alpha; c.setLineDash(dash); c.lineWidth = 1;
+    for (const x of xs) { if (x < this.x0 || x > this.x1) continue; c.beginPath(); c.moveTo(this.X(x), this.pt); c.lineTo(this.X(x), this.H - this.pb); c.stroke(); }
+    c.restore();
+  }
+  ticks(xs, color) {
+    const c = this.ctx; c.save(); c.fillStyle = color;
+    for (const x of xs) { if (x < this.x0 || x > this.x1) continue; const X = this.X(x), Y = this.H - this.pb;
+      c.beginPath(); c.moveTo(X, Y - 9); c.lineTo(X - 4, Y - 1); c.lineTo(X + 4, Y - 1); c.closePath(); c.fill(); }
+    c.restore();
+  }
+  shade(a, b, color, alpha) {
+    const c = this.ctx; c.save(); c.fillStyle = color; c.globalAlpha = alpha;
+    c.fillRect(this.X(a), this.pt, this.X(b) - this.X(a), this.H - this.pt - this.pb); c.restore();
+  }
+}
+function niceStep(range) { const r = range / 6, p = Math.pow(10, Math.floor(Math.log10(r))), m = r / p; return (m < 1.5 ? 1 : m < 3.5 ? 2 : m < 7.5 ? 5 : 10) * p; }
+function trimNum(v) { return (Math.round(v * 100) / 100).toString().replace('.', ','); }
+function yRange(fn, a, b, pad = .25) {
+  let lo = Infinity, hi = -Infinity;
+  for (let i = 0; i <= 400; i++) { const y = fn(a + (b - a) * i / 400); if (Number.isFinite(y)) { lo = Math.min(lo, y); hi = Math.max(hi, y); } }
+  if (!Number.isFinite(lo)) { lo = -1; hi = 1; }
+  const d = Math.max(hi - lo, .5); return [lo - pad * d, hi + pad * d];
+}
+
+/* ---------- Tabs ---------- */
+const tabs = [...document.querySelectorAll('[role=tab]')];
+function showTab(i) {
+  tabs.forEach((t, j) => { t.setAttribute('aria-selected', j === i); $('p' + (j + 1)).hidden = j !== i; });
+  try { localStorage.setItem('tau-tab', i); } catch (e) {}
+  redraw();
+}
+tabs.forEach((t, i) => t.addEventListener('click', () => showTab(i)));
+
+/* ---------- Scheda 1 ---------- */
+const p1 = new Plot($('cv1'));
+const neurons = [
+  { on: true, w: 2, m: 0, c: 1 },
+  { on: false, w: 2, m: 1, c: -1 },
+  { on: false, w: 2, m: 2, c: 1 },
+];
+const TARGETS = {
+  none: null,
+  bump: x => (x >= -1 && x <= 1) ? 2 : 0,
+  stairs: x => (x >= -2 && x < 0) ? 1 : (x >= 0 && x <= 2) ? 2 : 0,
+  tri: x => x < 0 ? 1 : -1,
+};
+function buildNeurons() {
+  const box = $('neurons'); box.innerHTML = '<h3>Neuroni</h3>';
+  neurons.forEach((n, k) => {
+    const d = document.createElement('div'); d.className = 'neuron';
+    d.innerHTML = `<div class="head"><span>Neurone ${k + 1}</span><label class="checks"><input type="checkbox" id="on${k}" ${n.on ? 'checked' : ''}> attivo</label></div>
+      <div class="row"><label for="nw${k}">peso w</label><input type="range" id="nw${k}" min="0.5" max="60" step="0.5" value="${n.w}"><output id="nw${k}o"></output></div>
+      <div class="row"><label for="nm${k}">salto m</label><input type="range" id="nm${k}" min="-3" max="3" step="0.1" value="${n.m}"><output id="nm${k}o"></output></div>
+      <div class="row"><label for="nc${k}">altezza c</label><input type="range" id="nc${k}" min="-3" max="3" step="0.1" value="${n.c}"><output id="nc${k}o"></output></div>`;
+    box.appendChild(d);
+    ['w', 'm', 'c'].forEach(p => $('n' + p + k).addEventListener('input', e => { n[p] = +e.target.value; draw1(); }));
+    $('on' + k).addEventListener('change', e => { n.on = e.target.checked; draw1(); });
+  });
+}
+function syncNeurons() {
+  neurons.forEach((n, k) => { $('on' + k).checked = n.on; ['w', 'm', 'c'].forEach(p => $('n' + p + k).value = n[p]); });
+}
+function draw1() {
+  neurons.forEach((n, k) => ['w', 'm', 'c'].forEach(p => $('n' + p + k + 'o').textContent = fmt(n[p], p === 'w' ? 1 : 1)));
+  const T = TARGETS[$('target1').value];
+  const sum = x => neurons.reduce((s, n) => s + (n.on ? n.c * sig(n.w * (x - n.m)) : 0), 0);
+  p1.setup(-3.5, 3.5, -3.2, 3.2); p1.axes();
+  if (T) p1.curve(T, tok('--c-t'), 3, { alpha: .55, n: 1400 });
+  neurons.forEach(n => { if (n.on) p1.curve(x => n.c * sig(n.w * (x - n.m)), tok('--c-n'), 1.5, { alpha: .7, dash: [5, 4] }); });
+  p1.curve(sum, tok('--c-g'), 2.6);
+  const n0 = neurons[0]; $('s1slope').textContent = n0.on ? fmt(n0.c * n0.w / 4, 2) + '  (= c·w/4)' : '–';
+  if (T) {
+    let e = 0; for (let i = 0; i <= 1400; i++) { const x = -3 + 6 * i / 1400; const d = Math.abs(T(x) - sum(x)); if (!(Math.abs(x + 1) < .02 || Math.abs(x - 1) < .02 || Math.abs(x) < .02 || Math.abs(x + 2) < .02 || Math.abs(x - 2) < .02)) e = Math.max(e, d); }
+    $('s1err').textContent = fmt(e, 2) + (e < .15 ? '  ✓ vinta' : '');
+  } else $('s1err').textContent = '–';
+}
+$('target1').addEventListener('change', draw1);
+$('preset-step').addEventListener('click', () => { Object.assign(neurons[0], { on: true, w: 40, m: 0, c: 1 }); neurons[1].on = neurons[2].on = false; syncNeurons(); draw1(); });
+$('preset-bump').addEventListener('click', () => { Object.assign(neurons[0], { on: true, w: 25, m: -1, c: 2 }); Object.assign(neurons[1], { on: true, w: 25, m: 1, c: -2 }); neurons[2].on = false; syncNeurons(); draw1(); });
+$('preset-reset').addEventListener('click', () => { neurons[0] = Object.assign(neurons[0], { on: true, w: 2, m: 0, c: 1 }); neurons[1].on = neurons[2].on = false; syncNeurons(); draw1(); });
+buildNeurons();
+
+/* ---------- Scheda 2 ---------- */
+const p2 = new Plot($('cv2'));
+let step2 = 3, f2 = FUNCS[0], customOk = true;
+const wFromSlider = v => Math.pow(10, v / 1000 * 3.3);        // 1 … ~2000
+const sliderFromW = w => Math.round(Math.log10(w) / 3.3 * 1000);
+const EXPL = {
+  1: `<p><b>Passo 1 · Griglia.</b> f è uniformemente continua su [a, b]: esiste δ tale che punti distanti meno di δ hanno valori distanti meno di ε/3.</p>
+      <span class="formula">h = (b − a)/N ≤ δ,  xₖ = a + k h,  mₖ = (xₖ₋₁ + xₖ)/2</span>
+      <p>I punti sono i nodi xₖ; le linee tratteggiate sono i punti medi mₖ, dove metteremo i gradini.</p>`,
+  2: `<p><b>Passo 2 · Funzione a scala.</b> Sommiamo gradini di altezza Δₖ = f(xₖ) − f(xₖ₋₁) nei punti medi:</p>
+      <span class="formula">S(x) = f(x₀) + Σ Δₖ · H(x − mₖ)</span>
+      <p>La somma è telescopica: tra mⱼ e mⱼ₊₁ vale proprio f(xⱼ). Quindi |f − S| &lt; ε/3.</p>`,
+  3: `<p><b>Passo 3 · Rete.</b> Ogni gradino diventa un neurone ripido:</p>
+      <span class="formula">G(x) = f(x₀) + Σ Δₖ · σ(w (x − mₖ))</span>
+      <p>Pesi tutti uguali a w, soglie −w·mₖ, pesi d'uscita Δₖ. Con w ≥ 4 ln N / h si ha |S − G| &lt; 2ε/3, quindi |f − G| &lt; ε.</p>
+      <p class="note">Prova a superare molto il w del teorema: l'errore peggiora. Il valore è sufficiente, non ottimale.</p>`,
+  4: `<p><b>Dentro la rete.</b> In viola i singoli contributi Δₖ·σ(w(x − mₖ)), cioè gli N neuroni nascosti già moltiplicati per il loro peso d'uscita.</p>
+      <p>La curva verde è la loro somma più la costante f(x₀). Non c'è altro: una rete a uno strato è una somma di gradini smussati.</p>`,
+};
+function parseCustom(s) {
+  const clean = s.replace(/\^/g, '**');
+  if (/[^0-9x+\-*/().,\s a-z]/i.test(clean)) throw new Error('bad');
+  const allowed = new Set(['x', 'sin', 'cos', 'tan', 'exp', 'abs', 'sqrt', 'log', 'pi', 'PI', 'atan', 'tanh', 'min', 'max', 'e', 'E', 'floor', 'sign']);
+  (clean.match(/[a-z_]+/gi) || []).forEach(w => { if (!allowed.has(w)) throw new Error('bad'); });
+  const body = clean.replace(/\bpi\b/g, 'PI').replace(/\be\b/g, 'E');
+  const fn = new Function('x', 'with(Math){return (' + body + ');}');
+  for (let i = 0; i <= 20; i++) { const v = fn(-3 + 6 * i / 20); if (!Number.isFinite(v)) throw new Error('bad'); }
+  return fn;
+}
+function net2() {
+  const N = +$('N2').value, a = -3, b = 3, h = (b - a) / N, w = wFromSlider(+$('w2').value);
+  const xk = Array.from({ length: N + 1 }, (_, k) => a + k * h);
+  const yk = xk.map(f2);
+  const m = xk.slice(1).map((x, k) => (xk[k] + x) / 2);
+  const D = yk.slice(1).map((y, k) => y - yk[k]);
+  const G = x => { let s = yk[0]; for (let k = 0; k < N; k++) s += D[k] * sig(w * (x - m[k])); return s; };
+  const S = x => { let s = yk[0]; for (let k = 0; k < N; k++) if (x >= m[k]) s += D[k]; return s; };
+  return { N, a, b, h, w, xk, yk, m, D, G, S };
+}
+function draw2() {
+  const r = net2();
+  $('N2o').textContent = r.N; $('w2o').textContent = r.w < 100 ? fmt(r.w, 1) : Math.round(r.w);
+  const wt = 4 * Math.log(r.N) / r.h;
+  $('s2h').textContent = fmt(r.h, 3); $('s2wt').textContent = fmt(wt, 1);
+  let eS = 0, eG = 0;
+  for (let i = 0; i <= 2000; i++) { const x = r.a + (r.b - r.a) * i / 2000, fx = f2(x); eS = Math.max(eS, Math.abs(fx - r.S(x))); eG = Math.max(eG, Math.abs(fx - r.G(x))); }
+  $('s2es').textContent = fmt(eS); $('s2eg').textContent = fmt(eG);
+  $('s2p').textContent = (3 * r.N + 1) + '  (N = ' + r.N + ')';
+  const [y0, y1] = yRange(f2, -3, 3);
+  p2.setup(-3.2, 3.2, y0, y1); p2.axes();
+  p2.curve(f2, tok('--c-f'), 2.4, { a: -3, b: 3 });
+  if (step2 === 1) {
+    p2.vlines(r.m, tok('--c-s'), .7);
+    p2.points(r.xk, r.yk, tok('--c-s'), 3.5);
+  }
+  if (step2 >= 2) {
+    const edges = [r.a, ...r.m, r.b];
+    p2.step(edges, r.yk, tok('--c-s'), step2 === 2 ? 2 : 1.3);
+  }
+  if (step2 === 4) {
+    for (let k = 0; k < r.N; k++) { const Dk = r.D[k], mk = r.m[k]; p2.curve(x => Dk * sig(r.w * (x - mk)), tok('--c-n'), 1.2, { alpha: .65, a: -3, b: 3, n: 300 }); }
+  }
+  if (step2 >= 3) p2.curve(r.G, tok('--c-g'), 2.6, { a: -3, b: 3 });
+  $('explain2').innerHTML = EXPL[step2];
+}
+document.querySelectorAll('[data-step]').forEach(btn => btn.addEventListener('click', () => {
+  step2 = +btn.dataset.step;
+  document.querySelectorAll('[data-step]').forEach(b => b.setAttribute('aria-pressed', b === btn));
+  draw2();
+}));
+function setF2() {
+  const v = $('f2').value; $('customWrap').hidden = v !== 'custom';
+  if (v === 'custom') {
+    try { f2 = parseCustom($('custom2').value); $('customErr').hidden = true; } catch (e) { $('customErr').hidden = false; return; }
+  } else f2 = FUNCS[+v];
+  draw2();
+}
+$('f2').addEventListener('change', setF2);
+$('custom2').addEventListener('input', setF2);
+$('N2').addEventListener('input', draw2);
+$('w2').addEventListener('input', draw2);
+$('wTheo').addEventListener('click', () => { const N = +$('N2').value; $('w2').value = sliderFromW(4 * Math.log(N) / (6 / N)); draw2(); });
+$('w2').value = sliderFromW(4 * Math.log(12) / 0.5);
+
+/* ---------- Scheda 3 ---------- */
+const p3 = new Plot($('cv3'));
+const lossCv = $('cvLoss');
+let T3 = null, running = false, raf = 0, seed = 1;
+function rng(s) { return () => { s |= 0; s = s + 0x6D2B79F5 | 0; let t = Math.imul(s ^ s >>> 15, 1 | s); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+function gauss(r) { const u = r() || 1e-9, v = r(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); }
+function init3() {
+  const N = +$('N3').value, n = +$('n3').value, noise = +$('noise3').value / 100, f = FUNCS[+$('f3').value];
+  const r = rng(seed * 7919 + 13);
+  const xs = Array.from({ length: n }, (_, i) => n === 1 ? 0 : -3 + 6 * i / (n - 1));
+  const rn = rng(4242);
+  const ys = xs.map(x => f(x) + noise * gauss(rn));
+  const P = { w: [], b: [], c: [], c0: [0] };
+  for (let k = 0; k < N; k++) { P.w.push(2 * gauss(r)); P.b.push(2 * gauss(r)); P.c.push(.5 * gauss(r)); }
+  const zeros = () => ({ w: Array(N).fill(0), b: Array(N).fill(0), c: Array(N).fill(0), c0: [0] });
+  T3 = { N, f, xs, ys, P, M: zeros(), V: zeros(), t: 0, hist: [], act: $('act3').value };
+  draw3();
+}
+function act(z, kind) { return kind === 'sig' ? sig(z) : relu(z); }
+function dact(z, kind) { if (kind === 'sig') { const s = sig(z); return s * (1 - s); } return z > 0 ? 1 : 0; }
+function model(x) { const { P, N, act: k } = T3; let s = P.c0[0]; for (let j = 0; j < N; j++) s += P.c[j] * act(P.w[j] * x + P.b[j], k); return s; }
+function trainSteps(steps) {
+  const { P, M, V, N, xs, ys, act: kind } = T3, n = xs.length, lr = +$('lr3').value / 1000;
+  for (let s = 0; s < steps; s++) {
+    const g = { w: Array(N).fill(0), b: Array(N).fill(0), c: Array(N).fill(0), c0: [0] };
+    let mse = 0;
+    for (let i = 0; i < n; i++) {
+      const x = xs[i]; let pred = P.c0[0]; const z = new Array(N), h = new Array(N);
+      for (let j = 0; j < N; j++) { z[j] = P.w[j] * x + P.b[j]; h[j] = act(z[j], kind); pred += P.c[j] * h[j]; }
+      const e = pred - ys[i]; mse += e * e;
+      const gp = 2 * e / n; g.c0[0] += gp;
+      for (let j = 0; j < N; j++) { g.c[j] += gp * h[j]; const gz = gp * P.c[j] * dact(z[j], kind); g.w[j] += gz * x; g.b[j] += gz; }
+    }
+    T3.t++; const t = T3.t;
+    for (const key of ['w', 'b', 'c', 'c0']) for (let j = 0; j < P[key].length; j++) {
+      M[key][j] = .9 * M[key][j] + .1 * g[key][j]; V[key][j] = .999 * V[key][j] + .001 * g[key][j] ** 2;
+      P[key][j] -= lr * (M[key][j] / (1 - .9 ** t)) / (Math.sqrt(V[key][j] / (1 - .999 ** t)) + 1e-8);
+    }
+    if (t % 5 === 0) T3.hist.push(mse / n);
+  }
+}
+function constructed(f, N) {
+  const a = -3, h = 6 / N, w = 4 * Math.log(Math.max(N, 2)) / h, x0 = f(a);
+  const m = [], D = [];
+  for (let k = 1; k <= N; k++) { m.push(a + (k - .5) * h); D.push(f(a + k * h) - f(a + (k - 1) * h)); }
+  return x => { let s = x0; for (let k = 0; k < N; k++) s += D[k] * sig(w * (x - m[k])); return s; };
+}
+function draw3() {
+  if (!T3) return;
+  $('N3o').textContent = $('N3').value; $('n3o').textContent = $('n3').value;
+  $('noise3o').textContent = fmt(+$('noise3').value / 100, 2); $('lr3o').textContent = fmt(+$('lr3').value / 1000, 3);
+  const wide = $('wide3').checked, X0 = wide ? -6 : -3.2, X1 = wide ? 6 : 3.2;
+  const [y0, y1] = yRange(T3.f, -3, 3, .35);
+  p3.setup(X0, X1, y0, y1); p3.axes();
+  if (wide) { p3.shade(-3, 3, tok('--c-g'), .06); }
+  p3.curve(T3.f, tok('--c-f'), 2.2);
+  const G = constructed(T3.f, T3.N);
+  if ($('cons3').checked) p3.curve(G, tok('--c-s'), 1.6, { dash: [6, 4], a: -3, b: 3 });
+  p3.points(T3.xs, T3.ys, tok('--c-pts'), 2.4);
+  p3.curve(model, tok('--c-g'), 2.6);
+  if ($('knots3').checked && T3.act === 'sig' || $('knots3').checked && T3.act === 'relu') {
+    p3.ticks(T3.P.w.map((w, j) => Math.abs(w) > 1e-6 ? -T3.P.b[j] / w : NaN).filter(Number.isFinite), tok('--c-n'));
+  }
+  let em = 0, ec = 0;
+  for (let i = 0; i <= 600; i++) { const x = -3 + 6 * i / 600, fx = T3.f(x); em = Math.max(em, Math.abs(fx - model(x))); ec = Math.max(ec, Math.abs(fx - G(x))); }
+  $('s3it').textContent = T3.t; $('s3max').textContent = fmt(em); $('s3cons').textContent = fmt(ec);
+  $('s3mse').textContent = T3.hist.length ? T3.hist[T3.hist.length - 1].toExponential(2).replace('.', ',') : '–';
+  drawLoss();
+}
+function drawLoss() {
+  const cv = lossCv, dpr = window.devicePixelRatio || 1, W = cv.clientWidth, H = cv.clientHeight;
+  if (cv.width !== Math.round(W * dpr)) { cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr); }
+  const c = cv.getContext('2d'); c.setTransform(dpr, 0, 0, dpr, 0, 0); c.clearRect(0, 0, W, H);
+  c.font = '11px ' + tok('--f-mono'); c.fillStyle = tok('--muted'); c.textBaseline = 'top';
+  c.fillText('errore quadratico medio (scala log)', 6, 4);
+  const h = T3.hist; if (h.length < 2) return;
+  const L = h.map(v => Math.log10(Math.max(v, 1e-8)));
+  const lo = Math.min(...L), hi = Math.max(...L), rng_ = Math.max(hi - lo, .5);
+  c.strokeStyle = tok('--grid'); c.beginPath(); c.moveTo(0, H - 1); c.lineTo(W, H - 1); c.stroke();
+  c.beginPath(); c.strokeStyle = tok('--c-g'); c.lineWidth = 1.8;
+  L.forEach((v, i) => { const x = 6 + (W - 12) * i / (L.length - 1), y = 20 + (H - 26) * (hi - v) / rng_; i ? c.lineTo(x, y) : c.moveTo(x, y); });
+  c.stroke();
+  c.lineTo(W - 6, H - 2); c.lineTo(6, H - 2); c.closePath(); c.fillStyle = tok('--c-g'); c.globalAlpha = .08; c.fill(); c.globalAlpha = 1;
+}
+function loop() {
+  if (!running) return;
+  const cost = T3.N * T3.xs.length;
+  trainSteps(Math.max(2, Math.min(40, Math.round(60000 / cost))));
+  draw3();
+  raf = requestAnimationFrame(loop);
+}
+function setRunning(v) { running = v; $('play3').textContent = v ? 'Pausa' : 'Avvia'; if (v) { cancelAnimationFrame(raf); raf = requestAnimationFrame(loop); } }
+$('play3').addEventListener('click', () => setRunning(!running));
+$('reset3').addEventListener('click', () => { seed++; init3(); });
+['f3', 'act3', 'N3', 'n3', 'noise3'].forEach(id => $(id).addEventListener(id === 'f3' || id === 'act3' ? 'change' : 'input', init3));
+['lr3'].forEach(id => $(id).addEventListener('input', draw3));
+['wide3', 'cons3', 'knots3'].forEach(id => $(id).addEventListener('change', draw3));
+
+/* ---------- Avvio ---------- */
+function redraw() {
+  if (!$('p1').hidden) draw1();
+  if (!$('p2').hidden) draw2();
+  if (!$('p3').hidden) draw3();
+}
+init3();
+let startTab = 0; try { startTab = +(localStorage.getItem('tau-tab') || 0); } catch (e) {}
+const hash = { '#neurone': 0, '#dimostrazione': 1, '#addestramento': 2 }[location.hash];
+if (hash !== undefined) startTab = hash;
+showTab(Math.min(2, Math.max(0, startTab | 0)));
+window.addEventListener('resize', redraw);
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(redraw);
+matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change', redraw);
+new MutationObserver(redraw).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+})();
+</script>
+
+</body></html>

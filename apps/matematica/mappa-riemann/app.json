@@ -1,0 +1,17 @@
+{
+  "id": "mappa-riemann",
+  "titolo": "La mappa della dimostrazione di Riemann",
+  "tipo": "web",
+  "avvio": "index.html",
+  "sommario": "Le sette tappe della dimostrazione annunciata dell'ipotesi di Riemann, spiegate con la matematica del liceo, con il «sismografo dei primi» calcolato nel browser.",
+  "argomento": [
+    "Matematica"
+  ],
+  "tema": "Teoria dei numeri",
+  "classi": [],
+  "anno": null,
+  "data": "2026-11-21",
+  "collegate": [],
+  "file": [],
+  "allegati": []
+}

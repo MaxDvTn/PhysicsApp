@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dal poligono al cerchio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+/* VOICE: lavagna di laboratorio, chiara e asciutta, per studenti di terza
+   IDEA: il foglio di geometria con compasso su cui si disegna il poligono inscritto
+   PICTURE: il poligono che si percorre davvero, con i colpi nei vertici e il triangolo delle velocità
+   COLOUR and TYPE: grafite delle slide della scuola; blu velocità, rosso forza, verde Δv; IBM Plex
+   LAYOUT: figura grande in alto, comandi e misure accanto o sotto, spiegazione in fondo */
+:root{color-scheme:light dark;
+ --bg:light-dark(#f4f5f2,#1f2326);--panel:light-dark(#ffffff,#2a2f33);--ink:light-dark(#1c2226,#e9ecee);
+ --muted:light-dark(#5b666d,#a5afb5);--line:light-dark(#d5d9d6,#3c4348);
+ --vel:light-dark(#1f5fbf,#6fa8ff);--forza:light-dark(#c62828,#ff6b6b);--dv:light-dark(#2e7d32,#6fd27a);
+ --cerchio:light-dark(#9aa3a8,#6b757b);--accent:light-dark(#1f5fbf,#6fa8ff)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "IBM Plex Sans",system-ui,sans-serif;overflow-x:clip}
+.band{padding:clamp(20px,3vw,40px) max(4vw,16px);max-width:1240px;margin:0 auto}
+h1{font-size:clamp(28px,4vw,42px);line-height:1.05;margin:0 0 6px;text-wrap:balance}
+.sub{color:var(--muted);margin:0 0 18px;max-width:70ch}
+.main{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:20px;align-items:start}
+@media(max-width:860px){.main{grid-template-columns:minmax(0,1fr)}}
+.fig{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:14px;aspect-ratio:1/0.92;min-height:320px}
+.fig canvas{position:absolute;inset:0;width:100%;height:100%}
+.side{display:grid;gap:14px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px}
+.card h2{font-size:17px;margin:0 0 10px}
+label{font-weight:600}
+.nrow{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.nval{font:700 clamp(34px,5vw,48px)/1 "IBM Plex Mono",monospace;color:var(--accent)}
+input[type=range]{width:100%;height:44px;accent-color:var(--accent)}
+.btns{display:flex;flex-wrap:wrap;gap:6px}
+button{font:600 15px "IBM Plex Sans",sans-serif;min-height:44px;min-width:44px;padding:0 12px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer}
+button[aria-pressed=true],button.on{background:var(--accent);color:var(--panel);border-color:var(--accent)}
+button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.chk{display:flex;gap:8px;align-items:center;min-height:36px;font-weight:400}
+.chk input{width:20px;height:20px;accent-color:var(--accent)}
+.mis{width:100%;border-collapse:collapse;font-size:15px}
+.mis td{padding:6px 0;border-bottom:1px solid var(--line)}
+.mis td:last-child{text-align:right;font:500 16px "IBM Plex Mono",monospace;white-space:nowrap}
+.f{color:var(--forza);font-weight:700}.v{color:var(--vel);font-weight:700}.d{color:var(--dv);font-weight:700}
+.reg{width:100%;border-collapse:collapse;font-size:14px;margin-top:8px}
+.reg th,.reg td{padding:5px 6px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+.reg th:first-child,.reg td:first-child{text-align:left}
+.scroll{overflow-x:auto}
+.spieg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+@media(max-width:860px){.spieg{grid-template-columns:minmax(0,1fr)}}
+.spieg p{margin:6px 0 0;color:var(--ink)}
+.spieg h3{margin:0;font-size:17px}
+.nota{font-size:13px;color:var(--muted);margin-top:14px}
+</style>
+</head>
+<body>
+<div class="band">
+  <h1>Dal poligono al cerchio: dove punta la forza?</h1>
+  <p class="sub">Una pallina va dritta lungo i lati di un poligono regolare e in ogni vertice riceve un colpo. Cambia il numero di lati e guarda dove puntano i colpi e che angolo fanno con la velocità.</p>
+  <div class="main">
+    <div class="fig" id="fig"><canvas id="cv" aria-label="Poligono regolare inscritto in una circonferenza, con la pallina, la velocità, i colpi e il triangolo delle velocità"></canvas></div>
+    <div class="side">
+      <div class="card">
+        <div class="nrow"><label for="n">Numero di lati</label><span class="nval" id="nval">3</span></div>
+        <input type="range" id="n" min="3" max="60" step="1" value="3">
+        <div class="btns" id="preset"></div>
+      </div>
+      <div class="card">
+        <div class="btns">
+          <button id="play" aria-pressed="true">Pausa</button>
+          <button id="passo">Vai al vertice dopo</button>
+        </div>
+        <label class="chk"><input type="checkbox" id="tutti" checked> Mostra i colpi in tutti i vertici</label>
+        <label class="chk"><input type="checkbox" id="tang" checked> Mostra la tangente alla circonferenza</label>
+        <label class="chk"><input type="checkbox" id="tri" checked> Mostra il triangolo delle velocità</label>
+        <label for="vel" style="font-weight:400">Velocità dell'animazione</label>
+        <input type="range" id="vel" min="0.2" max="3" step="0.1" value="1">
+      </div>
+      <div class="card">
+        <h2>Misure nell'ultimo vertice</h2>
+        <table class="mis"><tbody>
+          <tr><td>angolo tra <span class="f">|F⟩</span> e <span class="v">|v<sub>prima</sub>⟩</span></td><td id="a1"></td></tr>
+          <tr><td>angolo tra <span class="f">|F⟩</span> e <span class="v">|v<sub>dopo</sub>⟩</span></td><td id="a2"></td></tr>
+          <tr><td>angolo tra <span class="f">|F⟩</span> e la tangente al cerchio</td><td id="a3"></td></tr>
+          <tr><td>la velocità ruota a ogni vertice di</td><td id="a4"></td></tr>
+          <tr><td><span class="d">|Δv|</span> / |v| = L / r</td><td id="a5"></td></tr>
+          <tr><td>forza media · r / (m v²)</td><td id="a6"></td></tr>
+        </tbody></table>
+        <div class="btns" style="margin-top:10px"><button id="reg">Scrivi nella tabella</button><button id="canc">Svuota</button></div>
+        <div class="scroll"><table class="reg" id="tab"><thead><tr><th>lati</th><th>F–v prima</th><th>F–v dopo</th><th>|Δv|/|v|</th></tr></thead><tbody></tbody></table></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="band">
+  <div class="spieg">
+    <div class="card"><h3>1. Sui lati nessuna forza</h3><p>Tra un vertice e l'altro la pallina va dritta a velocità costante (principio d'inerzia). Solo nei vertici un colpo cambia la direzione di <span class="v">|v⟩</span>, non il modulo.</p></div>
+    <div class="card"><h3>2. Il colpo punta al centro</h3><p>Per il secondo principio il colpo ha la direzione di <span class="d">|Δv⟩ = |v<sub>dopo</sub>⟩ − |v<sub>prima</sub>⟩</span>. La retta dal vertice al centro è un asse di simmetria del poligono, e <span class="d">|Δv⟩</span> sta proprio su quella retta: in ogni vertice il colpo punta al centro <em>O</em>.</p></div>
+    <div class="card"><h3>3. Al limite: forza perpendicolare</h3><p>Con tanti lati, velocità prima e dopo quasi coincidono e gli angoli tendono a 90°. Con infiniti lati il poligono diventa la circonferenza: la forza punta sempre al centro, quindi è perpendicolare alla velocità, che è tangente. E la forza media vale sempre m v²/r, per ogni numero di lati.</p></div>
+  </div>
+  <p class="nota">Fisica 3R · Liceo «L. da Vinci» di Trento · lezione sulla forza centripeta. Vettori scritti con il ket: |v⟩ è il vettore velocità, |v| il suo modulo.</p>
+</div>
+<script>
+{
+const $=id=>document.getElementById(id);
+const cv=$('cv'),fig=$('fig'),ctx=cv.getContext('2d');
+let n=3,cerchio=false,s=0,play=true,last=null,ultimo=0,flash=0;
+const deg=Math.PI/180;
+const fmt=(x,d=1)=>x.toFixed(d).replace('.',',');
+const sonda=document.createElement('span');sonda.style.display='none';document.body.appendChild(sonda);
+const css=k=>{sonda.style.color=`var(${k})`;return getComputedStyle(sonda).color||'#888'};
+const presets=[3,4,5,6,8,12,36];
+$('preset').innerHTML=presets.map(p=>`<button data-n="${p}">${p}</button>`).join('')+'<button data-n="inf">cerchio</button>';
+function setN(v){
+  if(v==='inf'){cerchio=true;$('nval').textContent='∞';}
+  else{cerchio=false;n=+v;$('n').value=n;$('nval').textContent=n;s=Math.floor(s)%n;}
+  for(const b of $('preset').children)b.classList.toggle('on',b.dataset.n===String(cerchio?'inf':n));
+  ultimo=cerchio?0:Math.floor(s)%n;misure();
+}
+$('preset').addEventListener('click',e=>{const b=e.target.closest('button');if(b)setN(b.dataset.n)});
+$('n').addEventListener('input',e=>setN(e.target.value));
+$('play').addEventListener('click',()=>{play=!play;$('play').textContent=play?'Pausa':'Avvia';$('play').setAttribute('aria-pressed',play)});
+$('passo').addEventListener('click',()=>{if(cerchio){s+=0.25;}else{s=Math.floor(s)+1;ultimo=Math.round(s)%n;flash=1;misure();}});
+function misure(){
+  const N=cerchio?Infinity:n,h=cerchio?0:180/n;
+  $('a1').textContent=fmt(90+h)+'°';$('a2').textContent=fmt(90-h)+'°';$('a3').textContent='90,0°';
+  $('a4').textContent=cerchio?'→ 0°':fmt(360/n)+'°';
+  $('a5').textContent=cerchio?'→ 0':fmt(2*Math.sin(h*deg),3);
+  $('a6').textContent='1,000';
+}
+$('reg').addEventListener('click',()=>{
+  const h=cerchio?0:180/n,tr=document.createElement('tr');
+  for(const t of [cerchio?'∞':String(n),fmt(90+h)+'°',fmt(90-h)+'°',cerchio?'0':fmt(2*Math.sin(h*deg),3)]){const td=document.createElement('td');td.textContent=t;tr.appendChild(td);}
+  $('tab').tBodies[0].appendChild(tr);
+});
+$('canc').addEventListener('click',()=>{$('tab').tBodies[0].innerHTML=''});
+function freccia(x0,y0,x1,y1,col,w=3){
+  const a=Math.atan2(y1-y0,x1-x0),L=Math.hypot(x1-x0,y1-y0),t=Math.min(12,L*0.45);
+  ctx.strokeStyle=col;ctx.fillStyle=col;ctx.lineWidth=w;ctx.lineCap='round';
+  ctx.beginPath();ctx.moveTo(x0,y0);ctx.lineTo(x1-t*0.7*Math.cos(a),y1-t*0.7*Math.sin(a));ctx.stroke();
+  ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x1-t*Math.cos(a-0.4),y1-t*Math.sin(a-0.4));ctx.lineTo(x1-t*Math.cos(a+0.4),y1-t*Math.sin(a+0.4));ctx.closePath();ctx.fill();
+}
+function testo(t,x,y,col,al='left'){ctx.fillStyle=col;ctx.font='600 15px "IBM Plex Sans",sans-serif';ctx.textAlign=al;ctx.textBaseline='middle';ctx.fillText(t,x,y);}
+function draw(){
+  const W=fig.clientWidth,H=fig.clientHeight,dpr=window.devicePixelRatio||1;
+  if(cv.width!==Math.round(W*dpr)||cv.height!==Math.round(H*dpr)){cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);}
+  ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,H);
+  const V=css('--vel'),F=css('--forza'),D=css('--dv'),C=css('--cerchio'),I=css('--ink'),M=css('--muted');
+  const R=Math.min(W*0.3,H*0.4),cx=W*0.37,cy=H*0.47;
+  const P=phi=>[cx+R*Math.cos(phi*deg),cy-R*Math.sin(phi*deg)];
+  const dir=(a,l)=>[l*Math.cos(a*deg),-l*Math.sin(a*deg)];
+  ctx.setLineDash([5,6]);ctx.strokeStyle=C;ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(cx,cy,R,0,2*Math.PI);ctx.stroke();ctx.setLineDash([]);
+  ctx.fillStyle=I;ctx.beginPath();ctx.arc(cx,cy,3.5,0,2*Math.PI);ctx.fill();testo('O',cx-10,cy+14,I,'right');
+  const lv=Math.max(46,R*0.42),lf=R*0.5;
+  if(cerchio){
+    const phi=90-s*30,[x,y]=P(phi);
+    if($('tutti').checked){for(let k=0;k<24;k++){const[a0,b0]=P(90-k*15);freccia(a0,b0,a0+(cx-a0)*0.22,b0+(cy-b0)*0.22,F,1.6);}}
+    if($('tang').checked){const[tx,ty]=dir(phi-90,R*0.7);ctx.setLineDash([4,5]);ctx.strokeStyle=M;ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(x-tx,y-ty);ctx.lineTo(x+tx,y+ty);ctx.stroke();ctx.setLineDash([]);}
+    const[vx,vy]=dir(phi-90,lv);freccia(x,y,x+vx,y+vy,V);testo('|v⟩',x+vx*1.15,y+vy*1.15,V,'center');
+    freccia(x,y,x+(cx-x)*0.5,y+(cy-y)*0.5,F);testo('|F⟩',x+(cx-x)*0.62,y+(cy-y)*0.62,F,'center');
+    ctx.fillStyle=css('--panel');ctx.strokeStyle=I;ctx.lineWidth=2;ctx.beginPath();ctx.arc(x,y,9,0,2*Math.PI);ctx.fill();ctx.stroke();
+    testo('circonferenza: forza sempre verso O e perpendicolare a |v⟩',14,H-18,M);
+    return;
+  }
+  const passo=360/n,vert=k=>90-k*passo;
+  ctx.strokeStyle=V;ctx.lineWidth=2.5;ctx.beginPath();
+  for(let k=0;k<=n;k++){const[x,y]=P(vert(k));k?ctx.lineTo(x,y):ctx.moveTo(x,y);}ctx.stroke();
+  if($('tutti').checked){for(let k=0;k<n;k++){const[x,y]=P(vert(k));freccia(x,y,x+(cx-x)*0.28,y+(cy-y)*0.28,F,n>24?1.4:2);}}
+  const k=Math.floor(s)%n,t=s-Math.floor(s),[x0,y0]=P(vert(k)),[x1,y1]=P(vert(k+1));
+  const bx=x0+(x1-x0)*t,by=y0+(y1-y0)*t,av=vert(k)-90-passo/2;
+  const u=ultimo,[ux,uy]=P(vert(u)),ain=vert(u)-90+passo/2,aout=vert(u)-90-passo/2;
+  if($('tang').checked){const[tx,ty]=dir(vert(u)-90,R*0.6);ctx.setLineDash([4,5]);ctx.strokeStyle=M;ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(ux-tx,uy-ty);ctx.lineTo(ux+tx,uy+ty);ctx.stroke();ctx.setLineDash([]);}
+  ctx.globalAlpha=0.35+0.65*flash;freccia(ux,uy,ux+(cx-ux)*0.55,uy+(cy-uy)*0.55,F,4);ctx.globalAlpha=1;
+  testo('|F⟩',ux+(cx-ux)*0.66,uy+(cy-uy)*0.66,F,'center');
+  const[vx,vy]=dir(av,lv);freccia(bx,by,bx+vx,by+vy,V);testo('|v⟩',bx+vx*1.2,by+vy*1.2,V,'center');
+  ctx.fillStyle=css('--panel');ctx.strokeStyle=I;ctx.lineWidth=2;ctx.beginPath();ctx.arc(bx,by,9,0,2*Math.PI);ctx.fill();ctx.stroke();
+  if($('tri').checked){
+    const L=Math.min(W*0.1,H*0.1),bx0=W-L*1.4-10,by0=L*1.8+14,[ix,iy]=dir(ain,L),[ox2,oy2]=dir(aout,L);
+    ctx.fillStyle=css('--bg');ctx.strokeStyle=css('--line');ctx.lineWidth=1;ctx.beginPath();ctx.rect(bx0-L*1.4,by0-L*1.75,L*2.8,L*3.2);ctx.fill();ctx.stroke();
+    testo('velocità',bx0,by0-L*1.45,M,'center');
+    const ox=bx0-(ix+ox2)/3,oy=by0+L*0.15-(iy+oy2)/3;
+    freccia(ox,oy,ox+ix,oy+iy,V,2.5);freccia(ox,oy,ox+ox2,oy+oy2,V,2.5);freccia(ox+ix,oy+iy,ox+ox2,oy+oy2,D,3);
+    const[dx,dy]=dir(vert(u)+180,L*0.9);ctx.setLineDash([3,4]);ctx.strokeStyle=F;ctx.lineWidth=1.2;ctx.beginPath();ctx.moveTo(ox+(ix+ox2)/2-dx/2,oy+(iy+oy2)/2-dy/2);ctx.lineTo(ox+(ix+ox2)/2+dx/2,oy+(iy+oy2)/2+dy/2);ctx.stroke();ctx.setLineDash([]);
+    const mx=(ix+ox2)/2,my=(iy+oy2)/2,mm=Math.hypot(mx,my)||1;testo('|Δv⟩',ox+mx+mx/mm*26,oy+my+my/mm*18,D,'center');
+  }
+  testo('ultimo colpo: vertice evidenziato',14,H-18,M);
+}
+const ro=new ResizeObserver(draw);ro.observe(fig);
+const ridotto=matchMedia('(prefers-reduced-motion: reduce)').matches;
+if(ridotto){play=false;$('play').textContent='Avvia';$('play').setAttribute('aria-pressed','false');}
+function ciclo(ts){
+  if(last!==null&&play){
+    const dt=Math.min(0.05,(ts-last)/1000),v=+$('vel').value;
+    if(cerchio){s+=dt*v*0.6*180/Math.PI/30;}
+    else{
+      const lato=2*Math.sin(Math.PI/n),prima=Math.floor(s);
+      s+=dt*v*0.6/lato;
+      if(Math.floor(s)!==prima){ultimo=Math.floor(s)%n;flash=1;misure();}
+    }
+  }
+  flash=Math.max(0,flash-0.02);last=ts;draw();requestAnimationFrame(ciclo);
+}
+setN(3);requestAnimationFrame(ciclo);
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+{
+  "id": "attrito-viscoso-vpython",
+  "titolo": "Sferetta nella glicerina (VPython)",
+  "tipo": "vpython",
+  "avvio": null,
+  "sommario": "Simulazione passo per passo di una sferetta d'acciaio che cade nella glicerina, con grafici v(t) e a(t) e confronto con la legge di Stokes.",
+  "argomento": [
+    "Meccanica",
+    "Dinamica"
+  ],
+  "tema": "Attrito viscoso e velocità limite",
+  "classi": [
+    "3R"
+  ],
+  "anno": 3,
+  "data": "2026-11-13",
+  "file": [
+    [
+      "attrito_viscoso_studenti.py",
+      "Versione da completare (studenti)"
+    ],
+    [
+      "attrito_viscoso_completo.py",
+      "Versione completa (docente)"
+    ],
+    [
+      "attrito_viscoso_colab.ipynb",
+      "Notebook per Google Colab"
+    ]
+  ],
+  "colab": "attrito_viscoso_colab.ipynb",
+  "collegate": [
+    "pallina-nell-olio"
+  ],
+  "allegati": []
+}

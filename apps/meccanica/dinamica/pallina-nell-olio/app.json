@@ -1,0 +1,40 @@
+{
+  "id": "pallina-nell-olio",
+  "titolo": "La pallina da golf nell'olio",
+  "tipo": "web",
+  "avvio": "index.html",
+  "sommario": "Videoanalisi di una pallina che cade in un cilindro d'olio: dal moto osservato alla velocità limite.",
+  "argomento": [
+    "Meccanica",
+    "Dinamica"
+  ],
+  "tema": "Attrito viscoso e velocità limite",
+  "classi": [
+    "3R",
+    "3P"
+  ],
+  "anno": 3,
+  "data": "2026-11-24",
+  "allegati": [
+    [
+      "allegati/sintesi_attrito_viscoso.pdf",
+      "Sintesi della lezione"
+    ],
+    [
+      "allegati/problemi_attrito_viscoso_studenti.pdf",
+      "Problemi in classe (versione studenti)"
+    ],
+    [
+      "allegati/slide_attrito_viscoso.pdf",
+      "Slide, tema chiaro"
+    ],
+    [
+      "allegati/slide_attrito_viscoso_dark.pdf",
+      "Slide, tema scuro"
+    ]
+  ],
+  "collegate": [
+    "attrito-viscoso-vpython"
+  ],
+  "file": []
+}

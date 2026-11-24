@@ -1,0 +1,123 @@
+/* Quaderno a quadretti: righe ogni 20px, margine rosso a sinistra.
+   Il margine contiene l'indice (categorie, dati della scheda); a destra le app. */
+:root{
+  color-scheme:light dark;
+  --q:20px;
+  --carta:light-dark(#fbfcfb,#1b2824);
+  --quadretto:light-dark(#e1e8ec,#26362f);
+  --inchiostro:light-dark(#1d3d8f,#9cc0ff);
+  --grafite:light-dark(#23262b,#e6eae2);
+  --matita:light-dark(#5a6370,#a9b4ad);
+  --margine:light-dark(#d9464f,#e0717a);
+  --evidenzia:light-dark(#fff0a3,#47502a);
+  --bordo:light-dark(#c9d2d8,#3a4a43);
+  --colonna:13rem;
+}
+:root[data-tema=chiaro]{color-scheme:light}
+:root[data-tema=scuro]{color-scheme:dark}
+*{box-sizing:border-box}
+html{background:var(--carta)}
+body{
+  margin:0;color:var(--grafite);
+  font:17px/var(--q) "Atkinson Hyperlegible",system-ui,sans-serif;
+  line-height:calc(var(--q)*1.2);
+  background-image:
+    linear-gradient(var(--quadretto) 1px,transparent 1px),
+    linear-gradient(90deg,var(--quadretto) 1px,transparent 1px);
+  background-size:var(--q) var(--q);
+}
+a{color:var(--inchiostro);text-underline-offset:3px}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid var(--inchiostro);outline-offset:2px;border-radius:2px}
+.pagina{
+  display:grid;grid-template-columns:var(--colonna) minmax(0,1fr);
+  max-width:72rem;margin:0 auto;min-height:100vh;
+}
+.margine{border-right:2px solid var(--margine);padding:calc(var(--q)*2) var(--q) var(--q) var(--q)}
+.foglio{padding:calc(var(--q)*2) calc(var(--q)*1.5) calc(var(--q)*4)}
+.margine,.foglio{min-width:0}
+
+/* intestazione */
+.testata{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,38%);gap:var(--q);align-items:end}
+.testata h1{
+  font-size:clamp(44px,7vw,84px);line-height:1;font-weight:700;letter-spacing:-.02em;
+  margin:0 0 var(--q);color:var(--grafite);max-width:11ch;position:relative;z-index:1;
+}
+.testata p{max-width:34rem;margin:0;color:var(--matita);font-size:18px;position:relative;z-index:1}
+.strobo{width:100%;height:auto;overflow:visible;grid-column:2;grid-row:1/span 2}
+.testata h1,.testata p{grid-column:1}
+.strobo .suolo{stroke:var(--matita);stroke-width:1.5}
+.strobo circle{fill:var(--inchiostro)}
+.strobo .scia{stroke:var(--inchiostro);stroke-dasharray:2 6;fill:none;opacity:.45}
+.strobo text{fill:var(--matita);font:14px "Atkinson Hyperlegible",sans-serif}
+@media (prefers-reduced-motion:no-preference){
+  .strobo circle{opacity:0;animation:lampo .01s linear forwards;animation-delay:calc(var(--i)*110ms + 300ms)}
+  @keyframes lampo{to{opacity:1}}
+}
+.marchio{font-weight:700;font-size:19px;color:var(--grafite);text-decoration:none;display:block;margin-bottom:var(--q)}
+.indice{list-style:none;margin:0;padding:0}
+.indice li{margin:0 0 calc(var(--q)/2)}
+.indice a{text-decoration:none;color:var(--grafite)}
+.indice a:hover{text-decoration:underline}
+.indice small{color:var(--matita)}
+.tema-btn{margin-top:calc(var(--q)*2);font:inherit;font-size:15px;background:none;border:1px solid var(--bordo);color:var(--matita);border-radius:4px;padding:4px 10px;cursor:pointer;min-height:36px}
+
+/* filtri */
+.filtri{margin:calc(var(--q)*2) 0 calc(var(--q)*2);display:grid;gap:calc(var(--q)/2)}
+.filtro{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.filtro > span{color:var(--matita);min-width:5.5rem}
+.filtro button{
+  font:inherit;font-size:16px;min-height:40px;padding:0 14px;cursor:pointer;
+  background:var(--carta);color:var(--grafite);border:1px solid var(--bordo);border-radius:20px;
+}
+.filtro button[aria-pressed=true]{background:var(--inchiostro);border-color:var(--inchiostro);color:var(--carta)}
+.cerca{font:inherit;min-height:40px;padding:0 12px;border:1px solid var(--bordo);border-radius:4px;background:var(--carta);color:var(--grafite);width:min(100%,22rem)}
+
+/* elenco */
+.categoria{margin-top:calc(var(--q)*2)}
+.categoria > h2{font-size:30px;line-height:calc(var(--q)*2);margin:0}
+.sotto > h3{font-size:19px;color:var(--matita);font-weight:400;margin:var(--q) 0 calc(var(--q)/2)}
+.app{padding:calc(var(--q)/2) 0 var(--q);border-bottom:1px dashed var(--bordo);display:grid;grid-template-columns:2.2rem minmax(0,1fr);column-gap:10px}
+.app:last-child{border-bottom:0}
+.app .icona{width:2rem;height:2rem;margin-top:4px;color:var(--inchiostro)}
+.app h4{font-size:22px;line-height:1.3;margin:0}
+.app h4 a{color:var(--grafite);text-decoration:none}
+.app h4 a:hover{background:var(--evidenzia)}
+.app p{margin:4px 0 8px;max-width:40rem}
+.dati{display:flex;flex-wrap:wrap;gap:6px 14px;color:var(--matita);font-size:15px}
+.classe{border:1.5px solid var(--inchiostro);color:var(--inchiostro);border-radius:3px;padding:0 5px;font-weight:700;font-size:14px}
+.azioni{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.bottone{
+  display:inline-flex;align-items:center;min-height:40px;padding:0 16px;border-radius:4px;
+  font-weight:700;text-decoration:none;border:1.5px solid var(--inchiostro);color:var(--inchiostro);background:var(--carta);cursor:pointer;font:inherit;font-weight:700;
+}
+.bottone.pieno{background:var(--inchiostro);color:var(--carta)}
+.bottone:hover{background:var(--evidenzia);color:var(--grafite)}
+.vuoto{color:var(--matita);margin-top:var(--q)}
+[hidden]{display:none!important}
+
+/* scheda dell'app */
+.scheda h1{font-size:clamp(34px,5vw,54px);line-height:1.05;margin:0 0 var(--q);letter-spacing:-.01em}
+.scheda .lead{font-size:20px;line-height:1.45;max-width:38rem;margin:0 0 var(--q)}
+.testo{max-width:40rem;line-height:1.6}
+.testo h2{font-size:24px;margin:calc(var(--q)*2) 0 calc(var(--q)/2)}
+.testo li{margin-bottom:6px}
+.testo code{background:var(--evidenzia);padding:0 4px;border-radius:2px;font-size:.92em}
+.testo > h1:first-child{display:none}
+.materiali{list-style:none;padding:0;margin:0;max-width:40rem}
+.materiali li{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:8px 0;border-bottom:1px dashed var(--bordo)}
+.materiali small{color:var(--matita)}
+dl.scheda-dati{margin:0}
+dl.scheda-dati dt{color:var(--matita);font-size:15px}
+dl.scheda-dati dd{margin:0 0 var(--q)}
+.copiato{color:var(--inchiostro);font-weight:700;margin-left:8px}
+footer{margin-top:calc(var(--q)*4);color:var(--matita);font-size:15px;max-width:40rem}
+
+@media (max-width:760px){
+  .pagina{grid-template-columns:minmax(0,1fr)}
+  .margine{border-right:0;border-bottom:2px solid var(--margine);padding:var(--q)}
+  .margine .indice,.margine .tema-btn{display:none}
+  .foglio{padding:var(--q)}
+  .testata{grid-template-columns:minmax(0,1fr)}
+  .strobo{grid-column:1;grid-row:auto;max-width:360px}
+  .filtro > span{min-width:100%}
+}
