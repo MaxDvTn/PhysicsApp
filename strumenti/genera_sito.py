@@ -68,6 +68,10 @@ def bi(it, en, tag="span", attr=""):
     return f'<{tag}{a} data-l="it">{e(it)}</{tag}><{tag}{a} data-l="en">{e(en)}</{tag}>'
 
 
+def bi_attr(it, en):
+    return e(f"{it} / {en}")
+
+
 def bih(it, en):
     """Come bi(), ma con HTML già pronto (non viene ripulito)."""
     return f'<div data-l="it">{it}</div><div data-l="en">{en}</div>'
@@ -226,7 +230,7 @@ def pagina_indice(apps):
     for k, sub in alb:
         blocchi = []
         for s, lista in sorted(sub.items(), key=lambda kv: kv[0] or ""):
-            titolo = bi_cat(apps, s, 1, "h3") if s else ""
+            titolo = f'<h3 id="{k}-{s}">{bi_cat(apps, s, 1)}</h3>' if s else ""
             righe = "\n".join(riga_app(a) for a in sorted(lista, key=lambda a: a["titolo"]))
             blocchi.append(f'<div class="sotto">{titolo}{righe}</div>')
         sezioni.append(f'<section class="categoria" id="{k}" data-categoria="{k}">{bi_cat(apps, k, 0, "h2")}{"".join(blocchi)}</section>')
@@ -377,6 +381,8 @@ def pagina_scheda(a, apps):
     data = "/".join(reversed(a["data"].split("-")))
     arg = bi(" › ".join(a["argomento"]), " › ".join(a["en"]["argomento"])) + "<br>" + bi(a.get("tema", ""), EN(a, "tema") or "")
     t_it, t_en = f"{a['titolo']} · App di fisica", f"{a['en']['titolo']} · Physics apps"
+    sotto = (f' › <a href="{su}index.html#{a["categoria"]}-{a["sottocategoria"]}">{bi_cat(apps, a["sottocategoria"], 1)}</a>'
+             if a.get("sottocategoria") else "")
     return f"""<!DOCTYPE html>
 <html lang="it" data-titolo-it="{e(t_it)}" data-titolo-en="{e(t_en)}">
 <head>
@@ -402,7 +408,7 @@ def pagina_scheda(a, apps):
     <div class="comandi">{bottone_lingua()}<button class="tema-btn" type="button" onclick="cambiaTema()">{bi("Carta o lavagna", "Paper or blackboard")}</button></div>
   </aside>
   <main class="foglio scheda">
-    <p><a href="{su}index.html#{a['categoria']}">{bi("Torna a tutte le app", "Back to all the apps")}</a></p>
+    <nav class="briciole" aria-label="{bi_attr("Dove sei", "You are here")}"><a href="{su}index.html">{bi("Tutte le app", "All the apps")}</a> › <a href="{su}index.html#{a['categoria']}">{bi_cat(apps, a['categoria'], 0)}</a>{sotto}</nav>
     {bi(a['titolo'], a['en']['titolo'], 'h1')}
     {bi(a['sommario'], a['en']['sommario'], 'p', 'class="lead"')}
     <div class="azioni">{''.join(azioni)}<span class="copiato" id="copiato" role="status"></span></div>

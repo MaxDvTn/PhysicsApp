@@ -48,9 +48,22 @@ details{margin-top:12px}summary{cursor:pointer;font-weight:700;min-height:32px}
 <style>
 .lingua-btn{position:fixed;right:12px;bottom:12px;z-index:1000;font:600 14px/1 system-ui,sans-serif;min-height:38px;padding:0 14px;border-radius:19px;border:1px solid #8889;background:Canvas;color:CanvasText;cursor:pointer;box-shadow:0 1px 4px #0003}
 .lingua-btn:focus-visible{outline:3px solid Highlight;outline-offset:2px}
-@media print{.lingua-btn{display:none}}
+@media print{.lingua-btn,.nav-app{display:none}}
+.nav-app{position:fixed;left:12px;bottom:12px;z-index:1000;display:flex;flex-wrap:wrap;gap:6px;max-width:calc(100% - 140px)}
+.nav-app a{font:600 14px/1 system-ui,sans-serif;display:inline-flex;align-items:center;min-height:38px;padding:0 14px;border-radius:19px;border:1px solid #8889;background:Canvas;color:CanvasText;text-decoration:none;box-shadow:0 1px 4px #0003}
+.nav-app a:hover{border-color:currentColor}
+.nav-app a:focus-visible{outline:3px solid Highlight;outline-offset:2px}
+body.con-nav-app{padding-bottom:64px}
+@media (max-width:560px){
+  /* sul telefono la barra sta in cima alla pagina e non copre i comandi dell'app */
+  .nav-app{position:static;margin:10px 12px 6px;max-width:calc(100% - 120px)}
+  .nav-app a{padding:0 10px;font-size:13px;min-height:34px}.nav-app .solo-largo{display:none}
+  .lingua-btn{position:absolute;top:10px;bottom:auto;min-height:34px}
+  body.con-nav-app{padding-bottom:0}
+}
 </style>
 <button class="lingua-btn" id="linguaBtn" type="button"></button>
+<nav class="nav-app" id="navApp" aria-label="PhysicsApp" hidden></nav>
 <script>
 /* La lingua si sceglie così: ?lang=en|it nell'indirizzo, poi la scelta salvata (chiave «lingua»,
    la stessa del sito PhysicsApp), poi la lingua del browser. Gli elementi con data-en mostrano
@@ -110,6 +123,24 @@ window.I18N=(function(){
     }
   };
   document.getElementById('linguaBtn').addEventListener('click',function(){I.imposta(I.lingua==='en'?'it':'en')});
+  /* Barra per tornare alle istruzioni, alla sezione e a tutte le app: compare solo quando l'app
+     è dentro il sito PhysicsApp (indirizzo .../apps/<categoria>/.../<app>/). */
+  (function(){
+    var m=location.pathname.match(/^(.*\/)apps\/([^\/]+)\/(?:[^\/]+\/)*?([^\/]+)\/(?:index\.html)?$/);
+    var nav=document.getElementById('navApp');if(!m||!nav)return;
+    var radice=m[1],cat=m[2],nomi={it:cat.charAt(0).toUpperCase()+cat.slice(1).replace(/-/g,' '),en:null};
+    function disegna(){
+      var it=I.lingua!=='en',sez=it?nomi.it:(nomi.en||nomi.it);
+      nav.innerHTML='<a href="scheda.html">'+(it?'‹ Come si usa':'‹ How to use it')+'</a>'+
+        '<a class="solo-largo" href="'+radice+'index.html#'+cat+'">'+sez+'</a>'+
+        '<a href="'+radice+'index.html">'+(it?'Tutte le app':'All the apps')+'</a>';
+    }
+    nav.hidden=false;document.body.classList.add('con-nav-app');disegna();
+    window.addEventListener('lingua',disegna);
+    fetch(radice+'catalogo.json').then(function(r){return r.ok?r.json():[]}).then(function(c){
+      for(var i=0;i<c.length;i++){if(c[i].categoria===cat){nomi.it=c[i].argomento[0];nomi.en=c[i].en.argomento[0];break}}disegna();
+    }).catch(function(){});
+  })();
   return I;
 })();
 </script>

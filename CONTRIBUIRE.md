@@ -45,7 +45,7 @@
 
 ## Le app in due lingue
 
-Ogni app web ha il commutatore italiano/inglese di `strumenti/lingua_snippet.html`: si incolla subito dopo `<body>` (tra i commenti `LINGUA:INIZIO` e `LINGUA:FINE`). Poi:
+Ogni app web ha il commutatore italiano/inglese e la barra di navigazione (‹ Come si usa, sezione, Tutte le app) di `strumenti/lingua_snippet.html`: si incolla subito dopo `<body>` (tra i commenti `LINGUA:INIZIO` e `LINGUA:FINE`). Poi:
 
 - ai testi fissi si aggiunge `data-en="testo inglese"` (il contenuto dell'elemento resta l'italiano); alle etichette per i lettori di schermo `data-en-label`;
 - nel codice si usano `I18N.t('italiano', 'english')` per i testi e `I18N.num(x, cifre)` per i numeri (virgola in italiano, punto in inglese);
