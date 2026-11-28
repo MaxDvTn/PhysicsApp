@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Il cannone di Newton</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+<style>
+/* Il cannone di Newton (A Treatise of the System of the World, 1728).
+   Carta e inchiostro come l'incisione originale; di notte il cielo. Vettori con il ket (classi terze). */
+:root{color-scheme:light dark;
+  --carta:light-dark(#f6f1e6,#0f1622);--pannello:light-dark(#fffdf7,#172131);--inchiostro:light-dark(#2a2118,#e9e3d5);
+  --matita:light-dark(#6b5f50,#a9b2c0);--bordo:light-dark(#d9cdb6,#2c3a50);--accento:light-dark(#9c2f1f,#ff8a6b);
+  --terra:light-dark(#ece3cf,#1f3b5c);--terra-bordo:light-dark(#2a2118,#8fb3d9);--vel:light-dark(#1f5aa6,#8cc4ff);--forza:light-dark(#b3261e,#ff8a80)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--carta);color:var(--inchiostro);font:17px/1.5 "Atkinson Hyperlegible",system-ui,sans-serif}
+main{max-width:1240px;margin:0 auto;padding:22px 18px 30px}
+h1{font:400 clamp(32px,4.6vw,54px)/1.05 "IM Fell English",Georgia,serif;margin:0}
+.sotto{color:var(--matita);max-width:52rem;margin:6px 0 18px}
+.griglia{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(300px,1fr);gap:22px;align-items:start}
+.cielo{background:var(--pannello);border:1px solid var(--bordo);border-radius:8px;position:relative;overflow:hidden}
+canvas{display:block;width:100%;aspect-ratio:1/1;touch-action:none}
+.stato{position:absolute;left:12px;top:10px;font-variant-numeric:tabular-nums;color:var(--matita);font-size:15px;pointer-events:none}
+.pannello{background:var(--pannello);border:1px solid var(--bordo);border-radius:8px;padding:16px 18px}
+.pannello + .pannello{margin-top:16px}
+h2{font:400 26px/1.15 "IM Fell English",Georgia,serif;margin:0 0 8px}
+label{display:block;font-weight:700;margin:10px 0 2px}
+.val{font-variant-numeric:tabular-nums;color:var(--accento)}
+input[type=range]{width:100%;accent-color:var(--accento);height:28px}
+.scelte{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}
+button{font:600 15px "Atkinson Hyperlegible",sans-serif;min-height:40px;padding:0 14px;border-radius:6px;border:1px solid var(--bordo);background:var(--carta);color:var(--inchiostro);cursor:pointer}
+button.primario{background:var(--accento);border-color:var(--accento);color:var(--pannello);font-size:17px;min-height:46px;padding:0 22px}
+button:hover{border-color:var(--accento)}
+button:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid var(--accento);outline-offset:2px}
+.chk{display:flex;align-items:center;gap:8px;font-weight:400;margin:6px 0}
+.numeri{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 14px;margin-top:6px}
+.num{border-left:3px solid var(--accento);padding:2px 10px}
+.num b{display:block;font-size:21px;font-variant-numeric:tabular-nums}
+.num span{color:var(--matita);font-size:13px}
+.esito{font-size:18px;margin:10px 0 0;min-height:1.5em}
+.nota{color:var(--matita);font-size:14px}
+.domanda{border-left:4px solid var(--accento);padding:6px 12px;margin:8px 0;background:var(--carta)}
+details{margin-top:10px}summary{cursor:pointer;font-weight:700;min-height:32px}
+figure{margin:0}figure img{width:100%;max-width:300px;display:block;margin:6px auto;border-radius:4px}
+figcaption{font-size:13px;color:var(--matita);text-align:center}
+@media (prefers-color-scheme:light){figure img{mix-blend-mode:multiply}}
+@media (prefers-color-scheme:dark){figure img{filter:invert(.92) sepia(.15)}}
+@media (max-width:860px){.griglia{grid-template-columns:minmax(0,1fr)}}
+</style>
+</head>
+<body>
+<!-- LINGUA:INIZIO — commutatore italiano/inglese, uguale in tutte le app (strumenti/lingua_snippet.html) -->
+<style>
+.lingua-btn{position:fixed;right:12px;bottom:12px;z-index:1000;font:600 14px/1 system-ui,sans-serif;min-height:38px;padding:0 14px;border-radius:19px;border:1px solid #8889;background:Canvas;color:CanvasText;cursor:pointer;box-shadow:0 1px 4px #0003}
+.lingua-btn:focus-visible{outline:3px solid Highlight;outline-offset:2px}
+@media print{.lingua-btn,.nav-app{display:none}}
+.nav-app{position:fixed;left:12px;bottom:12px;z-index:1000;display:flex;flex-wrap:wrap;gap:6px;max-width:calc(100% - 140px)}
+.nav-app a{font:600 14px/1 system-ui,sans-serif;display:inline-flex;align-items:center;min-height:38px;padding:0 14px;border-radius:19px;border:1px solid #8889;background:Canvas;color:CanvasText;text-decoration:none;box-shadow:0 1px 4px #0003}
+.nav-app a:hover{border-color:currentColor}
+.nav-app a:focus-visible{outline:3px solid Highlight;outline-offset:2px}
+body.con-nav-app{padding-bottom:64px}
+@media (max-width:560px){
+  /* sul telefono la barra sta in cima alla pagina e non copre i comandi dell'app */
+  .nav-app{position:static;margin:10px 12px 6px;max-width:calc(100% - 120px)}
+  .nav-app a{padding:0 10px;font-size:13px;min-height:34px}.nav-app .solo-largo{display:none}
+  .lingua-btn{position:absolute;top:10px;bottom:auto;min-height:34px}
+  body.con-nav-app{padding-bottom:0}
+}
+</style>
+<button class="lingua-btn" id="linguaBtn" type="button"></button>
+<nav class="nav-app" id="navApp" aria-label="PhysicsApp" hidden></nav>
+<script>
+/* La lingua si sceglie così: ?lang=en|it nell'indirizzo, poi la scelta salvata (chiave «lingua»,
+   la stessa del sito PhysicsApp), poi la lingua del browser. Gli elementi con data-en mostrano
+   quel testo in inglese; il loro contenuto originale è l'italiano. Le app ascoltano l'evento «lingua». */
+window.I18N=(function(){
+  function iniziale(){
+    try{var q=new URLSearchParams(location.search).get('lang');if(q==='en'||q==='it')return q;
+        var s=localStorage.getItem('lingua');if(s==='en'||s==='it')return s}catch(e){}
+    return /^it/i.test(navigator.language||'it')?'it':'en';
+  }
+  var I={lingua:iniziale(),titolo:null,
+    t:function(it,en){return I.lingua==='en'?en:it},
+    num:function(x,d){var s=Number(x).toFixed(d);return I.lingua==='en'?s:s.replace('.',',')},
+    applica:function(){
+      document.documentElement.lang=I.lingua;
+      document.querySelectorAll('[data-en]').forEach(function(el){
+        if(el.dataset.it===undefined)el.dataset.it=el.innerHTML;
+        el.innerHTML=I.lingua==='en'?el.dataset.en:el.dataset.it;
+      });
+      document.querySelectorAll('[data-en-label]').forEach(function(el){
+        if(el.dataset.itLabel===undefined)el.dataset.itLabel=el.getAttribute('aria-label')||'';
+        el.setAttribute('aria-label',I.lingua==='en'?el.dataset.enLabel:el.dataset.itLabel);
+      });
+      if(I.titolo)document.title=I.t(I.titolo[0],I.titolo[1]);
+      var b=document.getElementById('linguaBtn');
+      b.textContent=I.lingua==='en'?'Italiano':'English';
+      b.setAttribute('lang',I.lingua==='en'?'it':'en');
+      b.setAttribute('aria-label',I.lingua==='en'?'Passa all’italiano':'Switch to English');
+      window.dispatchEvent(new Event('lingua'));
+    },
+    imposta:function(l){I.lingua=l;try{localStorage.setItem('lingua',l)}catch(e){}I.applica()},
+    /* Per le app con molti testi creati dal codice: dizionario {testo italiano: testo inglese}
+       e regole [[RegExp, sostituzione]], applicati ai nodi di testo e agli attributi
+       aria-label, placeholder e title, anche a quelli aggiunti dopo. */
+    dizionario:function(mappa,regole){
+      var stato=new WeakMap(),ATTR=['aria-label','placeholder','title'];
+      function inglese(it){var t=it.trim();if(!t)return null;var en=mappa[t];
+        if(en===undefined){for(var i=0;i<(regole||[]).length;i++){if(regole[i][0].test(t)){en=t.replace(regole[i][0],regole[i][1]);break}}}
+        return en===undefined?null:it.replace(t,en)}
+      function testo(n){var s=stato.get(n),it=(s&&n.nodeValue===s.en)?s.it:n.nodeValue,en=inglese(it);
+        if(en===null){stato.delete(n);return}stato.set(n,{it:it,en:en});
+        var v=I.lingua==='en'?en:it;if(n.nodeValue!==v)n.nodeValue=v}
+      function attributi(el){ATTR.forEach(function(a){if(!el.hasAttribute(a))return;var k='i18n'+a.replace(/-/g,''),
+        it=el.dataset[k]!==undefined&&el.getAttribute(a)===el.dataset[k+'En']?el.dataset[k]:el.getAttribute(a),en=inglese(it);
+        if(en===null)return;el.dataset[k]=it;el.dataset[k+'En']=en;var v=I.lingua==='en'?en:it;if(el.getAttribute(a)!==v)el.setAttribute(a,v)})}
+      function giro(radice){if(radice.nodeType===3){testo(radice);return}if(radice.nodeType!==1)return;
+        if(/^(SCRIPT|STYLE)$/.test(radice.tagName))return;attributi(radice);
+        var w=document.createTreeWalker(radice,NodeFilter.SHOW_TEXT|NodeFilter.SHOW_ELEMENT),n;
+        while((n=w.nextNode())){if(n.nodeType===3){if(!/^(SCRIPT|STYLE)$/.test(n.parentNode.tagName))testo(n)}else attributi(n)}}
+      var tutto=function(){giro(document.body)};
+      window.addEventListener('lingua',tutto);
+      new MutationObserver(function(ms){ms.forEach(function(m){
+        if(m.type==='characterData')testo(m.target);
+        else if(m.type==='attributes')attributi(m.target);
+        else m.addedNodes.forEach(giro)})}).observe(document.body,{subtree:true,childList:true,characterData:true,attributes:true,attributeFilter:ATTR});
+      tutto();
+    }
+  };
+  document.getElementById('linguaBtn').addEventListener('click',function(){I.imposta(I.lingua==='en'?'it':'en')});
+  /* Barra per tornare alle istruzioni, alla sezione e a tutte le app: compare solo quando l'app
+     è dentro il sito PhysicsApp (indirizzo .../apps/<categoria>/.../<app>/). */
+  (function(){
+    var m=location.pathname.match(/^(.*\/)apps\/([^\/]+)\/(?:[^\/]+\/)*?([^\/]+)\/(?:index\.html)?$/);
+    var nav=document.getElementById('navApp');if(!m||!nav)return;
+    var radice=m[1],cat=m[2],nomi={it:cat.charAt(0).toUpperCase()+cat.slice(1).replace(/-/g,' '),en:null};
+    function disegna(){
+      var it=I.lingua!=='en',sez=it?nomi.it:(nomi.en||nomi.it);
+      nav.innerHTML='<a href="scheda.html">'+(it?'‹ Come si usa':'‹ How to use it')+'</a>'+
+        '<a class="solo-largo" href="'+radice+'index.html#'+cat+'">'+sez+'</a>'+
+        '<a href="'+radice+'index.html">'+(it?'Tutte le app':'All the apps')+'</a>';
+    }
+    nav.hidden=false;document.body.classList.add('con-nav-app');disegna();
+    window.addEventListener('lingua',disegna);
+    fetch(radice+'catalogo.json').then(function(r){return r.ok?r.json():[]}).then(function(c){
+      for(var i=0;i<c.length;i++){if(c[i].categoria===cat){nomi.it=c[i].argomento[0];nomi.en=c[i].en.argomento[0];break}}disegna();
+    }).catch(function(){});
+  })();
+  return I;
+})();
+</script>
+<!-- LINGUA:FINE -->
+<main>
+  <h1 data-en="Newton's cannon">Il cannone di Newton</h1>
+  <p class="sotto" data-en="On top of a very high mountain, above the atmosphere, a cannon fires horizontally. The faster the projectile, the farther it lands, until it never lands again: it falls around the Earth. It is Newton's thought experiment that links an apple falling to the Moon going round.">In cima a una montagna altissima, sopra l'atmosfera, un cannone spara in orizzontale. Più il proiettile è veloce, più cade lontano, finché non cade più: gira intorno alla Terra. È l'esperimento mentale con cui Newton collega la mela che cade alla Luna che gira.</p>
+
+  <div class="griglia">
+    <div class="cielo">
+      <canvas id="cv" role="img" aria-label="La Terra, la montagna e le traiettorie dei proiettili" data-en-label="The Earth, the mountain and the paths of the projectiles"></canvas>
+      <div class="stato" id="stato"></div>
+    </div>
+
+    <div>
+      <section class="pannello" aria-labelledby="t-spara">
+        <h2 id="t-spara" data-en="Fire">Spara</h2>
+        <label for="v"><span data-en="Launch speed">Velocità di lancio</span>: <span class="val" id="vVal"></span></label>
+        <input id="v" type="range" min="0.5" max="12" step="0.01" value="4">
+        <div class="scelte" id="scelte"></div>
+        <label for="h"><span data-en="Height of the mountain">Altezza della montagna</span>: <span class="val" id="hVal"></span></label>
+        <input id="h" type="range" min="50" max="3000" step="10" value="400">
+        <div class="scelte">
+          <button class="primario" id="spara" data-en="Fire!">Spara!</button>
+          <button id="cancella" data-en="Clear the paths">Cancella le traiettorie</button>
+        </div>
+        <label class="chk"><input type="checkbox" id="frecce" checked> <span data-en="Show |v⟩ (velocity) and |F⟩ (force of gravity)">Mostra |v⟩ (velocità) e |F⟩ (forza di gravità)</span></label>
+        <label class="chk"><input type="checkbox" id="veloce"> <span data-en="Fast forward">Avanti veloce</span></label>
+        <p class="esito" id="esito" role="status"></p>
+        <div class="numeri">
+          <div class="num"><b id="nVc">–</b><span data-en="speed for a circular orbit">velocità per l'orbita circolare</span></div>
+          <div class="num"><b id="nVf">–</b><span data-en="escape speed">velocità di fuga</span></div>
+          <div class="num"><b id="nDist">–</b><span data-en="distance along the ground">distanza lungo il suolo</span></div>
+          <div class="num"><b id="nT">–</b><span data-en="flight time">tempo di volo</span></div>
+        </div>
+      </section>
+
+      <section class="pannello" aria-labelledby="t-dom">
+        <h2 id="t-dom" data-en="Before firing">Prima di sparare</h2>
+        <p class="domanda" data-en="1. If the speed doubles, does the projectile land twice as far away? Try 2 and 4 km/s.">1. Se la velocità raddoppia, il proiettile cade a distanza doppia? Prova 2 e 4 km/s.</p>
+        <p class="domanda" data-en="2. At what speed does it never land again? Write your guess, then look for it with the slider.">2. A che velocità non cade più? Scrivi la tua previsione, poi cercala con il cursore.</p>
+        <p class="domanda" data-en="3. In a circular orbit, what angle does the force make with the velocity? And in an elliptical orbit?">3. Nell'orbita circolare, che angolo fa la forza con la velocità? E in un'orbita ellittica?</p>
+        <details>
+          <summary data-en="The physics behind it">La fisica che c'è sotto</summary>
+          <div data-en="&lt;p&gt;The only force is gravity, directed towards the centre of the Earth: |F| = G M m / r². The program computes the motion step by step, as in the VPython simulations: at each step it updates the velocity with the acceleration and the position with the velocity.&lt;/p&gt;&lt;p&gt;In a circular orbit gravity is exactly the centripetal force needed: G M m / r² = m v² / r, so v = √(G M / r). At the surface it would be about 7.9 km/s; from the top of the mountain a little less, because r is larger.&lt;/p&gt;&lt;p&gt;Above the escape speed √(2 G M / r) the projectile no longer comes back. In between you get ellipses, with the centre of the Earth at one focus.&lt;/p&gt;&lt;p class=&quot;nota&quot;&gt;Data: Earth radius 6371 km, G M = 3.986·10¹⁴ m³/s², so |g| = 9.8 m/s² at the surface. No air, and the Earth does not rotate. The mountain is very high, as in Newton's figure, so that the projectile flies above the atmosphere.&lt;/p&gt;">
+            <p>L'unica forza è la gravità, diretta verso il centro della Terra: |F| = G M m / r². Il programma calcola il moto passo per passo, come nelle simulazioni VPython: a ogni passo aggiorna la velocità con l'accelerazione e la posizione con la velocità.</p>
+            <p>Nell'orbita circolare la gravità è proprio la forza centripeta che serve: G M m / r² = m v² / r, quindi v = √(G M / r). Al livello del suolo sarebbe circa 7,9 km/s; dalla cima della montagna un po' meno, perché r è più grande.</p>
+            <p>Sopra la velocità di fuga √(2 G M / r) il proiettile non torna più. In mezzo ci sono le ellissi, con il centro della Terra in un fuoco.</p>
+            <p class="nota">Dati: raggio terrestre 6371 km, G M = 3,986·10¹⁴ m³/s², quindi |g| = 9,8 m/s² al suolo. Niente aria e Terra che non ruota. La montagna è altissima, come nella figura di Newton, perché il proiettile voli sopra l'atmosfera.</p>
+          </div>
+        </details>
+      </section>
+
+      <section class="pannello" aria-labelledby="t-fig">
+        <h2 id="t-fig" data-en="Newton's figure">La figura di Newton</h2>
+        <figure>
+          <img src="figura_newton_1728.jpg" alt="Incisione: la Terra, una montagna in V e le traiettorie dei proiettili che cadono in D, E, F, G" data-en-alt="Engraving: the Earth, a mountain at V and the paths of projectiles landing at D, E, F, G">
+          <figcaption data-en="Isaac Newton, A Treatise of the System of the World, 1728 (public domain).">Isaac Newton, <i>A Treatise of the System of the World</i>, 1728 (pubblico dominio).</figcaption>
+        </figure>
+        <p class="nota" data-en="Newton imagines firing from the mountain V faster and faster: the projectile lands at D, then at E, F, G, until it goes all the way round and comes back to V. «And so, at last, exceeding the limits of the Earth, should pass quite by without touching it.»">Newton immagina di sparare dalla montagna V sempre più forte: il proiettile cade in D, poi in E, F, G, finché fa tutto il giro e torna in V. Così, alla fine, «oltrepasserebbe i confini della Terra senza toccarla».</p>
+      </section>
+    </div>
+  </div>
+</main>
+<script>
+{
+const $=id=>document.getElementById(id);
+const GM=3.986e14, R=6.371e6;
+const sonda=document.createElement('span');sonda.hidden=true;document.body.appendChild(sonda);
+const col=k=>{sonda.style.color=`var(${k})`;return getComputedStyle(sonda).color};
+const num=(x,d)=>I18N.num(x,d);
+const kmh=x=>Math.round(x).toLocaleString(I18N.t('it-IT','en-GB'));
+
+const cv=$('cv'), ctx=cv.getContext('2d');
+let W=600, scala=1;                 // pixel per metro
+let tracce=[];                      // traiettorie già sparate
+let colpo=null;                     // il proiettile in volo
+const PALETTE=['#9c2f1f','#1f5aa6','#2d7a4b','#7a4fa0','#b8740f','#1b7f86','#a23a74','#5a6b1f'];
+let nColpo=0;
+
+function ridimensiona(){
+  const r=cv.getBoundingClientRect(),d=devicePixelRatio||1;
+  W=r.width;cv.width=W*d;cv.height=W*d;ctx.setTransform(d,0,0,d,0,0);
+  inquadra();disegna();
+}
+function hMonte(){return +$('h').value*1000}
+function inquadra(){
+  // la scena deve contenere la Terra e le orbite: si allarga se un'orbita va lontano
+  let rmax=(R+hMonte())*1.18;
+  for(const t of tracce)rmax=Math.max(rmax,Math.min(t.rmax*1.08,R*4.5));
+  if(colpo)rmax=Math.max(rmax,Math.min(colpo.rmax*1.08,R*4.5));
+  scala=(W/2-10)/rmax;
+}
+const X=x=>W/2+x*scala, Y=y=>W/2-y*scala;
+
+function freccia(x0,y0,dx,dy,c,lab){
+  const x1=x0+dx,y1=y0+dy,a=Math.atan2(dy,dx),L=Math.hypot(dx,dy);if(L<3)return;
+  ctx.strokeStyle=c;ctx.fillStyle=c;ctx.lineWidth=2.5;ctx.beginPath();ctx.moveTo(x0,y0);ctx.lineTo(x1,y1);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x1-10*Math.cos(a-.4),y1-10*Math.sin(a-.4));ctx.lineTo(x1-10*Math.cos(a+.4),y1-10*Math.sin(a+.4));ctx.fill();
+  ctx.font='600 15px "Atkinson Hyperlegible",sans-serif';ctx.fillText(lab,x1+6,y1-6);
+}
+
+function disegna(){
+  ctx.clearRect(0,0,W,W);
+  // Terra
+  const rT=R*scala;
+  ctx.fillStyle=col('--terra');ctx.strokeStyle=col('--terra-bordo');ctx.lineWidth=2;
+  ctx.beginPath();ctx.arc(W/2,W/2,rT,0,7);ctx.fill();ctx.stroke();
+  // tratteggi come nell'incisione
+  ctx.save();ctx.beginPath();ctx.arc(W/2,W/2,rT,0,7);ctx.clip();ctx.strokeStyle=col('--matita');ctx.globalAlpha=.18;ctx.lineWidth=1;
+  for(let k=-rT;k<rT;k+=7){ctx.beginPath();ctx.moveTo(W/2-rT,W/2+k);ctx.lineTo(W/2+rT,W/2+k+rT*.25);ctx.stroke()}
+  ctx.restore();
+  ctx.fillStyle=col('--matita');ctx.font='14px "Atkinson Hyperlegible",sans-serif';ctx.textAlign='center';
+  ctx.fillText(I18N.t('Terra','Earth'),W/2,W/2+5);
+  // montagna
+  const hp=hMonte()*scala, base=Math.max(14,hp*0.9);
+  ctx.fillStyle=col('--terra');ctx.strokeStyle=col('--terra-bordo');ctx.lineWidth=2;
+  ctx.beginPath();ctx.moveTo(W/2-base,Y(R)+2);ctx.lineTo(W/2,Y(R+hMonte()));ctx.lineTo(W/2+base,Y(R)+2);ctx.closePath();ctx.fill();ctx.stroke();
+  ctx.fillStyle=col('--inchiostro');ctx.font='italic 20px "IM Fell English",Georgia,serif';ctx.fillText('V',W/2-16,Y(R+hMonte())-4);
+  // traiettorie
+  const tutte=colpo?[...tracce,colpo]:tracce, etichette=[];
+  for(const t of tutte){
+    ctx.strokeStyle=t.colore;ctx.lineWidth=2;ctx.beginPath();
+    t.punti.forEach((p,i)=>i?ctx.lineTo(X(p[0]),Y(p[1])):ctx.moveTo(X(p[0]),Y(p[1])));ctx.stroke();
+    const u=t.punti[t.punti.length-1];
+    if(t.esito==='cade'){ctx.fillStyle=t.colore;ctx.beginPath();ctx.arc(X(u[0]),Y(u[1]),4,0,7);ctx.fill();
+      // etichetta fuori dalla Terra, lungo il raggio; si salta se è troppo vicina a un'altra
+      const ang=Math.atan2(u[1],u[0]), ex=X(u[0])+16*Math.cos(ang), ey=Y(u[1])-16*Math.sin(ang);
+      if(etichette.every(([a,b])=>Math.hypot(a-ex,b-ey)>34)){etichette.push([ex,ey]);
+        ctx.font='600 13px "Atkinson Hyperlegible",sans-serif';ctx.textAlign=Math.cos(ang)>=0?'left':'right';ctx.textBaseline='middle';
+        ctx.fillText(num(t.v/1000,1)+' km/s',ex,ey);ctx.textBaseline='alphabetic';}}
+  }
+  // proiettile in volo e frecce
+  if(colpo){
+    const p=colpo.p, x=X(p[0]), y=Y(p[1]);
+    ctx.fillStyle=col('--inchiostro');ctx.beginPath();ctx.arc(x,y,6,0,7);ctx.fill();
+    if($('frecce').checked){
+      const vm=Math.hypot(colpo.vx,colpo.vy), r=Math.hypot(p[0],p[1]);
+      freccia(x,y,colpo.vx/vm*55,-colpo.vy/vm*55,col('--vel'),'|v⟩');
+      freccia(x,y,-p[0]/r*45,p[1]/r*45,col('--forza'),'|F⟩');
+    }
+  }
+  ctx.textAlign='left';
+}
+
+function aggiornaNumeri(){
+  const r0=R+hMonte();
+  $('vVal').textContent=num(+$('v').value,2)+' km/s';
+  $('hVal').textContent=kmh(+$('h').value)+' km';
+  $('nVc').textContent=num(Math.sqrt(GM/r0)/1000,2)+' km/s';
+  $('nVf').textContent=num(Math.sqrt(2*GM/r0)/1000,2)+' km/s';
+}
+function scelte(){
+  const r0=R+hMonte(), vc=Math.sqrt(GM/r0)/1000, vf=Math.sqrt(2*GM/r0)/1000;
+  const voci=[[2,'2'],[4,'4'],[6,'6'],[7,'7'],[vc,I18N.t('cerchio','circle')],[9,'9'],[vf,I18N.t('fuga','escape')]];
+  $('scelte').innerHTML=voci.map(([v,l])=>`<button type="button" data-v="${v}">${l}</button>`).join('');
+}
+// arrotondo per eccesso, così «fuga» è davvero alla velocità di fuga (o appena sopra)
+$('scelte').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;$('v').value=(Math.ceil(+b.dataset.v*100-1e-9)/100).toFixed(2);aggiornaNumeri()});
+
+function spara(){
+  if(colpo){tracce.push(colpo);colpo=null}
+  const v=+$('v').value*1000, r0=R+hMonte();
+  colpo={p:[0,r0],vx:v,vy:0,v,t:0,punti:[[0,r0]],rmax:r0,angolo:0,ultimoAng:0,esito:null,colore:PALETTE[nColpo++%PALETTE.length]};
+  // energia: E<0 orbita chiusa; E>=0 fuga (si ferma quando esce dalla scena)
+  colpo.E=v*v/2-GM/r0;
+  if(colpo.E<0){const a=-GM/(2*colpo.E);colpo.rmax=2*a-r0>r0?2*a-r0:r0;colpo.periodo=2*Math.PI*Math.sqrt(a*a*a/GM)}
+  else colpo.rmax=R*4.5;
+  inquadra();$('esito').textContent='';['nDist','nT'].forEach(k=>$(k).textContent='–');
+}
+$('spara').addEventListener('click',spara);
+$('cancella').addEventListener('click',()=>{tracce=[];colpo=null;nColpo=0;$('esito').textContent='';['nDist','nT'].forEach(k=>$(k).textContent='–');inquadra();disegna()});
+$('v').addEventListener('input',aggiornaNumeri);
+$('h').addEventListener('input',()=>{aggiornaNumeri();scelte();if(!colpo){inquadra();disegna()}});
+
+// passo per passo (Verlet), più passi per fotogramma per avere un moto liscio
+function avanza(dtReale){
+  if(!colpo||colpo.esito)return;
+  // un'orbita in circa 12 s; le orbite lunghissime e la fuga a velocità limitata
+  const accel=Math.min((colpo.E<0&&colpo.periodo)?colpo.periodo/12:3000,4000);
+  let dt=Math.min(dtReale,0.05)*accel*($('veloce').checked?4:1);
+  const passi=Math.min(4000,Math.max(1,Math.ceil(dt/2))); const h=dt/passi;
+  for(let i=0;i<passi;i++){
+    const [x,y]=colpo.p, r3=Math.pow(x*x+y*y,1.5);
+    const ax=-GM*x/r3, ay=-GM*y/r3;
+    colpo.vx+=ax*h/2;colpo.vy+=ay*h/2;
+    colpo.p=[x+colpo.vx*h,y+colpo.vy*h];
+    const [x2,y2]=colpo.p, r32=Math.pow(x2*x2+y2*y2,1.5);
+    colpo.vx+=-GM*x2/r32*h/2;colpo.vy+=-GM*y2/r32*h/2;
+    colpo.t+=h;
+    // angolo percorso dal punto di partenza (in senso orario, come il colpo verso destra)
+    let a=Math.atan2(x2,y2); if(a<0)a+=2*Math.PI;
+    if(a<colpo.ultimoAng-Math.PI)colpo.angolo+=2*Math.PI; colpo.ultimoAng=a;
+    const giro=colpo.angolo+a, r=Math.hypot(x2,y2);
+    if(r<=R){ // tocca il suolo
+      const k=R/r; colpo.p=[x2*k,y2*k]; colpo.punti.push(colpo.p); colpo.esito='cade';
+      const dist=giro*R/1000;
+      $('nDist').textContent=kmh(dist)+' km';$('nT').textContent=durata(colpo.t);
+      $('esito').textContent=I18N.t(`Cade a ${kmh(dist)} km dalla montagna.`,`It lands ${kmh(dist)} km from the mountain.`);
+      tracce.push(colpo);colpo=null;inquadra();return;
+    }
+    if(colpo.E<0&&giro>=2*Math.PI-1e-9){ // giro completo: è un'orbita
+      colpo.punti.push(colpo.p);colpo.esito='orbita';
+      const circ=Math.abs(colpo.v-Math.sqrt(GM/(R+hMonte())))<0.004*colpo.v;
+      $('nDist').textContent=I18N.t('non cade','it never lands');$('nT').textContent=durata(colpo.periodo);
+      $('esito').textContent=circ?I18N.t('Orbita circolare: torna in V dopo un giro (periodo qui sotto).','Circular orbit: it comes back to V after one lap (period below).')
+        :I18N.t('Orbita ellittica: non tocca più terra e torna in V.','Elliptical orbit: it never touches the ground and comes back to V.');
+      tracce.push(colpo);colpo=null;return;
+    }
+    if(colpo.E<0&&r>R*4.4){colpo.punti.push(colpo.p);colpo.esito='lontano';
+      $('nDist').textContent=I18N.t('non cade','it never lands');$('nT').textContent=durata(colpo.periodo);
+      $('esito').textContent=I18N.t('Esce dalla figura: è un\'ellisse molto allungata e torna in V dopo il tempo qui sotto.','It leaves the picture: it is a very long ellipse and comes back to V after the time below.');
+      tracce.push(colpo);colpo=null;return;}
+    if(colpo.E>=0&&r>R*4.4){colpo.punti.push(colpo.p);colpo.esito='fuga';
+      $('nDist').textContent=I18N.t('non cade','it never lands');$('nT').textContent='∞';
+      $('esito').textContent=I18N.t('Fuga: il proiettile si allontana e non torna più.','Escape: the projectile flies away and never comes back.');
+      tracce.push(colpo);colpo=null;return;}
+  }
+  const u=colpo.punti[colpo.punti.length-1];
+  if(Math.hypot(colpo.p[0]-u[0],colpo.p[1]-u[1])*scala>1.5)colpo.punti.push(colpo.p);
+  $('nT').textContent=durata(colpo.t);
+}
+function durata(s){
+  if(s<120)return num(s,0)+' s';
+  const m=Math.floor(s/60), ss=Math.round(s%60);
+  if(m<120)return m+' min '+String(ss).padStart(2,'0')+' s';
+  return num(s/3600,1)+' h';
+}
+function stato(){
+  if(!colpo){$('stato').textContent='';return}
+  const r=Math.hypot(colpo.p[0],colpo.p[1]), v=Math.hypot(colpo.vx,colpo.vy);
+  $('stato').textContent=I18N.t('quota ','height ')+kmh((r-R)/1000)+' km · |v| = '+num(v/1000,2)+' km/s';
+}
+let prima=null;
+function ciclo(t){
+  const dt=prima===null?0:(t-prima)/1000;prima=t;
+  avanza(dt);disegna();stato();requestAnimationFrame(ciclo);
+}
+window.addEventListener('resize',ridimensiona);
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change',disegna);
+const img=document.querySelector('figure img');img.dataset.itAlt=img.alt;
+window.addEventListener('lingua',()=>{img.alt=I18N.lingua==='en'?img.dataset.enAlt:img.dataset.itAlt;aggiornaNumeri();scelte();disegna()});
+I18N.titolo=['Il cannone di Newton',"Newton's cannon"];
+I18N.applica();
+aggiornaNumeri();scelte();ridimensiona();requestAnimationFrame(ciclo);
+}
+</script>
+</body>
+</html>

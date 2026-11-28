@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="it" data-titolo-it="Il cannone di Newton · App di fisica" data-titolo-en="Newton&#x27;s cannon · Physics apps">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Cg fill=%22%231d3d8f%22%3E%3Ccircle cx=%225%22 cy=%2226%22 r=%223%22/%3E%3Ccircle cx=%2212%22 cy=%2212%22 r=%223%22/%3E%3Ccircle cx=%2220%22 cy=%228%22 r=%223%22/%3E%3Ccircle cx=%2228%22 cy=%2216%22 r=%223%22/%3E%3C/g%3E%3C/svg%3E">
+<title>Il cannone di Newton · App di fisica</title>
+<meta name="description" content="Dalla figura di Newton del 1728: un cannone in cima a una montagna spara sempre più forte, finché il proiettile non cade più e gira intorno alla Terra.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../../sito/stile.css">
+<script>
+(function(){var r=document.documentElement;
+try{var t=localStorage.getItem('tema');if(t)r.dataset.tema=t}catch(e){}
+var l=null;try{var q=new URLSearchParams(location.search).get('lang');if(q==='en'||q==='it'){l=q;localStorage.setItem('lingua',q)}else{var s=localStorage.getItem('lingua');if(s==='en'||s==='it')l=s}}catch(e){}
+if(!l)l=/^it/i.test(navigator.language||'it')?'it':'en';r.lang=l;})();
+function cambiaTema(){var r=document.documentElement,s=r.dataset.tema||(matchMedia('(prefers-color-scheme: dark)').matches?'scuro':'chiaro');
+r.dataset.tema=s==='scuro'?'chiaro':'scuro';try{localStorage.setItem('tema',r.dataset.tema)}catch(e){}}
+function cambiaLingua(){var r=document.documentElement;r.lang=r.lang==='en'?'it':'en';try{localStorage.setItem('lingua',r.lang)}catch(e){}aggiornaTitolo()}
+function aggiornaTitolo(){var r=document.documentElement,t=r.dataset['titolo'+(r.lang==='en'?'En':'It')];if(t)document.title=t}
+document.addEventListener('DOMContentLoaded',aggiornaTitolo);
+</script>
+</head>
+<body>
+<div class="pagina">
+  <aside class="margine">
+    <a class="marchio" href="../../../../index.html">PhysicsApp</a>
+    <dl class="scheda-dati">
+      <dt><span data-l="it">Argomento</span><span data-l="en">Topic</span></dt><dd><span data-l="it">Meccanica › Gravitazione</span><span data-l="en">Mechanics › Gravitation</span><br><span data-l="it">Gravitazione e orbite</span><span data-l="en">Gravitation and orbits</span></dd>
+      <dt><span data-l="it">Anno</span><span data-l="en">Year</span></dt><dd><span class="classe" data-l="it">3º anno</span><span class="classe" data-l="en">Year 3</span></dd>
+      <dt><span data-l="it">Tipo</span><span data-l="en">Type</span></dt><dd><span data-l="it">App nel browser</span><span data-l="en">Browser app</span></dd>
+      <dt><span data-l="it">Data</span><span data-l="en">Date</span></dt><dd>28/11/2026</dd>
+    </dl>
+    <div class="comandi"><button class="tema-btn lingua-btn" type="button" onclick="cambiaLingua()"><span data-l="it" lang="en">English</span><span data-l="en" lang="it">Italiano</span></button><button class="tema-btn" type="button" onclick="cambiaTema()"><span data-l="it">Carta o lavagna</span><span data-l="en">Paper or blackboard</span></button></div>
+  </aside>
+  <main class="foglio scheda">
+    <nav class="briciole" aria-label="Dove sei / You are here"><a href="../../../../index.html"><span data-l="it">Tutte le app</span><span data-l="en">All the apps</span></a> › <a href="../../../../index.html#meccanica"><span data-l="it">Meccanica</span><span data-l="en">Mechanics</span></a> › <a href="../../../../index.html#meccanica-gravitazione"><span data-l="it">Gravitazione</span><span data-l="en">Gravitation</span></a></nav>
+    <h1 data-l="it">Il cannone di Newton</h1><h1 data-l="en">Newton&#x27;s cannon</h1>
+    <p class="lead" data-l="it">Dalla figura di Newton del 1728: un cannone in cima a una montagna spara sempre più forte, finché il proiettile non cade più e gira intorno alla Terra.</p><p class="lead" data-l="en">From Newton&#x27;s 1728 figure: a cannon on top of a mountain fires harder and harder, until the projectile never lands again and goes round the Earth.</p>
+    <div class="azioni"><a class="bottone pieno" href="index.html"><span data-l="it">Apri l’app</span><span data-l="en">Open the app</span></a><a class="bottone" href="https://github.com/MaxDvTn/PhysicsApp/tree/main/apps/meccanica/gravitazione/cannone-di-newton"><span data-l="it">Codice su GitHub</span><span data-l="en">Code on GitHub</span></a><span class="copiato" id="copiato" role="status"></span></div>
+    <div class="testo"><div data-l="it"><h1>Il cannone di Newton</h1>
+<p>In <em>A Treatise of the System of the World</em> (1728) Newton immagina un cannone in cima a una montagna altissima che spara in orizzontale, sempre più forte. Il proiettile cade sempre più lontano, finché gira intorno alla Terra e non cade più. L'app rifà l'esperimento mentale con la gravità vera: |F| = G M m / r², calcolata passo per passo.</p>
+<h2>Come si usa</h2>
+<ol>
+<li>Parti dalle tre domande del riquadro «Prima di sparare» e fai scrivere le previsioni.</li>
+<li>Scegli la velocità con il cursore o con i pulsanti 2, 4, 6, 7, <strong>cerchio</strong>, 9, <strong>fuga</strong> e premi <strong>Spara!</strong>. Le traiettorie restano disegnate, ognuna con il suo colore, come nella figura di Newton; sotto compaiono la distanza lungo il suolo e il tempo di volo.</li>
+<li>Confronta 2 e 4 km/s: la distanza non raddoppia, perché il suolo si curva sotto il proiettile.</li>
+<li>Con <strong>cerchio</strong> il proiettile gira intorno alla Terra e torna in V: la forza |F⟩ è sempre perpendicolare alla velocità |v⟩. Con 9 km/s l'orbita è un'ellisse e l'angolo cambia lungo il giro. Con <strong>fuga</strong> non torna più.</li>
+<li>Cambia l'altezza della montagna: la velocità per l'orbita circolare √(G M / r) e quella di fuga √(2 G M / r) diminuiscono con la quota.</li>
+</ol>
+<p>«Avanti veloce» accelera l'animazione; «Cancella le traiettorie» ricomincia.</p>
+<h2>Da sapere</h2>
+<ul>
+<li>Dati: raggio terrestre 6371 km, G M = 3,986·10¹⁴ m³/s² (|g| = 9,8 m/s² al suolo). Niente aria e Terra che non ruota.</li>
+<li>La montagna è altissima (400 km all'inizio, da 50 a 3000 km), come nella figura di Newton, perché il proiettile voli sopra l'atmosfera.</li>
+<li>Dalla cima di 400 km: orbita circolare a 7,67 km/s con periodo di circa 92 minuti, come la Stazione spaziale.</li>
+<li>La figura originale di Newton (1728) è di pubblico dominio ed è riprodotta nell'app.</li>
+</ul></div><div data-l="en"><h1>Newton's cannon</h1>
+<p>In <em>A Treatise of the System of the World</em> (1728) Newton imagines a cannon on top of a very high mountain firing horizontally, harder and harder. The projectile lands farther and farther away, until it goes round the Earth and never lands again. The app repeats the thought experiment with real gravity: |F| = G M m / r², computed step by step.</p>
+<h2>How to use it</h2>
+<ol>
+<li>Start from the three questions in the “Before firing” box and have students write down their predictions.</li>
+<li>Choose the speed with the slider or with the 2, 4, 6, 7, <strong>circle</strong>, 9, <strong>escape</strong> buttons and press <strong>Fire!</strong>. The paths stay on the screen, each in its own colour, as in Newton's figure; below you see the distance along the ground and the flight time.</li>
+<li>Compare 2 and 4 km/s: the distance does not double, because the ground curves away under the projectile.</li>
+<li>With <strong>circle</strong> the projectile goes round the Earth and comes back to V: the force |F⟩ is always perpendicular to the velocity |v⟩. At 9 km/s the orbit is an ellipse and the angle changes along the way. With <strong>escape</strong> it never comes back.</li>
+<li>Change the height of the mountain: the speed for a circular orbit √(G M / r) and the escape speed √(2 G M / r) decrease with altitude.</li>
+</ol>
+<p>“Fast forward” speeds up the animation; “Clear the paths” starts again.</p>
+<h2>Good to know</h2>
+<ul>
+<li>Data: Earth radius 6371 km, G M = 3.986·10¹⁴ m³/s² (|g| = 9.8 m/s² at the surface). No air, and the Earth does not rotate.</li>
+<li>The mountain is very high (400 km at the start, from 50 to 3000 km), as in Newton's figure, so that the projectile flies above the atmosphere.</li>
+<li>From a 400 km summit: circular orbit at 7.67 km/s with a period of about 92 minutes, like the Space Station.</li>
+<li>Newton's original figure (1728) is in the public domain and is reproduced in the app.</li>
+</ul></div></div>
+    <div class="testo" id="materiali"><h2 data-l="it">App collegate</h2><h2 data-l="en">Related apps</h2><ul class="materiali"><li><a href="../../../../apps/meccanica/dinamica/dal-poligono-al-cerchio/scheda.html"><span data-l="it">Dal poligono al cerchio</span><span data-l="en">From polygon to circle</span></a><small><span data-l="it">App nel browser</span><span data-l="en">Browser app</span></small></li><li><a href="../../../../apps/meccanica/dinamica/forza-centripeta-vpython/scheda.html"><span data-l="it">Forza sempre perpendicolare alla velocità (VPython)</span><span data-l="en">A force always perpendicular to the velocity (VPython)</span></a><small><span data-l="it">Simulazione VPython</span><span data-l="en">VPython simulation</span></small></li></ul></div>
+    <footer><span data-l="it">Liceo «L. da Vinci» di Trento, prof. Massimo Bosetti.</span><span data-l="en">Liceo «L. da Vinci», Trento, Prof. Massimo Bosetti.</span></footer>
+  </main>
+</div>
+<script>
+// Il codice si scarica subito, così al clic si copia e si apre GlowScript nello stesso gesto.
+const codici={};
+document.querySelectorAll('[data-copia]').forEach(b=>{
+  const f=b.dataset.copia;
+  if(!(f in codici)) codici[f]=fetch(f).then(r=>r.ok?r.text():null).catch(()=>null).then(t=>codici[f]=t);
+  b.addEventListener('click',()=>{
+    const msg=document.getElementById('copiato'), t=codici[f], en=document.documentElement.lang==='en';
+    const fatto=()=>msg.textContent=en?'Code copied: on GlowScript choose “Create New Program” and paste it with Cmd+V or Ctrl+V.':'Codice copiato: su GlowScript scegli «Create New Program» e incollalo con Cmd+V o Ctrl+V.';
+    const errore=()=>msg.textContent=en?'Could not copy: download the file below and paste it by hand.':'Non sono riuscito a copiare: scarica il file qui sotto e incollalo a mano.';
+    if(typeof t==='string'&&navigator.clipboard) navigator.clipboard.writeText(t).then(fatto,errore); else errore();
+    window.open('https://glowscript.org/','_blank','noopener');
+  });
+});
+</script>
+</body>
+</html>

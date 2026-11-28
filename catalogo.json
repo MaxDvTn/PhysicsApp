@@ -256,7 +256,8 @@
     ],
     "docente": [],
     "collegate": [
-      "forza-centripeta-vpython"
+      "forza-centripeta-vpython",
+      "cannone-di-newton"
     ],
     "cartella": "apps/meccanica/dinamica/dal-poligono-al-cerchio",
     "categoria": "meccanica",
@@ -330,7 +331,8 @@
       ]
     ],
     "collegate": [
-      "dal-poligono-al-cerchio"
+      "dal-poligono-al-cerchio",
+      "cannone-di-newton"
     ],
     "cartella": "apps/meccanica/dinamica/forza-centripeta-vpython",
     "categoria": "meccanica",
@@ -388,6 +390,39 @@
     "cartella": "apps/meccanica/dinamica/pallina-nell-olio",
     "categoria": "meccanica",
     "sottocategoria": "dinamica"
+  },
+  {
+    "id": "cannone-di-newton",
+    "titolo": "Il cannone di Newton",
+    "tipo": "web",
+    "avvio": "index.html",
+    "sommario": "Dalla figura di Newton del 1728: un cannone in cima a una montagna spara sempre più forte, finché il proiettile non cade più e gira intorno alla Terra.",
+    "argomento": [
+      "Meccanica",
+      "Gravitazione"
+    ],
+    "tema": "Gravitazione e orbite",
+    "anno": 3,
+    "data": "2026-11-28",
+    "en": {
+      "titolo": "Newton's cannon",
+      "sommario": "From Newton's 1728 figure: a cannon on top of a mountain fires harder and harder, until the projectile never lands again and goes round the Earth.",
+      "tema": "Gravitation and orbits",
+      "argomento": [
+        "Mechanics",
+        "Gravitation"
+      ]
+    },
+    "file": [],
+    "allegati": [],
+    "docente": [],
+    "collegate": [
+      "dal-poligono-al-cerchio",
+      "forza-centripeta-vpython"
+    ],
+    "cartella": "apps/meccanica/gravitazione/cannone-di-newton",
+    "categoria": "meccanica",
+    "sottocategoria": "gravitazione"
   },
   {
     "id": "clausius-clapeyron",

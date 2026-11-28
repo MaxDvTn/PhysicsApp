@@ -57,6 +57,12 @@ Tre tipi di app:
 | [La pallina da golf nell'olio](https://maxdvtn.github.io/PhysicsApp/apps/meccanica/dinamica/pallina-nell-olio/scheda.html) | [The golf ball in oil](https://maxdvtn.github.io/PhysicsApp/apps/meccanica/dinamica/pallina-nell-olio/scheda.html?lang=en) | App nel browser / Browser app | 3 | [`apps/meccanica/dinamica/pallina-nell-olio`](apps/meccanica/dinamica/pallina-nell-olio) |
 | [Sferetta nella glicerina (VPython)](https://maxdvtn.github.io/PhysicsApp/apps/meccanica/dinamica/attrito-viscoso-vpython/scheda.html) | [Small ball in glycerine (VPython)](https://maxdvtn.github.io/PhysicsApp/apps/meccanica/dinamica/attrito-viscoso-vpython/scheda.html?lang=en) | Simulazione VPython / VPython simulation | 3 | [`apps/meccanica/dinamica/attrito-viscoso-vpython`](apps/meccanica/dinamica/attrito-viscoso-vpython) |
 
+**Gravitazione · Gravitation**
+
+| App | English | Tipo / Type | Anno / Year | Cartella / Folder |
+|---|---|---|---|---|
+| [Il cannone di Newton](https://maxdvtn.github.io/PhysicsApp/apps/meccanica/gravitazione/cannone-di-newton/scheda.html) | [Newton's cannon](https://maxdvtn.github.io/PhysicsApp/apps/meccanica/gravitazione/cannone-di-newton/scheda.html?lang=en) | App nel browser / Browser app | 3 | [`apps/meccanica/gravitazione/cannone-di-newton`](apps/meccanica/gravitazione/cannone-di-newton) |
+
 ### Termodinamica · Thermodynamics
 
 | App | English | Tipo / Type | Anno / Year | Cartella / Folder |
